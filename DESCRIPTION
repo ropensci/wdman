@@ -1,15 +1,25 @@
 Package: wdman
 Type: Package
-Title: What the Package Does (Title Case)
+Title: wdman
 Version: 0.1.0
-Author: Who wrote it
+Authors@R: c(
+    person("John", "Harrison", , "johndharrison0@gmail.com",
+    role = c("aut", "cre"), comment = "R package wdman"))
 Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: wdman
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Suggests: testthat,
+Depends:
+    R (>= 3.2)
+Suggests:
+    testthat,
     covr
-Imports: binman,
-    processx
+Imports:
+    binman,
+    processx,
+    yaml
+URL: https://github.com/johndharrison/wdman
+URLNote: https://github.com/johndharrison/wdman
+BugReports: https://github.com/johndharrison/wdman/issues
+RoxygenNote: 5.0.1
