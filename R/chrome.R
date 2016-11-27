@@ -1,9 +1,10 @@
 #' Start chrome driver
 #'
 #' Start chrome driver
-#' @param type Run locally (chromedriver only) or as a remote driver
-#'     (selenium)
 #' @param port Port to run on
+#' @param version what version of chromedriver to run. Default = "latest"
+#'     which runs the most recent version. To see other version currently
+#'     sourced run binman::list_versions("chromedriver")
 #' @param path base URL path prefix for commands, e.g. wd/hub
 #'
 #' @return
@@ -11,10 +12,11 @@
 #'
 #' @examples
 
-chrome <- function(type = c("browser", "selenium"), port = 4567L,
-                   path = "wd/hub"){
+chrome <- function(port = 4567L, version = "latest", path = "wd/hub"){
   type <- match.arg(type)
   assert_that(is.integer(port))
+  assert_that(is.string(string))
+  assert_that(is.string(path))
   chromeyml <- system.file("yaml", "chromedriver.yml", package = "wdman")
   cyml <- yaml::yaml.load_file(chromeyml)
   platvec <- c("predlfunction", "binman::predl_google_storage","platform")
@@ -31,7 +33,16 @@ chrome <- function(type = c("browser", "selenium"), port = 4567L,
   process_yaml(tempyml)
   chromeplat <- cyml[[platvec]]
   chromever <- binman::list_versions("chromedriver")[[chromeplat]]
-  chromever <- as.character(max(package_version(chromever)))
+  chromever <- if(identical(version, "latest")){
+    as.character(max(package_version(chromever)))
+  }else{
+    mtch <- match(version, chromever)
+    if(is.na(mtch) || is.null(mtch)){
+      stop("version requested doesnt match versions available = ",
+           chromever)
+    }
+    chromever[mtch]
+  }
   chromedir <- file.path(app_dir("chromedriver"), chromeplat, chromever)
   chromepath <- list.files(chromedir,
                            pattern = "chromedriver($|.exe$)",

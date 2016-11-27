@@ -4,13 +4,14 @@
 \alias{chrome}
 \title{Start chrome driver}
 \usage{
-chrome(type = c("browser", "selenium"), port = 4567L, path = "wd/hub")
+chrome(port = 4567L, version = "latest", path = "wd/hub")
 }
 \arguments{
-\item{type}{Run locally (chromedriver only) or as a remote driver
-(selenium)}
-
 \item{port}{Port to run on}
+
+\item{version}{what version of chromedriver to run. Default = "latest"
+which runs the most recent version. To see other version currently
+sourced run binman::list_versions("chromedriver")}
 
 \item{path}{base URL path prefix for commands, e.g. wd/hub}
 }
