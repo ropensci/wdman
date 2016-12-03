@@ -4,7 +4,8 @@
 \alias{chrome}
 \title{Start chrome driver}
 \usage{
-chrome(port = 4567L, version = "latest", path = "wd/hub")
+chrome(port = 4567L, version = "latest", path = "wd/hub",
+  subprocess = TRUE)
 }
 \arguments{
 \item{port}{Port to run on}

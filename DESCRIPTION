@@ -18,6 +18,7 @@ Suggests:
 Imports:
     binman,
     processx,
+    subprocess,
     yaml
 URL: https://github.com/johndharrison/wdman
 URLNote: https://github.com/johndharrison/wdman

@@ -12,11 +12,11 @@
 #'
 #' @examples
 
-chrome <- function(port = 4567L, version = "latest", path = "wd/hub"){
-  type <- match.arg(type)
-  assert_that(is.integer(port))
-  assert_that(is.string(string))
-  assert_that(is.string(path))
+chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
+                   subprocess = TRUE){
+  assert_that(is_integer(port))
+  assert_that(is_string(version))
+  assert_that(is_string(path))
   chromeyml <- system.file("yaml", "chromedriver.yml", package = "wdman")
   cyml <- yaml::yaml.load_file(chromeyml)
   platvec <- c("predlfunction", "binman::predl_google_storage","platform")
@@ -39,7 +39,7 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub"){
     mtch <- match(version, chromever)
     if(is.na(mtch) || is.null(mtch)){
       stop("version requested doesnt match versions available = ",
-           chromever)
+           paste(chromever, collpase = ","))
     }
     chromever[mtch]
   }
@@ -47,13 +47,29 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub"){
   chromepath <- list.files(chromedir,
                            pattern = "chromedriver($|.exe$)",
                            full.names = TRUE)
-  cmd <- sprintf(
-    "%s --port=%s --url-base=%s",
-    shQuote(chromepath), port, path
-  )
-  chromedrv <- process$new(commandline = cmd)
-  Sys.sleep(1)
-  if(!chromedrv$is_alive()){stop("Chromedriver couldn't be started",
-                                 chromedrv$read_error_lines())}
+  if(subprocess){
+    args <- c()
+    tFile <- tempfile(fileext = ".txt")
+    args[["port"]] <- sprintf("--port=%s", port)
+    args[["url-base"]] <- sprintf("--url-base=%s", path)
+    args[["verbose"]] <- "--verbose"
+    args[["log-path"]] <- sprintf("--log-path=%s", tFile)
+    chromedrv <- subprocess::spawn_process(chromepath, arguments = args,
+                                          workdir = "/home/john/")
+    if(!is.na(subprocess::process_return_code(chromedrv))){
+      stop("Chromedriver couldn't be started",
+           subprocess::process_read(chromedrv, "stderr"))
+    }
+    list(process = chromedrv)
+  }else{
+    cmd <- sprintf(
+      "%s --port=%s --url-base=%s",
+      shQuote(chromepath), port, path
+    )
+    chromedrv <- process$new(commandline = cmd)
+    Sys.sleep(1)
+    if(!chromedrv$is_alive()){stop("Chromedriver couldn't be started",
+                                   chromedrv$read_error_lines())}
+  }
   list(process = chromedrv)
 }
