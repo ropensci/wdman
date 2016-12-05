@@ -17,7 +17,6 @@ Suggests:
     covr
 Imports:
     binman,
-    processx,
     subprocess,
     yaml
 URL: https://github.com/johndharrison/wdman

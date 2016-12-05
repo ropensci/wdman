@@ -61,16 +61,16 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
       stop("Chromedriver couldn't be started",
            subprocess::process_read(chromedrv, "stderr"))
     }
-    list(process = chromedrv)
-  }else{
-    cmd <- sprintf(
-      "%s --port=%s --url-base=%s",
-      shQuote(chromepath), port, path
-    )
-    chromedrv <- process$new(commandline = cmd)
-    Sys.sleep(1)
-    if(!chromedrv$is_alive()){stop("Chromedriver couldn't be started",
-                                   chromedrv$read_error_lines())}
+    list(process = chromedrv, log = tFile)
   }
-  list(process = chromedrv)
+  list(
+    process = chromedrv,
+    output = function(timeout = 0L){
+      subprocess::process_read(chromedrv, timeout = timeout)
+    },
+    error = function(timeout = 0L){
+      subprocess::process_read(chromedrv, pipe = "stderr", timeout)
+    },
+    stop = function(){subprocess::process_kill(chromedrv)}
+  )
 }
