@@ -19,7 +19,21 @@ warn, info, config, debug, trace]}
 
 \item{path}{base URL path prefix for commands, e.g. wd/hub}
 }
+\value{
+Returns a list with named elements process, output, error and
+    stop. process is the output from calling \code{\link{spawn_process}}
+    output, error and stop are functions calling
+    \code{\link{process_read}}, \code{\link{process_read}} with "stderr"
+    pipe and \code{\link{process_kill}}  respectively  on process.
+}
 \description{
 Start gecko driver
+}
+\examples{
+\dontrun{
+gDrv <- gecko()
+gDrv$output()
+gDrv$stop()
+}
 }
 

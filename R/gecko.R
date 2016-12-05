@@ -9,10 +9,19 @@
 #'     warn, info, config, debug, trace]
 #' @param path base URL path prefix for commands, e.g. wd/hub
 #'
-#' @return
+#' @return Returns a list with named elements process, output, error and
+#'     stop. process is the output from calling \code{\link{spawn_process}}
+#'     output, error and stop are functions calling
+#'     \code{\link{process_read}}, \code{\link{process_read}} with "stderr"
+#'     pipe and \code{\link{process_kill}}  respectively  on process.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' gDrv <- gecko()
+#' gDrv$output()
+#' gDrv$stop()
+#' }
 
 gecko <- function(port = 4567L, version = "latest",
                   log = c("fatal", "error", "warn", "info", "config",
@@ -51,10 +60,28 @@ gecko <- function(port = 4567L, version = "latest",
   geckopath <- list.files(geckodir,
                            pattern = "geckodriver($|.exe$)",
                            full.names = TRUE)
-  cmd <- sprintf( "%s --port %s --log %s", shQuote(geckopath), port, log)
-  geckodrv <- process$new(commandline = cmd)
-  Sys.sleep(1)
-  if(!geckodrv$is_alive()){stop("Geckodriver couldn't be started",
-                                geckodrv$read_error_lines())}
-  list(process = geckodrv)
+  args <- c()
+  args[["port"]] <- sprintf("--port=%s", port)
+  args[["log"]] <- sprintf("--log=%s", log)
+  geckodrv <- subprocess::spawn_process(
+    geckopath, arguments = args,
+    environment = Sys.getenv()[!grepl("R_", names(Sys.getenv()))])
+  if(!is.na(subprocess::process_return_code(geckodrv))){
+    stop("Geckodriver couldn't be started",
+         subprocess::process_read(geckodrv, "stderr"))
+  }
+  if(!is.na(subprocess::process_return_code(geckodrv))){
+    stop("Geckodriver couldn't be started",
+         subprocess::process_read(geckodrv, "stderr"))
+  }
+  list(
+    process = geckodrv,
+    output = function(timeout = 0L){
+      subprocess::process_read(geckodrv, timeout = timeout)
+    },
+    error = function(timeout = 0L){
+      subprocess::process_read(geckodrv, pipe = "stderr", timeout)
+    },
+    stop = function(){subprocess::process_kill(geckodrv)}
+  )
 }
