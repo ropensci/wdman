@@ -23,7 +23,7 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
   cyml[[platvec]] <-
     switch(Sys.info()["sysname"],
            Linux = grep("linux", cyml[[platvec]], value = TRUE),
-           windows = grep("win", cyml[[platvec]], value = TRUE),
+           Windows = grep("win", cyml[[platvec]], value = TRUE),
            Darwin = grep("mac", cyml[[platvec]], value = TRUE),
            stop("Unknown OS")
     )
@@ -54,8 +54,9 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
     args[["url-base"]] <- sprintf("--url-base=%s", path)
     args[["verbose"]] <- "--verbose"
     args[["log-path"]] <- sprintf("--log-path=%s", tFile)
-    chromedrv <- subprocess::spawn_process(chromepath, arguments = args,
-                                          environment = Sys.getenv())
+    chromedrv <- subprocess::spawn_process(
+      chromepath, arguments = args,
+      environment = Sys.getenv()[!grepl("R_", names(Sys.getenv()))])
     if(!is.na(subprocess::process_return_code(chromedrv))){
       stop("Chromedriver couldn't be started",
            subprocess::process_read(chromedrv, "stderr"))
