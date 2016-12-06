@@ -10,10 +10,10 @@ predlfunction:
     history: 3
     appname: "phantomjs"
     platformregex:
-    - "linux-x86_64"
-    - "linux-i686"
+    - "(?!.*-symbols)linux-x86_64"
+    - "(?!.*-symbols)linux-i686"
     - "windows"
-    - "macosx"
+    - "(?!.*-symbols)macosx"
 dlfunction:
   "binman::download_files": []
 postdlfunction:
