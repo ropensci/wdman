@@ -34,8 +34,8 @@ gecko <- function(port = 4567L, version = "latest",
   platvec <- c("predlfunction", "binman::predl_github_assets","platform")
   gyml[[platvec]] <-
     switch(Sys.info()["sysname"],
-           Linux = grep("linux", gyml[[platvec]], value = TRUE),
-           windows = grep("win", gyml[[platvec]], value = TRUE),
+           Linux = grep(os_arch("linux"), gyml[[platvec]], value = TRUE),
+           windows = grep(os_arch("win"), gyml[[platvec]], value = TRUE),
            Darwin = grep("mac", gyml[[platvec]], value = TRUE),
            stop("Unknown OS")
     )

@@ -3,8 +3,10 @@ predlfunction:
   "binman::predl_github_assets":
     url: https://api.github.com/repos/mozilla/geckodriver/releases
     platform:
+    - linux32
     - linux64
     - macos
+    - win32
     - win64
     history: 3
     appname: "geckodriver"

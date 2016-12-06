@@ -4,6 +4,7 @@ predlfunction:
     url: https://www.googleapis.com/storage/v1/b/chromedriver/o
     platform:
     - mac64
+    - linux32
     - linux64
     - win32
     history: 3

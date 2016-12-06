@@ -28,10 +28,10 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub"){
   assert_that(is_string(path))
   chromeyml <- system.file("yaml", "chromedriver.yml", package = "wdman")
   cyml <- yaml::yaml.load_file(chromeyml)
-  platvec <- c("predlfunction", "binman::predl_google_storage","platform")
+  platvec <- c("predlfunction", "binman::predl_google_storage", "platform")
   cyml[[platvec]] <-
     switch(Sys.info()["sysname"],
-           Linux = grep("linux", cyml[[platvec]], value = TRUE),
+           Linux = grep(os_arch("linux"), cyml[[platvec]], value = TRUE),
            Windows = grep("win", cyml[[platvec]], value = TRUE),
            Darwin = grep("mac", cyml[[platvec]], value = TRUE),
            stop("Unknown OS")
