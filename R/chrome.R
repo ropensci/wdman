@@ -63,8 +63,9 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub"){
   args[["verbose"]] <- "--verbose"
   args[["log-path"]] <- sprintf("--log-path=%s", tFile)
   chromedrv <- subprocess::spawn_process(
-    chromepath, arguments = args,
-    environment = Sys.getenv()[!grepl("R_", names(Sys.getenv()))])
+    chromepath, arguments = args#,
+    #environment = Sys.getenv()[!grepl("R_", names(Sys.getenv()))]
+    )
   if(!is.na(subprocess::process_return_code(chromedrv))){
     stop("Chromedriver couldn't be started",
          subprocess::process_read(chromedrv, "stderr"))
