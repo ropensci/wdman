@@ -63,6 +63,9 @@ phantomjs <- function(port = 4567L, version = "latest",
                            pattern = "phantomjs($|\\.exe$)",
                            recursive = TRUE,
                            full.names = TRUE)
+  if(file.access(phantompath, 1) < 0){
+    Sys.chmod(phantompath, '0755')
+  }
   args <- c()
   tFile <- tempfile(fileext = ".txt")
   args[["webdriver"]] <- sprintf("--webdriver=%s", port)
