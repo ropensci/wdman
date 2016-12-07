@@ -41,6 +41,10 @@ selenium <- function(port = 4567L,
   assert_that(is_string_or_null(chromever))
   assert_that(is_string_or_null(geckover))
   assert_that(is_string_or_null(phantomver))
+  javapath <- Sys.which("java")
+  if(identical(javapath, "")){
+    stop("PATH to JAVA not found. Please check JAVA is installed.")
+  }
   syml <- system.file("yaml", "seleniumserver.yml", package = "wdman")
   message("checking Selenium Server versions:")
   process_yaml(syml)
@@ -63,31 +67,44 @@ selenium <- function(port = 4567L,
   selpath <- list.files(seldir,
                         pattern = "selenium-server-standalone",
                         full.names = TRUE)
+  if(file.access(selpath, 1) < 0){
+    Sys.chmod(selpath, '0755')
+  }
   jvmargs <- c()
   selargs <- c()
-  tFile <- tempfile(fileext = ".txt")
   if(!is.null(chromever)){
-    chromecheck <- chromecheck()
+    chromecheck <- chrome_check()
     cver <- chrome_ver(chromecheck[["platform"]], chromever)
-    jvmargs[["chrome"]] <- sprintf("-Dwebdriver.chrome.driver=%s", cver)
+    jvmargs[["chrome"]] <- sprintf(
+      "-Dwebdriver.chrome.driver=%s",
+      cver[["path"]]
+    )
   }
   if(!is.null(geckover)){
-    geckocheck <- geckocheck()
+    geckocheck <- gecko_check()
     gver <- gecko_ver(geckocheck[["platform"]], geckover)
-    jvmargs[["chrome"]] <- sprintf("-Dwebdriver.gecko.driver=%s", gver)
+    jvmargs[["gecko"]] <- sprintf(
+      "-Dwebdriver.gecko.driver=%s",
+      gver[["path"]]
+    )
   }
   if(!is.null(phantomver)){
-    phantomcheck <- phantomcheck()
+    phantomcheck <- phantom_check()
     pver <- phantom_ver(phantomcheck[["platform"]], phantomver)
-    jvmargs[["chrome"]] <- sprintf("-Dphantomjs.binary.path=%s", pver)
+    jvmargs[["phantom"]] <- sprintf(
+      "-Dphantomjs.binary.path=%s",
+      pver[["path"]]
+    )
   }
   # should be the last JVM argument
-  jvmargs[["jar"]] <- sprintf("-jar %s", selpath)
+  jvmargs[["jar"]] <- "-jar"
+  jvmargs[["selpath"]] <- selpath
   # Selenium JAR arguments
-  selargs[["port"]] <- sprintf("-port %s", port)
+  selargs[["portswitch"]] <- "-port"
+  selargs[["port"]] <- port
 
   seleniumdrv <- subprocess::spawn_process(
-    selpath, arguments = c(jvmargs, selargs)
+    javapath, arguments = c(jvmargs, selargs)
   )
   if(!is.na(subprocess::process_return_code(seleniumdrv))){
     stop("Selenium server couldn't be started",

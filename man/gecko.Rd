@@ -16,8 +16,6 @@ sourced run binman::list_versions("geckodriver")}
 
 \item{log}{Set Gecko log level [values: fatal, error,
 warn, info, config, debug, trace]}
-
-\item{path}{base URL path prefix for commands, e.g. wd/hub}
 }
 \value{
 Returns a list with named elements process, output, error and
