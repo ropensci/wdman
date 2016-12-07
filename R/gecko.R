@@ -29,43 +29,15 @@ gecko <- function(port = 4567L, version = "latest",
   assert_that(is_integer(port))
   assert_that(is_string(version))
   log <- match.arg(log)
-  geckoyml <- system.file("yaml", "geckodriver.yml", package = "wdman")
-  gyml <- yaml::yaml.load_file(geckoyml)
-  platvec <- c("predlfunction", "binman::predl_github_assets","platform")
-  gyml[[platvec]] <-
-    switch(Sys.info()["sysname"],
-           Linux = grep(os_arch("linux"), gyml[[platvec]], value = TRUE),
-           windows = grep(os_arch("win"), gyml[[platvec]], value = TRUE),
-           Darwin = grep("mac", gyml[[platvec]], value = TRUE),
-           stop("Unknown OS")
-    )
-  tempyml <- tempfile(fileext = ".yml")
-  write(yaml::as.yaml(gyml), tempyml)
-  message("checking geckodriver versions:")
-  process_yaml(tempyml)
-  geckoplat <- gyml[[platvec]]
-  geckover <- binman::list_versions("geckodriver")[[geckoplat]]
-  geckover <- if(identical(version, "latest")){
-    vermax <- as.character(max(package_version(gsub("v", "", geckover))))
-    paste0("v", vermax)
-  }else{
-    mtch <- match(version, geckover)
-    if(is.na(mtch) || is.null(mtch)){
-      stop("version requested doesnt match versions available = ",
-           paste(geckover, collpase = ","))
-    }
-    geckover[mtch]
-  }
-  geckodir <- file.path(app_dir("geckodriver"), geckoplat, geckover)
-  geckopath <- list.files(geckodir,
-                           pattern = "geckodriver($|.exe$)",
-                           full.names = TRUE)
+  geckocheck <- gecko_check()
+  geckoplat <- geckocheck[["platform"]]
+  geckoversion <- gecko_ver(geckoplat, version)
   args <- c()
   args[["port"]] <- sprintf("--port=%s", port)
   args[["log"]] <- sprintf("--log=%s", log)
   geckodrv <- subprocess::spawn_process(
-    geckopath, arguments = args,
-    environment = Sys.getenv()[!grepl("R_", names(Sys.getenv()))])
+    geckoversion[["path"]], arguments = args
+  )
   if(!is.na(subprocess::process_return_code(geckodrv))){
     stop("Geckodriver couldn't be started",
          subprocess::process_read(geckodrv, "stderr"))
@@ -84,4 +56,43 @@ gecko <- function(port = 4567L, version = "latest",
     },
     stop = function(){subprocess::process_kill(geckodrv)}
   )
+}
+
+gecko_check <- function(){
+  geckoyml <- system.file("yaml", "geckodriver.yml", package = "wdman")
+  gyml <- yaml::yaml.load_file(geckoyml)
+  platvec <- c("predlfunction", "binman::predl_github_assets","platform")
+  gyml[[platvec]] <-
+    switch(Sys.info()["sysname"],
+           Linux = grep(os_arch("linux"), gyml[[platvec]], value = TRUE),
+           windows = grep(os_arch("win"), gyml[[platvec]], value = TRUE),
+           Darwin = grep("mac", gyml[[platvec]], value = TRUE),
+           stop("Unknown OS")
+    )
+  tempyml <- tempfile(fileext = ".yml")
+  write(yaml::as.yaml(gyml), tempyml)
+  message("checking geckodriver versions:")
+  process_yaml(tempyml)
+  geckoplat <- gyml[[platvec]]
+  list(yaml = gyml, platform = geckoplat)
+}
+
+gecko_ver <- function(platform, version){
+  geckover <- binman::list_versions("geckodriver")[[platform]]
+  geckover <- if(identical(version, "latest")){
+    vermax <- as.character(max(package_version(gsub("v", "", geckover))))
+    paste0("v", vermax)
+  }else{
+    mtch <- match(version, geckover)
+    if(is.na(mtch) || is.null(mtch)){
+      stop("version requested doesnt match versions available = ",
+           paste(geckover, collpase = ","))
+    }
+    geckover[mtch]
+  }
+  geckodir <- file.path(app_dir("geckodriver"), geckoplat, geckover)
+  geckopath <- list.files(geckodir,
+                          pattern = "geckodriver($|.exe$)",
+                          full.names = TRUE)
+  list(version = geckover, dir = geckodir, path = geckopath)
 }
