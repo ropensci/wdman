@@ -1,0 +1,106 @@
+#' Start Selenium Server
+#'
+#' Start Selenium Server
+#' @param port Port to run on
+#' @param version what version of Selenium Server to run. Default = "latest"
+#'     which runs the most recent version. To see other version currently
+#'     sourced run binman::list_versions("seleniumserver")
+#' @param chromever what version of Chrome driver to run. Default = "latest"
+#'     which runs the most recent version. To see other version currently
+#'     sourced run binman::list_versions("chromedriver"), A value of NULL
+#'     excludes adding the chrome browser to Selenium Server.
+#' @param geckover what version of Gecko driver to run. Default = "latest"
+#'     which runs the most recent version. To see other version currently
+#'     sourced run binman::list_versions("geckodriver"), A value of NULL
+#'     excludes adding the firefox browser to Selenium Server.
+#' @param phantomver what version of PhantomJS to run. Default = "latest"
+#'     which runs the most recent version. To see other version currently
+#'     sourced run binman::list_versions("phantomjs"), A value of NULL
+#'     excludes adding the PhantomJS headless browser to Selenium Server.
+#' @return Returns a list with named elements process, output, error
+#'     and stop. process is the output from calling \code{\link{spawn_process}}
+#'     output, error and stop are functions calling
+#'     \code{\link{process_read}}, \code{\link{process_read}} with "stderr"
+#'     pipe and \code{\link{process_kill}}  respectively  on process.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' selServ <- selenium()
+#' selServ$output()
+#' selServ$stop()
+#' }
+
+selenium <- function(port = 4567L,
+                     version = "latest",
+                     chromever = "latest",
+                     geckover = "latest",
+                     phantomver = "latest"){
+  assert_that(is_integer(port))
+  assert_that(is_string(version))
+  assert_that(is_string_or_null(chromever))
+  assert_that(is_string_or_null(geckover))
+  assert_that(is_string_or_null(phantomver))
+  syml <- system.file("yaml", "seleniumserver.yml", package = "wdman")
+  message("checking Selenium Server versions:")
+  process_yaml(syml)
+  selplat <- "generic"
+  selver <- binman::list_versions("seleniumserver")[[selplat]]
+  selver <- if(identical(version, "latest")){
+    # fix for beta versioning
+    sver <- gsub("3.0.0-beta", "2.9.9.", selver)
+    sver <- as.character(max(package_version(sver)))
+    sub("2.9.9.","3.0.0-beta", sver)
+  }else{
+    mtch <- match(version, selver)
+    if(is.na(mtch) || is.null(mtch)){
+      stop("version requested doesnt match versions available = ",
+           paste(selver, collpase = ","))
+    }
+    selver[mtch]
+  }
+  seldir <- file.path(app_dir("seleniumserver"), selplat, selver)
+  selpath <- list.files(seldir,
+                        pattern = "selenium-server-standalone",
+                        full.names = TRUE)
+  jvmargs <- c()
+  selargs <- c()
+  tFile <- tempfile(fileext = ".txt")
+  if(!is.null(chromever)){
+    chromecheck <- chromecheck()
+    cver <- chrome_ver(chromecheck[["platform"]], chromever)
+    jvmargs[["chrome"]] <- sprintf("-Dwebdriver.chrome.driver=%s", cver)
+  }
+  if(!is.null(geckover)){
+    geckocheck <- geckocheck()
+    gver <- gecko_ver(geckocheck[["platform"]], geckover)
+    jvmargs[["chrome"]] <- sprintf("-Dwebdriver.gecko.driver=%s", gver)
+  }
+  if(!is.null(phantomver)){
+    phantomcheck <- phantomcheck()
+    pver <- phantom_ver(phantomcheck[["platform"]], phantomver)
+    jvmargs[["chrome"]] <- sprintf("-Dphantomjs.binary.path=%s", pver)
+  }
+  # should be the last JVM argument
+  jvmargs[["jar"]] <- sprintf("-jar %s", selpath)
+  # Selenium JAR arguments
+  selargs[["port"]] <- sprintf("-port %s", port)
+
+  seleniumdrv <- subprocess::spawn_process(
+    selpath, arguments = c(jvmargs, selargs)
+  )
+  if(!is.na(subprocess::process_return_code(seleniumdrv))){
+    stop("Selenium server couldn't be started",
+         subprocess::process_read(seleniumdrv, "stderr"))
+  }
+  list(
+    process = seleniumdrv,
+    output = function(timeout = 0L){
+      subprocess::process_read(seleniumdrv, timeout = timeout)
+    },
+    error = function(timeout = 0L){
+      subprocess::process_read(seleniumdrv, pipe = "stderr", timeout)
+    },
+    stop = function(){subprocess::process_kill(seleniumdrv)}
+  )
+}

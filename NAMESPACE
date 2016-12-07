@@ -3,6 +3,7 @@
 export(chrome)
 export(gecko)
 export(phantomjs)
+export(selenium)
 importFrom(assertthat,assert_that)
 importFrom(binman,app_dir)
 importFrom(binman,list_versions)
