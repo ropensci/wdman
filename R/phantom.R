@@ -28,6 +28,35 @@ phantomjs <- function(port = 4567L, version = "latest",
   assert_that(is_integer(port))
   assert_that(is_string(version))
   loglevel <- match.arg(loglevel)
+  phantomcheck <- phantom_check()
+  phantomplat <- phantomcheck[["platform"]]
+  phantomversion <- phantom_ver(phantomplat, version)
+  args <- c()
+  tFile <- tempfile(fileext = ".txt")
+  args[["webdriver"]] <- sprintf("--webdriver=%s", port)
+  args[["log-path"]] <- sprintf("--webdriver-logfile=%s", tFile)
+  args[["log-level"]] <- sprintf("--webdriver-loglevel=%s", loglevel)
+  phantomdrv <- subprocess::spawn_process(
+    phantomversion[["path"]], arguments = args
+  )
+  if(!is.na(subprocess::process_return_code(phantomdrv))){
+    stop("PhantomJS couldn't be started",
+         subprocess::process_read(phantomdrv, "stderr"))
+  }
+  list(
+    process = phantomdrv,
+    output = function(timeout = 0L){
+      subprocess::process_read(phantomdrv, timeout = timeout)
+    },
+    error = function(timeout = 0L){
+      subprocess::process_read(phantomdrv, pipe = "stderr", timeout)
+    },
+    stop = function(){subprocess::process_kill(phantomdrv)},
+    log = function(){readLines(tFile)}
+  )
+}
+
+phantom_check <- function(){
   phantomyml <- system.file("yaml", "phantomjs.yml", package = "wdman")
   pjsyml <- yaml::yaml.load_file(phantomyml)
   platvec <- c("predlfunction", "binman::predl_bitbucket_downloads",
@@ -46,7 +75,11 @@ phantomjs <- function(port = 4567L, version = "latest",
   message("checking phantomjs versions:")
   process_yaml(tempyml)
   phantomplat <- pjsyml[[platvec[-4]]]
-  phantomver <- binman::list_versions("phantomjs")[[phantomplat]]
+  list(yaml = pjsyml, platform = phantomplat)
+}
+
+phantom_ver <- function(platform, version){
+  phantomver <- binman::list_versions("phantomjs")[[platform]]
   phantomver <- if(identical(version, "latest")){
     as.character(max(package_version(phantomver)))
   }else{
@@ -60,33 +93,11 @@ phantomjs <- function(port = 4567L, version = "latest",
   phantomdir <- file.path(app_dir("phantomjs"), phantomplat,
                           phantomver)
   phantompath <- list.files(phantomdir,
-                           pattern = "phantomjs($|\\.exe$)",
-                           recursive = TRUE,
-                           full.names = TRUE)
+                            pattern = "phantomjs($|\\.exe$)",
+                            recursive = TRUE,
+                            full.names = TRUE)
   if(file.access(phantompath, 1) < 0){
     Sys.chmod(phantompath, '0755')
   }
-  args <- c()
-  tFile <- tempfile(fileext = ".txt")
-  args[["webdriver"]] <- sprintf("--webdriver=%s", port)
-  args[["log-path"]] <- sprintf("--webdriver-logfile=%s", tFile)
-  args[["log-level"]] <- sprintf("--webdriver-loglevel=%s", loglevel)
-  phantomdrv <- subprocess::spawn_process(
-    phantompath, arguments = args,
-    environment = Sys.getenv()[!grepl("R_", names(Sys.getenv()))])
-  if(!is.na(subprocess::process_return_code(phantomdrv))){
-    stop("PhantomJS couldn't be started",
-         subprocess::process_read(phantomdrv, "stderr"))
-  }
-  list(
-    process = phantomdrv,
-    output = function(timeout = 0L){
-      subprocess::process_read(phantomdrv, timeout = timeout)
-    },
-    error = function(timeout = 0L){
-      subprocess::process_read(phantomdrv, pipe = "stderr", timeout)
-    },
-    stop = function(){subprocess::process_kill(phantomdrv)},
-    log = function(){readLines(tFile)}
-  )
+  list(version = phantomver, dir = phantomdir, path = phantompath)
 }
