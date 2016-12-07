@@ -5,7 +5,6 @@ Version: 0.1.0
 Authors@R: c(
     person("John", "Harrison", , "johndharrison0@gmail.com",
     role = c("aut", "cre"), comment = "R package wdman"))
-Maintainer: The package maintainer <yourself@somewhere.net>
 Description: wdman
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -17,7 +16,8 @@ Suggests:
     covr
 Imports:
     binman,
-    subprocess,
+    assertthat,
+    subprocess (>= 0.8.0),
     yaml
 URL: https://github.com/johndharrison/wdman
 URLNote: https://github.com/johndharrison/wdman
