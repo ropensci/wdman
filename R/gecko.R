@@ -64,7 +64,7 @@ gecko_check <- function(){
   gyml[[platvec]] <-
     switch(Sys.info()["sysname"],
            Linux = grep(os_arch("linux"), gyml[[platvec]], value = TRUE),
-           windows = grep(os_arch("win"), gyml[[platvec]], value = TRUE),
+           Windows = grep(os_arch("win"), gyml[[platvec]], value = TRUE),
            Darwin = grep("mac", gyml[[platvec]], value = TRUE),
            stop("Unknown OS")
     )
