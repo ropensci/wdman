@@ -9,6 +9,9 @@ predlfunction:
     platformregex:
     - "selenium-server-standalone"
     fileregex: "\\.jar$"
+    versionregex:
+    - ".*selenium-server-standalone-(.*)\\.jar"
+    - "\\1"
 dlfunction:
   "binman::download_files": []
 postdlfunction:
