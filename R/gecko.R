@@ -7,7 +7,6 @@
 #'     sourced run binman::list_versions("geckodriver")
 #' @param log Set Gecko log level [values: fatal, error,
 #'     warn, info, config, debug, trace]
-#' @param path base URL path prefix for commands, e.g. wd/hub
 #'
 #' @return Returns a list with named elements process, output, error and
 #'     stop. process is the output from calling \code{\link{spawn_process}}
@@ -90,7 +89,7 @@ gecko_ver <- function(platform, version){
     }
     geckover[mtch]
   }
-  geckodir <- file.path(app_dir("geckodriver"), geckoplat, geckover)
+  geckodir <- file.path(app_dir("geckodriver"), platform, geckover)
   geckopath <- list.files(geckodir,
                           pattern = "geckodriver($|.exe$)",
                           full.names = TRUE)

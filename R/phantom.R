@@ -90,8 +90,7 @@ phantom_ver <- function(platform, version){
     }
     phantomver[mtch]
   }
-  phantomdir <- file.path(app_dir("phantomjs"), phantomplat,
-                          phantomver)
+  phantomdir <- file.path(app_dir("phantomjs"), platform, phantomver)
   phantompath <- list.files(phantomdir,
                             pattern = "phantomjs($|\\.exe$)",
                             recursive = TRUE,
