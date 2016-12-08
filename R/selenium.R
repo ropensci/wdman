@@ -69,7 +69,9 @@ selenium <- function(port = 4567L,
     }
     selver[mtch]
   }
-  seldir <- file.path(app_dir("seleniumserver"), selplat, selver)
+  seldir <- normalizePath(
+    file.path(app_dir("seleniumserver"), selplat, selver)
+  )
   selpath <- list.files(seldir,
                         pattern = "selenium-server-standalone",
                         full.names = TRUE)
