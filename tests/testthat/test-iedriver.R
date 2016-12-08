@@ -1,7 +1,6 @@
 context("iedriver")
 
 test_that("canCallIEDriver", {
-  myNP <- normalizePath
   with_mock(
     `binman::process_yaml` = function(...){},
     `binman::list_versions` = function(...){
