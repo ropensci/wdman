@@ -11,6 +11,12 @@ test_that("canCallPhantomJS", {
         windows = c("1.9.8", "2.0.0", "2.1.1")
       )
     },
+    `binman::app_dir` = function(...){
+      "some.dir"
+    },
+    `base::normalizePath` = function(path, winslash, mustWork){
+      path
+    },
     `base::list.files` = function(...){
       "some.path"
     },

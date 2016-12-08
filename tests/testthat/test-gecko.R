@@ -10,6 +10,12 @@ test_that("canCallChromeGecko", {
         win64 = c("v0.10.0", "v0.11.0", "v0.11.1")
       )
     },
+    `binman::app_dir` = function(...){
+      "some.dir"
+    },
+    `base::normalizePath` = function(path, winslash, mustWork){
+      path
+    },
     `base::list.files` = function(...){
       "some.path"
     },

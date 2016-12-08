@@ -10,6 +10,12 @@ test_that("canCallChrome", {
         win32 = c("2.23", "2.24", "2.25")
       )
     },
+    `binman::app_dir` = function(...){
+      "some.dir"
+    },
+    `base::normalizePath` = function(path, winslash, mustWork){
+      path
+    },
     `base::list.files` = function(...){
       "some.path"
     },
