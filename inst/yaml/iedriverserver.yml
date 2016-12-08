@@ -1,0 +1,21 @@
+name: iedriverserver
+predlfunction:
+  "binman::predl_google_storage":
+    url: https://www.googleapis.com/storage/v1/b/selenium-release/o
+    platform:
+      - win32
+      - win64
+    history: 3
+    appname: "iedriverserver"
+    platformregex:
+      - "IEDriverServer_Win32"
+      - "IEDriverServer_x64"
+    fileregex: "\\.zip$"
+    versionregex:
+      - ".*IEDriverServer_Win32_(.*)\\.zip"
+      - "\\1"
+dlfunction:
+  "binman::download_files": []
+postdlfunction:
+  "binman::unziptar_dlfiles":
+    chmod: TRUE
