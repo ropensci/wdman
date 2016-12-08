@@ -17,6 +17,11 @@
 #'     which runs the most recent version. To see other version currently
 #'     sourced run binman::list_versions("phantomjs"), A value of NULL
 #'     excludes adding the PhantomJS headless browser to Selenium Server.
+#' @param iedrver what version of IEDriverServer to run. Default = "latest"
+#'     which runs the most recent version. To see other version currently
+#'     sourced run binman::list_versions("iedriverserver"), A value of NULL
+#'     excludes adding the internet explorer browser to Selenium Server.
+#'     NOTE this functionality is Windows OS only.
 #' @return Returns a list with named elements process, output, error
 #'     and stop. process is the output from calling \code{\link{spawn_process}}
 #'     output, error and stop are functions calling
@@ -35,6 +40,7 @@ selenium <- function(port = 4567L,
                      version = "latest",
                      chromever = "latest",
                      geckover = "latest",
+                     iedrver = NULL,
                      phantomver = "latest"){
   assert_that(is_integer(port))
   assert_that(is_string(version))
@@ -94,6 +100,14 @@ selenium <- function(port = 4567L,
     jvmargs[["phantom"]] <- sprintf(
       "-Dphantomjs.binary.path=%s",
       pver[["path"]]
+    )
+  }
+  if(!is.null(iedrver)){
+    iecheck <- ie_check()
+    iever <- ie_ver(iecheck[["platform"]], iedrver)
+    jvmargs[["internetexplorer"]] <- sprintf(
+      "-Dwebdriver.ie.driver=%s",
+      iever[["path"]]
     )
   }
   # should be the last JVM argument
