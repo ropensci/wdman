@@ -32,6 +32,12 @@ mock_binman_list_versions_iedriver <- function(...){
   )
 }
 
+mock_binman_list_versions_selenium <- function(...){
+  list(
+    generic = c("3.0.0", "3.0.0-beta4", "3.0.1")
+  )
+}
+
 mock_base_normalizePath <- function(path, winslash, mustWork){
   path
 }
