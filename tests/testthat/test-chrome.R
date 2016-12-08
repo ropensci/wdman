@@ -1,30 +1,14 @@
 context("chrome")
-
 test_that("canCallChrome", {
   with_mock(
-    `binman::process_yaml` = function(...){},
-    `binman::list_versions` = function(...){
-      list(
-        linux64 = c("2.23", "2.24", "2.25", "2.26"),
-        mac64 = c("2.23", "2.24", "2.25"),
-        win32 = c("2.23", "2.24", "2.25")
-      )
-    },
-    `binman::app_dir` = function(...){
-      "some.dir"
-    },
-    `base::normalizePath` = function(path, winslash, mustWork){
-      path
-    },
-    `base::list.files` = function(...){
-      "some.path"
-    },
-    `subprocess::spawn_process` = function(...){
-      "hello"
-    },
-    `subprocess::process_return_code` = function(...){
-      NA
-    },
+    `binman::process_yaml` = binman_process_yaml,
+    `binman::list_versions` = mock_binman_list_versions_chrome,
+    `binman::app_dir` = mock_binman_app_dir,
+    `base::normalizePath` = mock_base_normalizePath,
+    `base::list.files` = mock_base_list.files,
+    `subprocess::spawn_process` = mock_subprocess_spawn_process,
+    `subprocess::process_return_code` =
+      mock_subprocess_process_return_code,
     cDrv <- chrome()
   )
   expect_identical(cDrv$process, "hello")
