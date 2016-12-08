@@ -1,4 +1,4 @@
-binman_process_yaml = function(...){}
+binman_process_yaml <- function(...){}
 
 mock_binman_list_versions_chrome <- function(...){
   list(
