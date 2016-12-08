@@ -17,3 +17,13 @@ test_that("canCallIEDriver", {
   )
   expect_identical(ieDrv$process, "hello")
 })
+
+test_that("iedriver_verErrorWorks", {
+  with_mock(
+    `binman::list_versions` = mock_binman_list_versions_iedriver,
+    expect_error(
+      wdman:::ie_ver("linux64", "noversion"),
+      "doesnt match versions"
+    )
+  )
+})

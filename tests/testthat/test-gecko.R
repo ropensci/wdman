@@ -14,3 +14,13 @@ test_that("canCallChromeGecko", {
   )
   expect_identical(gDrv$process, "hello")
 })
+
+test_that("gecko_verErrorWorks", {
+  with_mock(
+    `binman::list_versions` = mock_binman_list_versions_gecko,
+    expect_error(
+      wdman:::gecko_ver("linux64", "noversion"),
+      "doesnt match versions"
+    )
+  )
+})

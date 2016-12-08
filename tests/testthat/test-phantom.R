@@ -14,3 +14,13 @@ test_that("canCallPhantomJS", {
   )
   expect_identical(pDrv$process, "hello")
 })
+
+test_that("phantom_verErrorWorks", {
+  with_mock(
+    `binman::list_versions` = mock_binman_list_versions_phantomjs,
+    expect_error(
+      wdman:::phantom_ver("linux64", "noversion"),
+      "doesnt match versions"
+    )
+  )
+})

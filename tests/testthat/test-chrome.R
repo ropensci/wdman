@@ -13,3 +13,13 @@ test_that("canCallChrome", {
   )
   expect_identical(cDrv$process, "hello")
 })
+
+test_that("chrome_verErrorWorks", {
+  with_mock(
+    `binman::list_versions` = mock_binman_list_versions_chrome,
+    expect_error(
+      wdman:::chrome_ver("linux64", "noversion"),
+      "doesnt match versions"
+    )
+  )
+})

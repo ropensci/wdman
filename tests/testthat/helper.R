@@ -27,7 +27,7 @@ mock_binman_list_versions_gecko <- function(...){
 
 mock_binman_list_versions_iedriver <- function(...){
   list(
-    win64 = c("2.53.0", "2.53.1", "3.0.0"),
+    win32 = c("2.53.0", "2.53.1", "3.0.0"),
     win64 = c("2.53.0", "2.53.1", "3.0.0")
   )
 }
