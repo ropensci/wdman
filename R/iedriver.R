@@ -90,7 +90,9 @@ ie_ver <- function(platform, version){
     }
     iever[mtch]
   }
-  iedir <- file.path(app_dir("iedriverserver"), platform, iever)
+  iedir <- normalizePath(
+    file.path(app_dir("iedriverserver"), platform, iever)
+  )
   iepath <- list.files(iedir,
                            pattern = "IEDriverServer($|.exe$)",
                            full.names = TRUE)
