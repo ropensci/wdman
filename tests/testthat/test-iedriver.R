@@ -3,27 +3,13 @@ context("iedriver")
 test_that("canCallIEDriver", {
   with_mock(
     `binman::process_yaml` = function(...){},
-    `binman::list_versions` = function(...){
-      list(
-        win64 = c("2.53.0", "2.53.1", "3.0.0"),
-        win64 = c("2.53.0", "2.53.1", "3.0.0")
-      )
-    },
-    `binman::app_dir` = function(...){
-      "some.dir"
-    },
-    `base::normalizePath` = function(path, winslash, mustWork){
-      path
-    },
-    `base::list.files` = function(...){
-      "some.path"
-    },
-    `subprocess::spawn_process` = function(...){
-      "hello"
-    },
-    `subprocess::process_return_code` = function(...){
-      NA
-    },
+    `binman::list_versions` = mock_binman_list_versions_iedriver,
+    `binman::app_dir` = mock_binman_app_dir,
+    `base::normalizePath` = mock_base_normalizePath,
+    `base::list.files` = mock_base_list.files,
+    `subprocess::spawn_process` = mock_subprocess_spawn_process,
+    `subprocess::process_return_code` =
+      mock_subprocess_process_return_code,
     `base::Sys.info` = function(...){
       structure("Windows", .Names = "sysname")
     },
