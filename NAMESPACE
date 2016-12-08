@@ -2,6 +2,7 @@
 
 export(chrome)
 export(gecko)
+export(iedriver)
 export(phantomjs)
 export(selenium)
 importFrom(assertthat,assert_that)
