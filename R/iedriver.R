@@ -5,6 +5,9 @@
 #' @param version what version of IE driver server to run. Default = "latest"
 #'     which runs the most recent version. To see other version currently
 #'     sourced run binman::list_versions("iedriverserver")
+#' @param loglevel Specifies the log level used by the server. Valid values
+#' are: TRACE, DEBUG, INFO, WARN, ERROR, and FATAL. Defaults to FATAL
+#' if not specified.
 #'
 #' @return Returns a list with named elements process, output, error, stop
 #'     and log. process is the output from calling \code{\link{spawn_process}}
@@ -21,18 +24,20 @@
 #' ieDrv$stop()
 #' }
 
-iedriver <- function(port = 4567L, version = "latest"){
+iedriver <- function(port = 4567L, version = "latest",
+                     loglevel = c("FATAL", "TRACE", "DEBUG", "INFO",
+                                  "WARN", "ERROR")){
   assert_that(is_integer(port))
   assert_that(is_string(version))
+  loglevel <- match.arg(loglevel)
   iecheck <- ie_check()
   ieplat <- iecheck[["platform"]]
   ieversion <- ie_ver(ieplat, version)
   args <- c()
   tFile <- tempfile(fileext = ".txt")
-  args[["port"]] <- sprintf("--port=%s", port)
-  args[["url-base"]] <- sprintf("--url-base=%s", path)
-  args[["verbose"]] <- "--verbose"
-  args[["log-path"]] <- sprintf("--log-path=%s", tFile)
+  args[["port"]] <- sprintf("/port=%s", port)
+  args[["log-level"]] <- sprintf("/log-level=%s", loglevel)
+  args[["log-path"]] <- sprintf("/log-file=%s", tFile)
   iedrv <- subprocess::spawn_process(
     ieversion[["path"]], arguments = args
   )
@@ -56,22 +61,25 @@ iedriver <- function(port = 4567L, version = "latest"){
 ie_check <- function(){
   ieyml <- system.file("yaml", "iedriverserver.yml", package = "wdman")
   iyml <- yaml::yaml.load_file(ieyml)
-  platvec <- c("predlfunction", "binman::predl_google_storage", "platform")
-  iyml[[platvec]] <-
+  platvec <- c("predlfunction", "binman::predl_google_storage",
+               "platform", "platformregex")
+  platmatch <-
     switch(Sys.info()["sysname"],
-           Windows = grep(os_arch("win"), cyml[[platvec]], value = TRUE),
+           Windows = grep(os_arch("win"), iyml[[platvec[-4]]]),
            stop("IEDriverServer not available for this platform")
     )
+  iyml[[platvec[-4]]] <- iyml[[platvec[-4]]][platmatch]
+  iyml[[platvec[-3]]] <- iyml[[platvec[-3]]][platmatch]
   tempyml <- tempfile(fileext = ".yml")
   write(yaml::as.yaml(iyml), tempyml)
   message("checking iedriver versions:")
   process_yaml(tempyml)
-  ieplat <- iyml[[platvec]]
+  ieplat <- iyml[[platvec[-4]]]
   list(yaml = iyml, platform = ieplat)
 }
 
 ie_ver <- function(platform, version){
-  iever <- binman::list_versions("iedriver")[[platform]]
+  iever <- binman::list_versions("iedriverserver")[[platform]]
   iever <- if(identical(version, "latest")){
     as.character(max(package_version(iever)))
   }else{
@@ -82,7 +90,7 @@ ie_ver <- function(platform, version){
     }
     iever[mtch]
   }
-  iedir <- file.path(app_dir("iedriver"), platform, iever)
+  iedir <- file.path(app_dir("iedriverserver"), platform, iever)
   iepath <- list.files(iedir,
                            pattern = "IEDriverServer($|.exe$)",
                            full.names = TRUE)

@@ -12,7 +12,7 @@ predlfunction:
       - "IEDriverServer_x64"
     fileregex: "\\.zip$"
     versionregex:
-      - ".*IEDriverServer_Win32_(.*)\\.zip"
+      - ".*IEDriverServer_.*_(.*)\\.zip"
       - "\\1"
 dlfunction:
   "binman::download_files": []
