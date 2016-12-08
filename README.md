@@ -1,11 +1,17 @@
-# wdman
+wdman
+==========================
+| CRAN version       | Travis build status   | Appveyor build status   | Coverage |
+| :-------------: |:-------------:|:-------------:|:-------------:|
+|  | [![Build Status](https://travis-ci.org/johndharrison/binman.svg?branch=master)](https://travis-ci.org/johndharrison/wdman) | [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/johndharrison/wdman?branch=master&svg=true)](https://ci.appveyor.com/project/johndharrison/wdman) | [![codecov](https://codecov.io/gh/johndharrison/wdman/branch/master/graph/badge.svg)](https://codecov.io/gh/johndharrison/wdman)|
 
-The goal of wdman is to ...
+## Installation
 
-## Example
+You can install wdman from github with:
 
-This is a basic example which shows you how to solve a common problem:
 
 ``` r
-## basic example code
+# install.packages("devtools")
+devtools::install_github("lbartnik/subprocess")
+devtools::install_github("johndharrison/binman")
+devtools::install_github("johndharrison/wdman")
 ```
