@@ -57,10 +57,7 @@ selenium <- function(port = 4567L,
   selplat <- "generic"
   selver <- binman::list_versions("seleniumserver")[[selplat]]
   selver <- if(identical(version, "latest")){
-    # fix for beta versioning
-    sver <- gsub("3.0.0-beta", "2.9.9.", selver)
-    sver <- as.character(max(package_version(sver)))
-    sub("2.9.9.","3.0.0-beta", sver)
+    as.character(max(binman::sem_ver(selver)))
   }else{
     mtch <- match(version, selver)
     if(is.na(mtch) || is.null(mtch)){
@@ -69,7 +66,9 @@ selenium <- function(port = 4567L,
     }
     selver[mtch]
   }
-  seldir <- file.path(app_dir("seleniumserver"), selplat, selver)
+  seldir <- normalizePath(
+    file.path(app_dir("seleniumserver"), selplat, selver)
+  )
   selpath <- list.files(seldir,
                         pattern = "selenium-server-standalone",
                         full.names = TRUE)

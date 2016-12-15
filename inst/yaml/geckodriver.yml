@@ -9,6 +9,9 @@ predlfunction:
     - win32
     - win64
     history: 3
+    versionregex:
+    - "^v"
+    - ""
     appname: "geckodriver"
 dlfunction:
   "binman::download_files": []

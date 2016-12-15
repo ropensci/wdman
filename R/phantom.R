@@ -81,7 +81,7 @@ phantom_check <- function(){
 phantom_ver <- function(platform, version){
   phantomver <- binman::list_versions("phantomjs")[[platform]]
   phantomver <- if(identical(version, "latest")){
-    as.character(max(package_version(phantomver)))
+    as.character(max(binman::sem_ver(phantomver)))
   }else{
     mtch <- match(version, phantomver)
     if(is.na(mtch) || is.null(mtch)){
@@ -90,7 +90,9 @@ phantom_ver <- function(platform, version){
     }
     phantomver[mtch]
   }
-  phantomdir <- file.path(app_dir("phantomjs"), platform, phantomver)
+  phantomdir <- normalizePath(
+    file.path(app_dir("phantomjs"), platform, phantomver)
+  )
   phantompath <- list.files(phantomdir,
                             pattern = "phantomjs($|\\.exe$)",
                             recursive = TRUE,

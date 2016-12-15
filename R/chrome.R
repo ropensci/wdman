@@ -77,7 +77,7 @@ chrome_check <- function(){
 chrome_ver <- function(platform, version){
   chromever <- binman::list_versions("chromedriver")[[platform]]
   chromever <- if(identical(version, "latest")){
-    as.character(max(package_version(chromever)))
+    as.character(max(binman::sem_ver(chromever)))
   }else{
     mtch <- match(version, chromever)
     if(is.na(mtch) || is.null(mtch)){
@@ -86,7 +86,9 @@ chrome_ver <- function(platform, version){
     }
     chromever[mtch]
   }
-  chromedir <- file.path(app_dir("chromedriver"), platform, chromever)
+  chromedir <- normalizePath(
+    file.path(app_dir("chromedriver"), platform, chromever)
+  )
   chromepath <- list.files(chromedir,
                            pattern = "chromedriver($|.exe$)",
                            full.names = TRUE)

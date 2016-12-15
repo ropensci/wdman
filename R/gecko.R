@@ -79,8 +79,7 @@ gecko_check <- function(){
 gecko_ver <- function(platform, version){
   geckover <- binman::list_versions("geckodriver")[[platform]]
   geckover <- if(identical(version, "latest")){
-    vermax <- as.character(max(package_version(gsub("v", "", geckover))))
-    paste0("v", vermax)
+    as.character(max(binman::sem_ver(geckover)))
   }else{
     mtch <- match(version, geckover)
     if(is.na(mtch) || is.null(mtch)){
@@ -89,7 +88,9 @@ gecko_ver <- function(platform, version){
     }
     geckover[mtch]
   }
-  geckodir <- file.path(app_dir("geckodriver"), platform, geckover)
+  geckodir <- normalizePath(
+    file.path(app_dir("geckodriver"), platform, geckover)
+  )
   geckopath <- list.files(geckodir,
                           pattern = "geckodriver($|.exe$)",
                           full.names = TRUE)
