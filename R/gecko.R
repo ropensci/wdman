@@ -79,8 +79,7 @@ gecko_check <- function(){
 gecko_ver <- function(platform, version){
   geckover <- binman::list_versions("geckodriver")[[platform]]
   geckover <- if(identical(version, "latest")){
-    vermax <- as.character(max(binman::sem_ver(gsub("v", "", geckover))))
-    paste0("v", vermax)
+    as.character(max(binman::sem_ver(geckover)))
   }else{
     mtch <- match(version, geckover)
     if(is.na(mtch) || is.null(mtch)){
