@@ -1,3 +1,8 @@
+# wdman 0.1.5
+
+* Use binman::sem_ver for versioing.
+* Remove the v in gecko versions.
+
 # wdman 0.1.4
 
 * Added tests for driver functions.
