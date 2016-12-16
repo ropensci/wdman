@@ -1,7 +1,12 @@
+# wdman 0.2.0
+
+* Added verbose arguments to the driver functions
+
 # wdman 0.1.5
 
 * Use binman::sem_ver for versioning.
 * Remove the v in gecko versions.
+* Improve logging in selenium function.
 
 # wdman 0.1.4
 
