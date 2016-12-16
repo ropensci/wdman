@@ -26,7 +26,7 @@
 
 iedriver <- function(port = 4567L, version = "latest",
                      loglevel = c("FATAL", "TRACE", "DEBUG", "INFO",
-                                  "WARN", "ERROR")){
+                                  "WARN", "ERROR"), verbose = TRUE){
   assert_that(is_integer(port))
   assert_that(is_string(version))
   loglevel <- match.arg(loglevel)
@@ -58,7 +58,7 @@ iedriver <- function(port = 4567L, version = "latest",
   )
 }
 
-ie_check <- function(){
+ie_check <- function(verbose){
   ieyml <- system.file("yaml", "iedriverserver.yml", package = "wdman")
   iyml <- yaml::yaml.load_file(ieyml)
   platvec <- c("predlfunction", "binman::predl_google_storage",
@@ -72,8 +72,8 @@ ie_check <- function(){
   iyml[[platvec[-3]]] <- iyml[[platvec[-3]]][platmatch]
   tempyml <- tempfile(fileext = ".yml")
   write(yaml::as.yaml(iyml), tempyml)
-  message("checking iedriver versions:")
-  process_yaml(tempyml)
+  if(verbose) message("checking iedriver versions:")
+  process_yaml(tempyml, verbose)
   ieplat <- iyml[[platvec[-4]]]
   list(yaml = iyml, platform = ieplat)
 }

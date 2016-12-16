@@ -41,7 +41,8 @@ selenium <- function(port = 4567L,
                      chromever = "latest",
                      geckover = "latest",
                      iedrver = NULL,
-                     phantomver = "latest"){
+                     phantomver = "latest",
+                     verbose = TRUE){
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_string_or_null(chromever))
@@ -52,8 +53,8 @@ selenium <- function(port = 4567L,
     stop("PATH to JAVA not found. Please check JAVA is installed.")
   }
   syml <- system.file("yaml", "seleniumserver.yml", package = "wdman")
-  message("checking Selenium Server versions:")
-  process_yaml(syml)
+  if(verbose) message("checking Selenium Server versions:")
+  process_yaml(syml, verbose)
   selplat <- "generic"
   selver <- binman::list_versions("seleniumserver")[[selplat]]
   selver <- if(identical(version, "latest")){
@@ -78,7 +79,7 @@ selenium <- function(port = 4567L,
   jvmargs <- c()
   selargs <- c()
   if(!is.null(chromever)){
-    chromecheck <- chrome_check()
+    chromecheck <- chrome_check(verbose)
     cver <- chrome_ver(chromecheck[["platform"]], chromever)
     jvmargs[["chrome"]] <- sprintf(
       "-Dwebdriver.chrome.driver=%s",
@@ -86,7 +87,7 @@ selenium <- function(port = 4567L,
     )
   }
   if(!is.null(geckover)){
-    geckocheck <- gecko_check()
+    geckocheck <- gecko_check(verbose)
     gver <- gecko_ver(geckocheck[["platform"]], geckover)
     jvmargs[["gecko"]] <- sprintf(
       "-Dwebdriver.gecko.driver=%s",
@@ -94,7 +95,7 @@ selenium <- function(port = 4567L,
     )
   }
   if(!is.null(phantomver)){
-    phantomcheck <- phantom_check()
+    phantomcheck <- phantom_check(verbose)
     pver <- phantom_ver(phantomcheck[["platform"]], phantomver)
     jvmargs[["phantom"]] <- sprintf(
       "-Dphantomjs.binary.path=%s",
@@ -102,7 +103,7 @@ selenium <- function(port = 4567L,
     )
   }
   if(!is.null(iedrver)){
-    iecheck <- ie_check()
+    iecheck <- ie_check(verbose)
     iever <- ie_ver(iecheck[["platform"]], iedrver)
     jvmargs[["internetexplorer"]] <- sprintf(
       "-Dwebdriver.ie.driver=%s",
@@ -127,7 +128,7 @@ selenium <- function(port = 4567L,
   if(length(startlog) >0){
     if(any(grepl("Address already in use", startlog))){
       subprocess::process_kill(seleniumdrv)
-      stop("Selenium server signals port =", port, " is already in use.")
+      stop("Selenium server signals port = ", port, " is already in use.")
     }
   }
   log <- data.frame(type = "stderr", message = startlog,

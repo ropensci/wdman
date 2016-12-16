@@ -24,7 +24,7 @@
 
 gecko <- function(port = 4567L, version = "latest",
                   log = c("fatal", "error", "warn", "info", "config",
-                          "debug", "trace")){
+                          "debug", "trace"), verbose = TRUE){
   assert_that(is_integer(port))
   assert_that(is_string(version))
   log <- match.arg(log)
@@ -57,7 +57,7 @@ gecko <- function(port = 4567L, version = "latest",
   )
 }
 
-gecko_check <- function(){
+gecko_check <- function(verbose){
   geckoyml <- system.file("yaml", "geckodriver.yml", package = "wdman")
   gyml <- yaml::yaml.load_file(geckoyml)
   platvec <- c("predlfunction", "binman::predl_github_assets","platform")
@@ -70,8 +70,8 @@ gecko_check <- function(){
     )
   tempyml <- tempfile(fileext = ".yml")
   write(yaml::as.yaml(gyml), tempyml)
-  message("checking geckodriver versions:")
-  process_yaml(tempyml)
+  if(verbose) message("checking geckodriver versions:")
+  process_yaml(tempyml, verbose)
   geckoplat <- gyml[[platvec]]
   list(yaml = gyml, platform = geckoplat)
 }
