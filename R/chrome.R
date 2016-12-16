@@ -77,7 +77,7 @@ chrome_check <- function(){
 chrome_ver <- function(platform, version){
   chromever <- binman::list_versions("chromedriver")[[platform]]
   chromever <- if(identical(version, "latest")){
-    as.character(max(binman::sem_ver(chromever)))
+    as.character(max(package_version(chromever)))
   }else{
     mtch <- match(version, chromever)
     if(is.na(mtch) || is.null(mtch)){

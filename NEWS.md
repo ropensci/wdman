@@ -1,6 +1,6 @@
 # wdman 0.1.5
 
-* Use binman::sem_ver for versioing.
+* Use binman::sem_ver for versioning.
 * Remove the v in gecko versions.
 
 # wdman 0.1.4
