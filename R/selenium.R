@@ -123,14 +123,54 @@ selenium <- function(port = 4567L,
     stop("Selenium server couldn't be started",
          subprocess::process_read(seleniumdrv, "stderr"))
   }
+  startlog <- selenium_start_log(seleniumdrv)
+  if(length(startlog) >0){
+    if(any(grepl("Address already in use", startlog))){
+      subprocess::process_kill(seleniumdrv)
+      stop("Selenium server signals port =", port, " is already in use.")
+    }
+  }
+  log <- data.frame(type = "stderr", message = startlog,
+                    stringsAsFactors = FALSE)
+  selenium_read <- function(pipe = "stdout", timeout = 0L){
+    msg <- subprocess::process_read(seleniumdrv, pipe = pipe,
+                                    timeout = timeout)
+    if(length(msg) > 0){
+      log <<- rbind.data.frame(log, data.frame(type = pipe,
+                                               message = msg,
+                                               stringsAsFactors = FALSE))
+    }
+    msg
+  }
   list(
     process = seleniumdrv,
-    output = function(timeout = 0L){
-      subprocess::process_read(seleniumdrv, timeout = timeout)
-    },
-    error = function(timeout = 0L){
-      subprocess::process_read(seleniumdrv, pipe = "stderr", timeout)
-    },
-    stop = function(){subprocess::process_kill(seleniumdrv)}
+    output = function(timeout = 0L){selenium_read(timeout = timeout)},
+    error = function(timeout = 0L){selenium_read("stderr",
+                                                 timeout = timeout)},
+    stop = function(){subprocess::process_kill(seleniumdrv)},
+    log = function(){output(); error(); log}
   )
+}
+
+
+selenium_start_log <- function(handle, poll = 3000L){
+  startlog <- c()
+  progress <- 0L
+  while(progress < poll){
+    begin <- Sys.time()
+    errchk <- tryCatch(
+      subprocess::process_read(handle, "stderr",
+                               timeout = min(500L, poll)),
+      error = function(e){
+        e
+      }
+    )
+    end <- Sys.time()
+    progress <- progress + min(as.numeric(end-begin), 500L, poll)
+    startlog <- c(startlog, errchk)
+    selup <- any(grepl("Selenium Server is up and running", errchk))
+    nocontent <- identical(errchk, character(0))
+    if(selup || nocontent){break}
+  }
+  startlog
 }
