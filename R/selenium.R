@@ -151,7 +151,7 @@ selenium <- function(port = 4567L,
     error = function(timeout = 0L){selenium_read("stderr",
                                                  timeout = timeout)},
     stop = function(){subprocess::process_kill(seleniumdrv)},
-    log = function(){output(); error(); log}
+    log = function(){selenium_read(); selenium_read("stderr"); log}
   )
 }
 
