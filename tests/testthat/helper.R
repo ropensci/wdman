@@ -19,9 +19,9 @@ mock_binman_list_versions_phantomjs <- function(...){
 
 mock_binman_list_versions_gecko <- function(...){
   list(
-    linux64 = c("v0.10.0", "v0.11.0", "v0.11.1"),
-    macos = c("v0.10.0", "v0.11.0", "v0.11.1"),
-    win64 = c("v0.10.0", "v0.11.0", "v0.11.1")
+    linux64 = c("0.10.0", "0.11.0", "0.11.1"),
+    macos = c("0.10.0", "0.11.0", "0.11.1"),
+    win64 = c("0.10.0", "0.11.0", "0.11.1")
   )
 }
 
@@ -56,4 +56,8 @@ mock_subprocess_spawn_process <- function(...){
 
 mock_subprocess_process_return_code <- function(...){
   NA
+}
+
+mock_subprocess_process_read_selenium <- function(...){
+  "Selenium Server is up and running"
 }

@@ -10,6 +10,8 @@ test_that("canCallSelenium", {
     `subprocess::spawn_process` = mock_subprocess_spawn_process,
     `subprocess::process_return_code` =
       mock_subprocess_process_return_code,
+    `subprocess::process_read` =
+      mock_subprocess_process_read_selenium,
     `base::Sys.info` = function(...){
       structure("Windows", .Names = "sysname")
     },

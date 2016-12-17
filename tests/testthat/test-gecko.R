@@ -1,6 +1,6 @@
 context("gecko")
 
-test_that("canCallChromeGecko", {
+test_that("canCallGecko", {
   with_mock(
     `binman::process_yaml` = function(...){},
     `binman::list_versions` = mock_binman_list_versions_gecko,
