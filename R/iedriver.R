@@ -8,6 +8,7 @@
 #' @param loglevel Specifies the log level used by the server. Valid values
 #' are: TRACE, DEBUG, INFO, WARN, ERROR, and FATAL. Defaults to FATAL
 #' if not specified.
+#' @param verbose If TRUE, include status messages (if any)
 #'
 #' @return Returns a list with named elements process, output, error, stop
 #'     and log. process is the output from calling \code{\link{spawn_process}}
@@ -30,7 +31,7 @@ iedriver <- function(port = 4567L, version = "latest",
   assert_that(is_integer(port))
   assert_that(is_string(version))
   loglevel <- match.arg(loglevel)
-  iecheck <- ie_check()
+  iecheck <- ie_check(verbose)
   ieplat <- iecheck[["platform"]]
   ieversion <- ie_ver(ieplat, version)
   args <- c()

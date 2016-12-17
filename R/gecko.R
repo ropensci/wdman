@@ -7,6 +7,7 @@
 #'     sourced run binman::list_versions("geckodriver")
 #' @param log Set Gecko log level [values: fatal, error,
 #'     warn, info, config, debug, trace]
+#' @param verbose If TRUE, include status messages (if any)
 #'
 #' @return Returns a list with named elements process, output, error and
 #'     stop. process is the output from calling \code{\link{spawn_process}}
@@ -28,7 +29,7 @@ gecko <- function(port = 4567L, version = "latest",
   assert_that(is_integer(port))
   assert_that(is_string(version))
   log <- match.arg(log)
-  geckocheck <- gecko_check()
+  geckocheck <- gecko_check(verbose)
   geckoplat <- geckocheck[["platform"]]
   geckoversion <- gecko_ver(geckoplat, version)
   args <- c()

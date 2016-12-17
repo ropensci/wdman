@@ -5,7 +5,7 @@
 \title{Start IE driver server}
 \usage{
 iedriver(port = 4567L, version = "latest", loglevel = c("FATAL", "TRACE",
-  "DEBUG", "INFO", "WARN", "ERROR"))
+  "DEBUG", "INFO", "WARN", "ERROR"), verbose = TRUE)
 }
 \arguments{
 \item{port}{Port to run on}
@@ -17,6 +17,8 @@ sourced run binman::list_versions("iedriverserver")}
 \item{loglevel}{Specifies the log level used by the server. Valid values
 are: TRACE, DEBUG, INFO, WARN, ERROR, and FATAL. Defaults to FATAL
 if not specified.}
+
+\item{verbose}{If TRUE, include status messages (if any)}
 }
 \value{
 Returns a list with named elements process, output, error, stop

@@ -6,6 +6,7 @@
 #'     which runs the most recent version. To see other version currently
 #'     sourced run binman::list_versions("chromedriver")
 #' @param path base URL path prefix for commands, e.g. wd/hub
+#' @param verbose If TRUE, include status messages (if any)
 #'
 #' @return Returns a list with named elements process, output, error, stop
 #'     and log. process is the output from calling \code{\link{spawn_process}}

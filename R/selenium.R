@@ -22,6 +22,7 @@
 #'     sourced run binman::list_versions("iedriverserver"), A value of NULL
 #'     excludes adding the internet explorer browser to Selenium Server.
 #'     NOTE this functionality is Windows OS only.
+#' @param verbose If TRUE, include status messages (if any)
 #' @return Returns a list with named elements process, output, error
 #'     and stop. process is the output from calling \code{\link{spawn_process}}
 #'     output, error and stop are functions calling
@@ -48,6 +49,7 @@ selenium <- function(port = 4567L,
   assert_that(is_string_or_null(chromever))
   assert_that(is_string_or_null(geckover))
   assert_that(is_string_or_null(phantomver))
+  assert_that(is_logical(verbose))
   javapath <- Sys.which("java")
   if(identical(javapath, "")){
     stop("PATH to JAVA not found. Please check JAVA is installed.")
