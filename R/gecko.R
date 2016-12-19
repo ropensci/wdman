@@ -5,7 +5,7 @@
 #' @param version what version of geckodriver to run. Default = "latest"
 #'     which runs the most recent version. To see other version currently
 #'     sourced run binman::list_versions("geckodriver")
-#' @param log Set Gecko log level [values: fatal, error,
+#' @param loglevel Set Gecko log level [values: fatal, error,
 #'     warn, info, config, debug, trace]
 #' @param verbose If TRUE, include status messages (if any)
 #'
@@ -24,7 +24,7 @@
 #' }
 
 gecko <- function(port = 4567L, version = "latest",
-                  log = c("fatal", "error", "warn", "info", "config",
+                  loglevel = c("fatal", "error", "warn", "info", "config",
                           "debug", "trace"), verbose = TRUE){
   assert_that(is_integer(port))
   assert_that(is_string(version))
@@ -35,7 +35,7 @@ gecko <- function(port = 4567L, version = "latest",
   geckoversion <- gecko_ver(geckoplat, version)
   args <- c()
   args[["port"]] <- sprintf("--port=%s", port)
-  args[["log"]] <- sprintf("--log=%s", log)
+  args[["log"]] <- sprintf("--log=%s", loglevel)
   geckodrv <- subprocess::spawn_process(
     geckoversion[["path"]], arguments = args
   )
