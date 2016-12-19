@@ -126,32 +126,26 @@ selenium <- function(port = 4567L,
     stop("Selenium server couldn't be started",
          subprocess::process_read(seleniumdrv, "stderr"))
   }
-  startlog <- selenium_start_log(seleniumdrv)
-  if(length(startlog) >0){
-    if(any(grepl("Address already in use", startlog))){
+  log <- as.environment(seleniumdrv)
+  if(length(log[["stderr"]]) >0){
+    if(any(grepl("Address already in use", log[["stderr"]]))){
       subprocess::process_kill(seleniumdrv)
       stop("Selenium server signals port = ", port, " is already in use.")
     }
   }
-  log <- data.frame(type = "stderr", message = startlog,
-                    stringsAsFactors = FALSE)
-  selenium_read <- function(pipe = "stdout", timeout = 0L){
-    msg <- subprocess::process_read(seleniumdrv, pipe = pipe,
-                                    timeout = timeout)
-    if(length(msg) > 0){
-      log <<- rbind.data.frame(log, data.frame(type = pipe,
-                                               message = msg,
-                                               stringsAsFactors = FALSE))
-    }
-    msg
-  }
   list(
     process = seleniumdrv,
-    output = function(timeout = 0L){selenium_read(timeout = timeout)},
-    error = function(timeout = 0L){selenium_read("stderr",
-                                                 timeout = timeout)},
+    output = function(timeout = 0L){
+      infun_read(seleniumdrv, log, "stdout", timeout = timeout)
+    },
+    error = function(timeout = 0L){
+      infun_read(seleniumdrv, log, "stderr", timeout = timeout)
+    },
     stop = function(){subprocess::process_kill(seleniumdrv)},
-    log = function(){selenium_read(); selenium_read("stderr"); log}
+    log = function(){
+      infun_read(seleniumdrv, log)
+      as.list(log)
+    }
   )
 }
 
@@ -162,17 +156,17 @@ selenium_start_log <- function(handle, poll = 3000L){
   while(progress < poll){
     begin <- Sys.time()
     errchk <- tryCatch(
-      subprocess::process_read(handle, "stderr",
-                               timeout = min(500L, poll)),
+      subprocess::process_read(handle, timeout = min(500L, poll)),
       error = function(e){
         e
       }
     )
     end <- Sys.time()
-    progress <- progress + min(as.numeric(end-begin), 500L, poll)
+    progress <- progress + min(as.numeric(end-begin)*1000L, 500L, poll)
     startlog <- c(startlog, errchk)
-    selup <- any(grepl("Selenium Server is up and running", errchk))
-    nocontent <- identical(errchk, character(0))
+    selup <- any(grepl("Selenium Server is up and running",
+                       errchk[["stderr"]]))
+    nocontent <- identical(unlist(errchk), character(0))
     if(selup || nocontent){break}
   }
   startlog
