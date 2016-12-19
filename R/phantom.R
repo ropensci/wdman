@@ -35,9 +35,7 @@ phantomjs <- function(port = 4567L, version = "latest",
   phantomplat <- phantomcheck[["platform"]]
   phantomversion <- phantom_ver(phantomplat, version)
   args <- c()
-  tFile <- tempfile(fileext = ".txt")
   args[["webdriver"]] <- sprintf("--webdriver=%s", port)
-  args[["log-path"]] <- sprintf("--webdriver-logfile=%s", tFile)
   args[["log-level"]] <- sprintf("--webdriver-loglevel=%s", loglevel)
   phantomdrv <- subprocess::spawn_process(
     phantomversion[["path"]], arguments = args
@@ -46,16 +44,28 @@ phantomjs <- function(port = 4567L, version = "latest",
     stop("PhantomJS couldn't be started",
          subprocess::process_read(phantomdrv, "stderr"))
   }
+  startlog <- generic_start_log(phantomdrv)
+  if(length(startlog[["stdout"]]) >0){
+    if(any(
+      grepl("GhostDriver - main.fail.*sourceURL", startlog[["stdout"]])
+    )){
+      subprocess::process_kill(phantomdrv)
+      stop("PhantomJS signals port = ", port, " is already in use.")
+    }
+  }
   list(
     process = phantomdrv,
     output = function(timeout = 0L){
-      subprocess::process_read(phantomdrv, timeout = timeout)
+      infun_read(phantomdrv, log, "stdout", timeout = timeout)
     },
     error = function(timeout = 0L){
-      subprocess::process_read(phantomdrv, pipe = "stderr", timeout)
+      infun_read(phantomdrv, log, "stderr", timeout = timeout)
     },
     stop = function(){subprocess::process_kill(phantomdrv)},
-    log = function(){readLines(tFile)}
+    log = function(){
+      infun_read(phantomdrv, log)
+      as.list(log)
+    }
   )
 }
 

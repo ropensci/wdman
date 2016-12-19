@@ -32,3 +32,7 @@ generic_start_log <- function(handle, poll = 3000L, increment = 500L){
   }
   startlog
 }
+
+`%+%` <- function(chr1, chr2){
+  paste0(chr1, chr2)
+}
