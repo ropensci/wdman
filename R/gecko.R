@@ -45,7 +45,7 @@ gecko <- function(port = 4567L, version = "latest",
   }
   startlog <- generic_start_log(geckodrv)
   if(length(startlog[["stderr"]]) >0){
-    if(any(grepl("Address already in use", startlog[["stderr"]]))){
+    if(any(grepl("Address in use", startlog[["stderr"]]))){
       subprocess::process_kill(geckodrv)
       stop("Gecko Driver signals port = ", port, " is already in use.")
     }
