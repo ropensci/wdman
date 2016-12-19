@@ -28,6 +28,7 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_string(path))
+  assert_that(is_logical(verbose))
   chromecheck <- chrome_check(verbose)
   chromeplat <- chromecheck[["platform"]]
   chromeversion <- chrome_ver(chromeplat, version)
@@ -36,7 +37,6 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
   args[["port"]] <- sprintf("--port=%s", port)
   args[["url-base"]] <- sprintf("--url-base=%s", path)
   args[["verbose"]] <- "--verbose"
-  args[["log-path"]] <- sprintf("--log-path=%s", tFile)
   chromedrv <- subprocess::spawn_process(
     chromeversion[["path"]], arguments = args
   )
@@ -44,16 +44,27 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
     stop("Chromedriver couldn't be started",
          subprocess::process_read(chromedrv, "stderr"))
   }
+  startlog <- chrome_start_log(chromedrv)
+  if(length(startlog[["stderr"]]) >0){
+    if(any(grepl("Address already in use", startlog[["stderr"]]))){
+      subprocess::process_kill(chromedrv)
+      stop("Chrome Driver signals port = ", port, " is already in use.")
+    }
+  }
+  log <- as.environment(startlog)
   list(
     process = chromedrv,
     output = function(timeout = 0L){
-      subprocess::process_read(chromedrv, timeout = timeout)
+      infun_read(chromedrv, log, "stdout", timeout = timeout)
     },
     error = function(timeout = 0L){
-      subprocess::process_read(chromedrv, pipe = "stderr", timeout)
+      infun_read(chromedrv, log, "stderr", timeout = timeout)
     },
     stop = function(){subprocess::process_kill(chromedrv)},
-    log = function(){readLines(tFile)}
+    log = function(){
+      infun_read(chromedrv, log)
+      as.list(log)
+    }
   )
 }
 
@@ -95,4 +106,25 @@ chrome_ver <- function(platform, version){
                            pattern = "chromedriver($|.exe$)",
                            full.names = TRUE)
   list(version = chromever, dir = chromedir, path = chromepath)
+}
+
+chrome_start_log <- function(handle, poll = 3000L){
+  startlog <- list(stdout = character(), stderr = character())
+  progress <- 0L
+  while(progress < poll){
+    begin <- Sys.time()
+    errchk <- tryCatch(
+      subprocess::process_read(handle, timeout = min(500L, poll)),
+      error = function(e){
+        e
+      }
+    )
+    print(errchk)
+    end <- Sys.time()
+    progress <- progress + min(as.numeric(end-begin)*1000L, 500L, poll)
+    startlog <- Map(c, startlog, errchk)
+    nocontent <- identical(unlist(errchk), character())
+    if(nocontent){break}
+  }
+  startlog
 }
