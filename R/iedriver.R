@@ -47,16 +47,27 @@ iedriver <- function(port = 4567L, version = "latest",
     stop("iedriver couldn't be started",
          subprocess::process_read(iedrv, "stderr"))
   }
+  startlog <- generic_start_log(iedrv)
+  if(length(startlog[["stderr"]]) >0){
+    if(any(grepl("Address in use", startlog[["stderr"]]))){
+      subprocess::process_kill(iedrv)
+      stop("IE Driver signals port = ", port, " is already in use.")
+    }
+  }
+  log <- as.environment(startlog)
   list(
     process = iedrv,
     output = function(timeout = 0L){
-      subprocess::process_read(iedrv, timeout = timeout)
+      infun_read(iedrv, log, "stdout", timeout = timeout)
     },
     error = function(timeout = 0L){
-      subprocess::process_read(iedrv, pipe = "stderr", timeout)
+      infun_read(iedrv, log, "stderr", timeout = timeout)
     },
     stop = function(){subprocess::process_kill(iedrv)},
-    log = function(){readLines(tFile)}
+    log = function(){
+      infun_read(iedrv, log)
+      as.list(log)
+    }
   )
 }
 
