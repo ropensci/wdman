@@ -42,9 +42,9 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
   )
   if(!is.na(subprocess::process_return_code(chromedrv))){
     stop("Chromedriver couldn't be started",
-         subprocess::process_read(chromedrv, "stderr"))
+         subprocess_read(chromedrv, "stderr")[["stderr"]])
   }
-  startlog <- chrome_start_log(chromedrv)
+  startlog <- generic_start_log(chromedrv)
   if(length(startlog[["stderr"]]) >0){
     if(any(grepl("Address already in use", startlog[["stderr"]]))){
       subprocess::process_kill(chromedrv)
@@ -106,25 +106,4 @@ chrome_ver <- function(platform, version){
                            pattern = "chromedriver($|.exe$)",
                            full.names = TRUE)
   list(version = chromever, dir = chromedir, path = chromepath)
-}
-
-chrome_start_log <- function(handle, poll = 3000L){
-  startlog <- list(stdout = character(), stderr = character())
-  progress <- 0L
-  while(progress < poll){
-    begin <- Sys.time()
-    errchk <- tryCatch(
-      subprocess::process_read(handle, timeout = min(500L, poll)),
-      error = function(e){
-        e
-      }
-    )
-    print(errchk)
-    end <- Sys.time()
-    progress <- progress + min(as.numeric(end-begin)*1000L, 500L, poll)
-    startlog <- Map(c, startlog, errchk)
-    nocontent <- identical(unlist(errchk), character())
-    if(nocontent){break}
-  }
-  startlog
 }
