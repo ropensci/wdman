@@ -30,6 +30,7 @@ iedriver <- function(port = 4567L, version = "latest",
                                   "WARN", "ERROR"), verbose = TRUE){
   assert_that(is_integer(port))
   assert_that(is_string(version))
+  assert_that(is_logical(verbose))
   loglevel <- match.arg(loglevel)
   iecheck <- ie_check(verbose)
   ieplat <- iecheck[["platform"]]

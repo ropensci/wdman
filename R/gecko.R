@@ -28,6 +28,7 @@ gecko <- function(port = 4567L, version = "latest",
                           "debug", "trace"), verbose = TRUE){
   assert_that(is_integer(port))
   assert_that(is_string(version))
+  assert_that(is_logical(verbose))
   log <- match.arg(log)
   geckocheck <- gecko_check(verbose)
   geckoplat <- geckocheck[["platform"]]

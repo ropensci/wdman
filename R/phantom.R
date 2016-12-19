@@ -29,6 +29,7 @@ phantomjs <- function(port = 4567L, version = "latest",
                       verbose = TRUE){
   assert_that(is_integer(port))
   assert_that(is_string(version))
+  assert_that(is_logical(verbose))
   loglevel <- match.arg(loglevel)
   phantomcheck <- phantom_check(verbose)
   phantomplat <- phantomcheck[["platform"]]
