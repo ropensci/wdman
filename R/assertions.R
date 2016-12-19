@@ -22,6 +22,14 @@ assertthat::on_failure(is_list) <- function(call, env){
   paste0(deparse(call$x), " is not a list")
 }
 
+is_env <- function(x){
+  is.environment(x)
+}
+
+assertthat::on_failure(is_env) <- function(call, env){
+  paste0(deparse(call$x), " is not an environment")
+}
+
 is_list_of_df <- function(x){
   is_list(x) && all(vapply(x, is.data.frame, logical(1)))
 }
