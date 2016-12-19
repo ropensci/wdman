@@ -43,11 +43,11 @@ gecko <- function(port = 4567L, version = "latest",
     stop("Geckodriver couldn't be started",
          subprocess::process_read(geckodrv, "stderr")[["stderr"]])
   }
-  startlog <- generic_start_log(chromedrv)
+  startlog <- generic_start_log(geckodrv)
   if(length(startlog[["stderr"]]) >0){
     if(any(grepl("Address already in use", startlog[["stderr"]]))){
-      subprocess::process_kill(chromedrv)
-      stop("Chrome Driver signals port = ", port, " is already in use.")
+      subprocess::process_kill(geckodrv)
+      stop("Gecko Driver signals port = ", port, " is already in use.")
     }
   }
   log <- as.environment(startlog)

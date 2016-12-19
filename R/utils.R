@@ -11,20 +11,21 @@ infun_read <- function(handle, env, pipe = PIPE_BOTH, timeout = 0L){
   msg
 }
 
-generic_start_log <- function(handle, poll = 3000L){
+generic_start_log <- function(handle, poll = 3000L, increment = 500L){
   startlog <- list(stdout = character(), stderr = character())
   progress <- 0L
   while(progress < poll){
     begin <- Sys.time()
     errchk <- tryCatch(
-      subprocess::process_read(handle, timeout = min(500L, poll)),
+      subprocess::process_read(handle, timeout = min(increment, poll)),
       error = function(e){
         e
       }
     )
     print(errchk)
     end <- Sys.time()
-    progress <- progress + min(as.numeric(end-begin)*1000L, 500L, poll)
+    progress <-
+      progress + min(as.numeric(end-begin)*1000L, increment, poll)
     startlog <- Map(c, startlog, errchk)
     nocontent <- identical(unlist(errchk), character())
     if(nocontent){break}
