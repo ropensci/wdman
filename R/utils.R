@@ -37,7 +37,8 @@ generic_start_log <- function(handle, poll = 3000L, increment = 500L){
       progress + min(as.numeric(end-begin)*1000L, increment, poll)
     startlog <- Map(c, startlog, errchk)
     nocontent <- identical(unlist(errchk), character())
-    if(nocontent){break}
+    slcontent <- sum(vapply(startlog, length, integer(1)))
+    if(nocontent && slcontent > 0){break}
   }
   startlog
 }
