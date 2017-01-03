@@ -7,8 +7,16 @@ os_arch <- function(string = ""){
 infun_read <- function(handle, env, pipe = subprocess::PIPE_BOTH,
                        timeout = 0L){
   msg <- subprocess::process_read(handle, pipe = pipe, timeout = timeout)
-  env[["stdout"]] <- c(env[["stdout"]], msg[["stdout"]])
-  env[["stderr"]] <- c(env[["stderr"]], msg[["stderr"]])
+  if(identical(pipe, subprocess::PIPE_BOTH)){
+    env[["stdout"]] <- c(env[["stdout"]], msg[["stdout"]])
+    env[["stderr"]] <- c(env[["stderr"]], msg[["stderr"]])
+  }
+  if(identical(pipe, subprocess::PIPE_STDOUT)){
+    env[["stdout"]] <- c(env[["stdout"]], msg)
+  }
+  if(identical(pipe, subprocess::PIPE_STDERR)){
+    env[["stderr"]] <- c(env[["stderr"]], msg)
+  }
   msg
 }
 
