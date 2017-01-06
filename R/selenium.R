@@ -60,7 +60,7 @@ selenium <- function(port = 4567L,
   selplat <- "generic"
   selver <- binman::list_versions("seleniumserver")[[selplat]]
   selver <- if(identical(version, "latest")){
-    as.character(max(binman::sem_ver(selver)))
+    as.character(max(semver::parse_version(selver)))
   }else{
     mtch <- match(version, selver)
     if(is.na(mtch) || is.null(mtch)){

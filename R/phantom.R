@@ -94,7 +94,7 @@ phantom_check <- function(verbose){
 phantom_ver <- function(platform, version){
   phantomver <- binman::list_versions("phantomjs")[[platform]]
   phantomver <- if(identical(version, "latest")){
-    as.character(max(binman::sem_ver(phantomver)))
+    as.character(max(semver::parse_version(phantomver)))
   }else{
     mtch <- match(version, phantomver)
     if(is.na(mtch) || is.null(mtch)){

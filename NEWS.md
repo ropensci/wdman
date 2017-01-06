@@ -1,6 +1,7 @@
 # wdman 0.2.0
 
 * Added verbose arguments to the driver functions
+* Import semver for parsing semantic versions
 
 # wdman 0.1.5
 

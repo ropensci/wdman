@@ -94,7 +94,7 @@ ie_check <- function(verbose){
 ie_ver <- function(platform, version){
   iever <- binman::list_versions("iedriverserver")[[platform]]
   iever <- if(identical(version, "latest")){
-    as.character(max(binman::sem_ver(iever)))
+    as.character(max(semver::parse_version(iever)))
   }else{
     mtch <- match(version, iever)
     if(is.na(mtch) || is.null(mtch)){
