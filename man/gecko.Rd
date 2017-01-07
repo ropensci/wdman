@@ -4,8 +4,8 @@
 \alias{gecko}
 \title{Start gecko driver}
 \usage{
-gecko(port = 4567L, version = "latest", loglevel = c("fatal", "error",
-  "warn", "info", "config", "debug", "trace"), verbose = TRUE)
+gecko(port = 4567L, version = "latest", loglevel = c("info", "fatal",
+  "error", "warn", "config", "debug", "trace"), verbose = TRUE)
 }
 \arguments{
 \item{port}{Port to run on}
