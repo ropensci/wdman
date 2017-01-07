@@ -24,12 +24,12 @@
 #' }
 
 gecko <- function(port = 4567L, version = "latest",
-                  loglevel = c("fatal", "error", "warn", "info", "config",
+                  loglevel = c("info", "fatal", "error", "warn", "config",
                           "debug", "trace"), verbose = TRUE){
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_logical(verbose))
-  log <- match.arg(log)
+  loglevel <- match.arg(loglevel)
   geckocheck <- gecko_check(verbose)
   geckoplat <- geckocheck[["platform"]]
   geckoversion <- gecko_ver(geckoplat, version)
