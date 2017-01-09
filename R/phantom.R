@@ -53,6 +53,7 @@ phantomjs <- function(port = 4567L, version = "latest",
       stop("PhantomJS signals port = ", port, " is already in use.")
     }
   }
+  log <- as.environment(startlog)
   list(
     process = phantomdrv,
     output = function(timeout = 0L){
