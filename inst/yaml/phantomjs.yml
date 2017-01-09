@@ -13,7 +13,7 @@ predlfunction:
     - "(?!.*-symbols)linux-x86_64"
     - "(?!.*-symbols)linux-i686"
     - "windows"
-    - "(?!.*-symbols)macosx"
+    - "(?!.*-symbols)macos"
 dlfunction:
   "binman::download_files": []
 postdlfunction:

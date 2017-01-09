@@ -126,12 +126,17 @@ selenium <- function(port = 4567L,
     stop("Selenium server couldn't be started",
          subprocess::process_read(seleniumdrv, "stderr")[["stderr"]])
   }
-  startlog <- generic_start_log(seleniumdrv)
+  startlog <- generic_start_log(seleniumdrv, poll = 10000L)
   if(length(startlog[["stderr"]]) >0){
     if(any(grepl("Address already in use", startlog[["stderr"]]))){
       subprocess::process_kill(seleniumdrv)
       stop("Selenium server signals port = ", port, " is already in use.")
     }
+  }else{
+    warning(
+      "No output to stderr yet detected. Please check ",
+      "log and that process is running manually."
+      )
   }
   log <- as.environment(startlog)
   list(
