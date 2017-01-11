@@ -41,7 +41,7 @@ gecko <- function(port = 4567L, version = "latest",
   )
   if(!is.na(subprocess::process_return_code(geckodrv))){
     stop("Geckodriver couldn't be started",
-         subprocess::process_read(geckodrv, "stderr")[["stderr"]])
+         subprocess::process_read(geckodrv, "stderr"))
   }
   startlog <- generic_start_log(geckodrv)
   if(length(startlog[["stderr"]]) >0){
