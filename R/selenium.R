@@ -120,7 +120,8 @@ selenium <- function(port = 4567L,
   selargs[["port"]] <- port
 
   seleniumdrv <- subprocess::spawn_process(
-    javapath, arguments = c(jvmargs, selargs), environment = Sys.getenv()
+    javapath, arguments = c(jvmargs, selargs),
+    termination_mode = TERMINATION_CHILD_ONLY
   )
   if(!is.na(subprocess::process_return_code(seleniumdrv))){
     stop("Selenium server couldn't be started",
