@@ -3,7 +3,6 @@ sudo: required
 language: R
 cache: packages
 r_github_packages:
-- lbartnik/subprocess
 - johndharrison/wdman
 env:
   matrix:

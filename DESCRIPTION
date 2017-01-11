@@ -20,8 +20,6 @@ Imports:
     subprocess (>= 0.8.0),
     yaml,
     semver(>= 0.2.0)
-Remotes:
-    lbartnik/subprocess
 URL: https://github.com/johndharrison/wdman
 URLNote: https://github.com/johndharrison/wdman
 BugReports: https://github.com/johndharrison/wdman/issues
