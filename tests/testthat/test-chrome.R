@@ -10,7 +10,16 @@ test_that("canCallChrome", {
     `subprocess::process_return_code` =
       mock_subprocess_process_return_code,
     `wdman:::generic_start_log` = mock_generic_start_log,
-    cDrv <- chrome()
+    `wdman:::infun_read` = function(...){"infun"},
+    {
+      cDrv <- chrome()
+      expect_identical(cDrv$output(), "infun")
+      expect_identical(cDrv$error(), "infun")
+      logOut <- cDrv$log()[["stdout"]]
+      logErr <- cDrv$log()[["stderr"]]
+      expect_identical(logOut, "super duper")
+      expect_identical(logErr, "no error here")
+    }
   )
   expect_identical(cDrv$process, "hello")
 })

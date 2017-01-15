@@ -11,7 +11,16 @@ test_that("canCallGecko", {
     `subprocess::process_return_code` =
       mock_subprocess_process_return_code,
     `wdman:::generic_start_log` = mock_generic_start_log,
-    gDrv <- gecko()
+    `wdman:::infun_read` = function(...){"infun"},
+    {
+      gDrv <- gecko()
+      expect_identical(gDrv$output(), "infun")
+      expect_identical(gDrv$error(), "infun")
+      logOut <- gDrv$log()[["stdout"]]
+      logErr <- gDrv$log()[["stderr"]]
+      expect_identical(logOut, "super duper")
+      expect_identical(logErr, "no error here")
+    }
   )
   expect_identical(gDrv$process, "hello")
 })

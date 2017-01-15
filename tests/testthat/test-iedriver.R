@@ -14,7 +14,16 @@ test_that("canCallIEDriver", {
       structure("Windows", .Names = "sysname")
     },
     `wdman:::generic_start_log` = mock_generic_start_log,
-    ieDrv <- iedriver()
+    `wdman:::infun_read` = function(...){"infun"},
+    {
+      ieDrv <- iedriver()
+      expect_identical(ieDrv$output(), "infun")
+      expect_identical(ieDrv$error(), "infun")
+      logOut <- ieDrv$log()[["stdout"]]
+      logErr <- ieDrv$log()[["stderr"]]
+      expect_identical(logOut, "super duper")
+      expect_identical(logErr, "no error here")
+    }
   )
   expect_identical(ieDrv$process, "hello")
 })

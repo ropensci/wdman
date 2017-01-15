@@ -12,7 +12,9 @@ test_that("canCallSelenium", {
       mock_subprocess_process_return_code,
     `subprocess::process_read` =
       mock_subprocess_process_read_selenium,
+    `subprocess::process_kill` = function(...){},
     `wdman:::generic_start_log` = mock_generic_start_log,
+    `wdman:::infun_read` = function(...){"infun"},
     `base::Sys.info` = function(...){
       structure("Windows", .Names = "sysname")
     },
@@ -44,7 +46,15 @@ test_that("canCallSelenium", {
     `wdman:::ie_ver` = function(...){
       list(path = "some.path")
     },
-    selServ <- selenium(iedrver = "latest")
+    {
+      selServ <- selenium(iedrver = "latest")
+      expect_identical(selServ$output(), "infun")
+      expect_identical(selServ$error(), "infun")
+      logOut <- selServ$log()[["stdout"]]
+      logErr <- selServ$log()[["stderr"]]
+      expect_identical(logOut, "super duper")
+      expect_identical(logErr, "no error here")
+    }
   )
   expect_identical(selServ$process, "hello")
 })
