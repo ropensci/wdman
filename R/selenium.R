@@ -123,7 +123,7 @@ selenium <- function(port = 4567L,
   )
   if(!is.na(subprocess::process_return_code(seleniumdrv))){
     stop("Selenium server couldn't be started",
-         subprocess::process_read(seleniumdrv, "stderr")[["stderr"]])
+         subprocess::process_read(seleniumdrv, "stderr"))
   }
   startlog <- generic_start_log(seleniumdrv, poll = 10000L)
   if(length(startlog[["stderr"]]) >0){
