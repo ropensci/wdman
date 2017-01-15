@@ -61,3 +61,7 @@ mock_subprocess_process_return_code <- function(...){
 mock_subprocess_process_read_selenium <- function(...){
   "Selenium Server is up and running"
 }
+
+mock_generic_start_log <- function(...){
+  list(stdout = "super duper", stderr = "no error here")
+}
