@@ -37,3 +37,11 @@ test_that("canCallInfun_read", {
   expect_identical(testenv[["stderr"]], rep("stderr here", 2))
   rm(testenv)
 })
+
+test_that("canCallGeneric_start_log", {
+  with_mock(
+    `subprocess::process_read` = mock_subprocess_process_read_utils,
+    out <- generic_start_log("", poll = 1500L)
+  )
+  expect_identical(out, list(stdout = character(), stderr = character()))
+})
