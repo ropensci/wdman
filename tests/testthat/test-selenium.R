@@ -48,3 +48,20 @@ test_that("canCallSelenium", {
   )
   expect_identical(selServ$process, "hello")
 })
+
+test_that("errorIfJavaNotFound", {
+  with_mock(
+    `base::Sys.which`= function(...){""},
+    expect_error(selenium(), "PATH to JAVA not found")
+  )
+})
+
+test_that("errorIfVersionNotFound", {
+  with_mock(
+    `base::Sys.which`= function(...){"im here"},
+    `binman::list_versions` = mock_binman_list_versions_selenium,
+    expect_error(selenium(version = "nothere"),
+                 "version requested doesnt match versions available")
+  )
+})
+

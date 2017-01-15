@@ -12,6 +12,7 @@ test_that("assertionsWork", {
                "is not a file")
   expect_error(assertthat::assert_that(is_URL_file("")),
                "is not a URL or file")
+  expect_true(is_URL_file("http://www.google.com"))
   expect_error(assertthat::assert_that(is_character(1L)),
                "should be an character vector")
   expect_error(assertthat::assert_that(is_data.frame(1L)),
