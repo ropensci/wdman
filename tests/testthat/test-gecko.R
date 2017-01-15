@@ -10,6 +10,7 @@ test_that("canCallGecko", {
     `subprocess::spawn_process` = mock_subprocess_spawn_process,
     `subprocess::process_return_code` =
       mock_subprocess_process_return_code,
+    `wdman:::generic_start_log` = mock_generic_start_log,
     gDrv <- gecko()
   )
   expect_identical(gDrv$process, "hello")

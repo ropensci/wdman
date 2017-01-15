@@ -13,6 +13,7 @@ test_that("canCallIEDriver", {
     `base::Sys.info` = function(...){
       structure("Windows", .Names = "sysname")
     },
+    `wdman:::generic_start_log` = mock_generic_start_log,
     ieDrv <- iedriver()
   )
   expect_identical(ieDrv$process, "hello")

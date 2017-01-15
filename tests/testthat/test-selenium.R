@@ -12,6 +12,7 @@ test_that("canCallSelenium", {
       mock_subprocess_process_return_code,
     `subprocess::process_read` =
       mock_subprocess_process_read_selenium,
+    `wdman:::generic_start_log` = mock_generic_start_log,
     `base::Sys.info` = function(...){
       structure("Windows", .Names = "sysname")
     },
