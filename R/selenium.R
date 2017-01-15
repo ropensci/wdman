@@ -118,10 +118,6 @@ selenium <- function(port = 4567L,
   # Selenium JAR arguments
   selargs[["portswitch"]] <- "-port"
   selargs[["port"]] <- port
-  selargs[["debugswitch"]] <- "-debug"
-  selargs[["logswitch"]] <- "-log"
-  selargs[["log"]] <- {tf <- tempfile(fileext = ".log")}
-  print(tf)
   seleniumdrv <- subprocess::spawn_process(
     javapath, arguments = c(jvmargs, selargs)
   )
