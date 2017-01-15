@@ -69,6 +69,7 @@ test_that("errorIfJavaNotFound", {
 test_that("errorIfVersionNotFound", {
   with_mock(
     `base::Sys.which`= function(...){"im here"},
+    `binman::process_yaml` = function(...){},
     `binman::list_versions` = mock_binman_list_versions_selenium,
     expect_error(selenium(version = "nothere"),
                  "version requested doesnt match versions available")
