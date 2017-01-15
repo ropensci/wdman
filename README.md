@@ -11,7 +11,9 @@ You can install wdman from github with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("lbartnik/subprocess")
-devtools::install_github("johndharrison/binman")
 devtools::install_github("johndharrison/wdman")
 ```
+
+There are a number of binary files associated with the Webdriver/Selenium 
+project. This package provides functions to download these binaries and to 
+manage processes involving them.
