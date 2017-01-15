@@ -31,7 +31,6 @@ generic_start_log <- function(handle, poll = 3000L, increment = 500L){
         e
       }
     )
-    print(errchk)
     end <- Sys.time()
     progress <-
       progress + min(as.numeric(end-begin)*1000L, increment, poll)
