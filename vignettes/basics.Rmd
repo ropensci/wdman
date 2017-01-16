@@ -1,0 +1,27 @@
+---
+title: "wdman: Basics"
+author: "John D Harrison"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+vignette: >
+  %\VignetteIndexEntry{wdman: Basics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+The goal of this vignette is to describe the basic functionality of the 
+`wdman` package.
+
+## Introduction
+
+`wdman` (Webdriver Manager) is an R package that allows the user to manage
+the downloading/running of third party binaries relating to the webdriver/selenium
+projects. The package was inspired by a similar node package 
+[webdriver-manager](https://www.npmjs.com/package/webdriver-manager).
+
+The checking/downloading of binaries is handled by the [binman](https://github.com/johndharrison/binman) package and the
+running of the binaries as processes is handled by the [subprocess](https://github.com/lbartnik/subprocess) package.
+

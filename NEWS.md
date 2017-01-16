@@ -2,6 +2,7 @@
 
 * Added verbose arguments to the driver functions
 * Import semver for parsing semantic versions
+* Added basic vignette on operation.
 
 # wdman 0.1.5
 
