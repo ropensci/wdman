@@ -137,7 +137,7 @@ test_that("pickUpErrorFromPortInUse", {
       mock_subprocess_process_return_code,
     `subprocess::process_read` =
       mock_subprocess_process_read_selenium,
-    `subprocess::process_kill` = function(...){},
+    `subprocess::process_kill` = mock_subprocess_process_kill,
     `wdman:::generic_start_log` = function(...){
       list(stderr = "Address already in use")
     },

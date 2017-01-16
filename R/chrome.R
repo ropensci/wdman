@@ -42,7 +42,7 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
   )
   if(!is.na(subprocess::process_return_code(chromedrv))){
     stop("Chromedriver couldn't be started",
-         subprocess::process_read(chromedrv, "stderr")[["stderr"]])
+         subprocess::process_read(chromedrv, "stderr"))
   }
   startlog <- generic_start_log(chromedrv)
   if(length(startlog[["stderr"]]) >0){
