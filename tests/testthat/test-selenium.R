@@ -12,7 +12,7 @@ test_that("canCallSelenium", {
       mock_subprocess_process_return_code,
     `subprocess::process_read` =
       mock_subprocess_process_read_selenium,
-    `subprocess::process_kill` = function(...){},
+    `subprocess::process_kill` = mock_subprocess_process_kill,
     `wdman:::generic_start_log` = mock_generic_start_log,
     `wdman:::infun_read` = function(...){"infun"},
     `base::Sys.info` = function(...){
@@ -54,6 +54,7 @@ test_that("canCallSelenium", {
       logErr <- selServ$log()[["stderr"]]
       expect_identical(logOut, "super duper")
       expect_identical(logErr, "no error here")
+      expect_identical(selServ$stop(), "stopped")
     }
   )
   expect_identical(selServ$process, "hello")

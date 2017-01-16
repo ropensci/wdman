@@ -10,6 +10,7 @@ test_that("canCallPhantomJS", {
     `subprocess::spawn_process` = mock_subprocess_spawn_process,
     `subprocess::process_return_code` =
       mock_subprocess_process_return_code,
+    `subprocess::process_kill` = mock_subprocess_process_kill,
     `wdman:::generic_start_log` = mock_generic_start_log,
     `wdman:::infun_read` = function(...){"infun"},
     {
@@ -20,6 +21,7 @@ test_that("canCallPhantomJS", {
       logErr <- pDrv$log()[["stderr"]]
       expect_identical(logOut, "super duper")
       expect_identical(logErr, "no error here")
+      expect_identical(pDrv$stop(), "stopped")
     }
   )
   expect_identical(pDrv$process, "hello")

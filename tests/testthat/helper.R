@@ -59,6 +59,8 @@ mock_subprocess_process_return_code <- function(...){
   NA
 }
 
+mock_subprocess_process_kill <- function(...){"stopped"}
+
 mock_subprocess_process_read_selenium <- function(...){
   "Selenium Server is up and running"
 }
