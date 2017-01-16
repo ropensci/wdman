@@ -1,12 +1,12 @@
 Package: wdman
-Type: Webdriver/Selenium Binary Manager
+Type: 'Webdriver'/'Selenium' Binary Manager
 Title: wdman
 Version: 0.2.0
 Authors@R: c(
     person("John", "Harrison", , "johndharrison0@gmail.com",
     role = c("aut", "cre"), comment = "R package wdman"))
 Description: There are a number of binary files associated with the 
-    Webdriver/Selenium project. This package provides functions to 
+    'Webdriver'/'Selenium' project. This package provides functions to 
     download these binaries and to manage processes involving them.
 License: MIT + file LICENSE
 Encoding: UTF-8
