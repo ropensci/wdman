@@ -5,7 +5,7 @@
 \title{Start phantomjs}
 \usage{
 phantomjs(port = 4567L, version = "latest", loglevel = c("INFO", "ERROR",
-  "WARN", "DEBUG"), verbose = TRUE)
+  "WARN", "DEBUG"), verbose = TRUE, ...)
 }
 \arguments{
 \item{port}{Port to run on}
@@ -18,6 +18,8 @@ sourced run binman::list_versions("phantomjs")}
 warn, info, config, debug, trace]}
 
 \item{verbose}{If TRUE, include status messages (if any)}
+
+\item{...}{pass additional options to the driver}
 }
 \value{
 Returns a list with named elements process, output, error, stop

@@ -23,6 +23,7 @@
 #'     excludes adding the internet explorer browser to Selenium Server.
 #'     NOTE this functionality is Windows OS only.
 #' @param verbose If TRUE, include status messages (if any)
+#' @param ... pass additional options to the driver
 #' @return Returns a list with named elements process, output, error
 #'     and stop. process is the output from calling \code{\link{spawn_process}}
 #'     output, error and stop are functions calling
@@ -43,7 +44,8 @@ selenium <- function(port = 4567L,
                      geckover = "latest",
                      iedrver = NULL,
                      phantomver = "latest",
-                     verbose = TRUE){
+                     verbose = TRUE,
+                     ...){
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_string_or_null(chromever))

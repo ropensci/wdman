@@ -7,6 +7,7 @@
 #'     sourced run binman::list_versions("chromedriver")
 #' @param path base URL path prefix for commands, e.g. wd/hub
 #' @param verbose If TRUE, include status messages (if any)
+#' @param ... pass additional options to the driver
 #'
 #' @return Returns a list with named elements process, output, error, stop
 #'     and log. process is the output from calling \code{\link{spawn_process}}
@@ -24,7 +25,7 @@
 #' }
 
 chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
-                   verbose = TRUE){
+                   verbose = TRUE, ...){
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_string(path))

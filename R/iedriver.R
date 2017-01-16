@@ -9,6 +9,7 @@
 #' are: TRACE, DEBUG, INFO, WARN, ERROR, and FATAL. Defaults to FATAL
 #' if not specified.
 #' @param verbose If TRUE, include status messages (if any)
+#' @param ... pass additional options to the driver
 #'
 #' @return Returns a list with named elements process, output, error, stop
 #'     and log. process is the output from calling \code{\link{spawn_process}}
@@ -27,7 +28,7 @@
 
 iedriver <- function(port = 4567L, version = "latest",
                      loglevel = c("FATAL", "TRACE", "DEBUG", "INFO",
-                                  "WARN", "ERROR"), verbose = TRUE){
+                                  "WARN", "ERROR"), verbose = TRUE, ...){
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_logical(verbose))

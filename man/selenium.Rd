@@ -6,7 +6,7 @@
 \usage{
 selenium(port = 4567L, version = "latest", chromever = "latest",
   geckover = "latest", iedrver = NULL, phantomver = "latest",
-  verbose = TRUE)
+  verbose = TRUE, ...)
 }
 \arguments{
 \item{port}{Port to run on}
@@ -37,6 +37,8 @@ sourced run binman::list_versions("phantomjs"), A value of NULL
 excludes adding the PhantomJS headless browser to Selenium Server.}
 
 \item{verbose}{If TRUE, include status messages (if any)}
+
+\item{...}{pass additional options to the driver}
 }
 \value{
 Returns a list with named elements process, output, error

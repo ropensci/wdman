@@ -8,6 +8,7 @@
 #' @param loglevel Set phantomjs log level [values: fatal, error,
 #'     warn, info, config, debug, trace]
 #' @param verbose If TRUE, include status messages (if any)
+#' @param ... pass additional options to the driver
 #'
 #' @return Returns a list with named elements process, output, error, stop
 #'     and log. process is the output from calling \code{\link{spawn_process}}
@@ -26,7 +27,7 @@
 
 phantomjs <- function(port = 4567L, version = "latest",
                       loglevel = c('INFO', 'ERROR', 'WARN', 'DEBUG'),
-                      verbose = TRUE){
+                      verbose = TRUE, ...){
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_logical(verbose))
