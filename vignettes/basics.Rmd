@@ -30,6 +30,6 @@ The `wdman` package currently manages the following binaries:
 
 * [Selenium standalone binary](http://selenium-release.storage.googleapis.com/index.html)
 * [chromedriver](https://chromedriver.storage.googleapis.com/index.html)
-* [PhamtonJS binary](http://phantomjs.org/download.html)
+* [PhantomJS binary](http://phantomjs.org/download.html)
 * [geckodriver](https://github.com/mozilla/geckodriver/releases)
 * [iedriver](https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver)
