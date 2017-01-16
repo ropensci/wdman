@@ -80,8 +80,9 @@ selenium <- function(port = 4567L,
   if(file.access(selpath, 1) < 0){
     Sys.chmod(selpath, '0755')
   }
-  jvmargs <- c()
-  selargs <- c()
+  eopts <- list(...)
+  jvmargs <- c(Reduce(c, eopts[names(eopts) == "jvmargs"]))
+  selargs <- c(Reduce(c, eopts[names(eopts) == "selargs"]))
   if(!is.null(chromever)){
     chromecheck <- chrome_check(verbose)
     cver <- chrome_ver(chromecheck[["platform"]], chromever)

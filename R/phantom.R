@@ -35,7 +35,8 @@ phantomjs <- function(port = 4567L, version = "latest",
   phantomcheck <- phantom_check(verbose)
   phantomplat <- phantomcheck[["platform"]]
   phantomversion <- phantom_ver(phantomplat, version)
-  args <- c()
+  eopts <- list(...)
+  args <- c(Reduce(c, eopts[names(eopts) == "args"]))
   args[["webdriver"]] <- sprintf("--webdriver=%s", port)
   args[["log-level"]] <- sprintf("--webdriver-loglevel=%s", loglevel)
   phantomdrv <- subprocess::spawn_process(

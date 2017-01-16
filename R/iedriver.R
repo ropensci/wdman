@@ -36,7 +36,8 @@ iedriver <- function(port = 4567L, version = "latest",
   iecheck <- ie_check(verbose)
   ieplat <- iecheck[["platform"]]
   ieversion <- ie_ver(ieplat, version)
-  args <- c()
+  eopts <- list(...)
+  args <- c(Reduce(c, eopts[names(eopts) == "args"]))
   tFile <- tempfile(fileext = ".txt")
   args[["port"]] <- sprintf("/port=%s", port)
   args[["log-level"]] <- sprintf("/log-level=%s", loglevel)

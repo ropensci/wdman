@@ -33,8 +33,8 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
   chromecheck <- chrome_check(verbose)
   chromeplat <- chromecheck[["platform"]]
   chromeversion <- chrome_ver(chromeplat, version)
-  args <- c()
-  tFile <- tempfile(fileext = ".txt")
+  eopts <- list(...)
+  args <- c(Reduce(c, eopts[names(eopts) == "args"]))
   args[["port"]] <- sprintf("--port=%s", port)
   args[["url-base"]] <- sprintf("--url-base=%s", path)
   args[["verbose"]] <- "--verbose"

@@ -34,7 +34,8 @@ gecko <- function(port = 4567L, version = "latest",
   geckocheck <- gecko_check(verbose)
   geckoplat <- geckocheck[["platform"]]
   geckoversion <- gecko_ver(geckoplat, version)
-  args <- c()
+  eopts <- list(...)
+  args <- c(Reduce(c, eopts[names(eopts) == "args"]))
   args[["port"]] <- sprintf("--port=%s", port)
   args[["log"]] <- sprintf("--log=%s", loglevel)
   geckodrv <- subprocess::spawn_process(
