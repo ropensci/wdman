@@ -1,6 +1,6 @@
 Package: wdman
-Type: 'Webdriver'/'Selenium' Binary Manager
-Title: wdman
+Type: Package
+Title: 'Webdriver'/'Selenium' Binary Manager
 Version: 0.2.0
 Authors@R: c(
     person("John", "Harrison", , "johndharrison0@gmail.com",
