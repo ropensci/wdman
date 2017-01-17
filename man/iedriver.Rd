@@ -5,7 +5,8 @@
 \title{Start IE driver server}
 \usage{
 iedriver(port = 4567L, version = "latest", loglevel = c("FATAL", "TRACE",
-  "DEBUG", "INFO", "WARN", "ERROR"), verbose = TRUE, ...)
+  "DEBUG", "INFO", "WARN", "ERROR"), verbose = TRUE, retcommand = FALSE,
+  ...)
 }
 \arguments{
 \item{port}{Port to run on}
@@ -19,6 +20,9 @@ are: TRACE, DEBUG, INFO, WARN, ERROR, and FATAL. Defaults to FATAL
 if not specified.}
 
 \item{verbose}{If TRUE, include status messages (if any)}
+
+\item{retcommand}{If TRUE return only the command that would be passed
+to \code{\link{spawn_process}}}
 
 \item{...}{pass additional options to the driver}
 }

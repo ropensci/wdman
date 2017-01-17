@@ -5,7 +5,7 @@
 \title{Start chrome driver}
 \usage{
 chrome(port = 4567L, version = "latest", path = "wd/hub",
-  verbose = TRUE, ...)
+  verbose = TRUE, retcommand = FALSE, ...)
 }
 \arguments{
 \item{port}{Port to run on}
@@ -17,6 +17,9 @@ sourced run binman::list_versions("chromedriver")}
 \item{path}{base URL path prefix for commands, e.g. wd/hub}
 
 \item{verbose}{If TRUE, include status messages (if any)}
+
+\item{retcommand}{If TRUE return only the command that would be passed
+to \code{\link{spawn_process}}}
 
 \item{...}{pass additional options to the driver}
 }

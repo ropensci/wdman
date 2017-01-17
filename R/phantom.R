@@ -8,6 +8,8 @@
 #' @param loglevel Set phantomjs log level [values: fatal, error,
 #'     warn, info, config, debug, trace]
 #' @param verbose If TRUE, include status messages (if any)
+#' @param retcommand If TRUE return only the command that would be passed
+#'     to \code{\link{spawn_process}}
 #' @param ... pass additional options to the driver
 #'
 #' @return Returns a list with named elements process, output, error, stop
@@ -27,7 +29,7 @@
 
 phantomjs <- function(port = 4567L, version = "latest",
                       loglevel = c('INFO', 'ERROR', 'WARN', 'DEBUG'),
-                      verbose = TRUE, ...){
+                      verbose = TRUE, retcommand = FALSE, ...){
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_logical(verbose))
@@ -39,6 +41,9 @@ phantomjs <- function(port = 4567L, version = "latest",
   args <- c(Reduce(c, eopts[names(eopts) == "args"]))
   args[["webdriver"]] <- sprintf("--webdriver=%s", port)
   args[["log-level"]] <- sprintf("--webdriver-loglevel=%s", loglevel)
+  if(retcommand){
+    return(paste(c(phantomversion[["path"]], args), collapse = " "))
+  }
   phantomdrv <- subprocess::spawn_process(
     phantomversion[["path"]], arguments = args
   )

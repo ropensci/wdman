@@ -8,6 +8,8 @@
 #' @param loglevel Set Gecko log level [values: fatal, error,
 #'     warn, info, config, debug, trace]
 #' @param verbose If TRUE, include status messages (if any)
+#' @param retcommand If TRUE return only the command that would be passed
+#'     to \code{\link{spawn_process}}
 #' @param ... pass additional options to the driver
 #'
 #' @return Returns a list with named elements process, output, error and
@@ -26,7 +28,8 @@
 
 gecko <- function(port = 4567L, version = "latest",
                   loglevel = c("info", "fatal", "error", "warn", "config",
-                          "debug", "trace"), verbose = TRUE, ...){
+                          "debug", "trace"), verbose = TRUE,
+                  retcommand = FALSE, ...){
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_logical(verbose))
@@ -38,6 +41,9 @@ gecko <- function(port = 4567L, version = "latest",
   args <- c(Reduce(c, eopts[names(eopts) == "args"]))
   args[["port"]] <- sprintf("--port=%s", port)
   args[["log"]] <- sprintf("--log=%s", loglevel)
+  if(retcommand){
+    return(paste(c(geckoversion[["path"]], args), collapse = " "))
+  }
   geckodrv <- subprocess::spawn_process(
     geckoversion[["path"]], arguments = args
   )

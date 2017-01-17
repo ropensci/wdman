@@ -6,7 +6,7 @@
 \usage{
 selenium(port = 4567L, version = "latest", chromever = "latest",
   geckover = "latest", iedrver = NULL, phantomver = "latest",
-  verbose = TRUE, ...)
+  verbose = TRUE, retcommand = FALSE, ...)
 }
 \arguments{
 \item{port}{Port to run on}
@@ -37,6 +37,9 @@ sourced run binman::list_versions("phantomjs"), A value of NULL
 excludes adding the PhantomJS headless browser to Selenium Server.}
 
 \item{verbose}{If TRUE, include status messages (if any)}
+
+\item{retcommand}{If TRUE return only the command that would be passed
+to \code{\link{spawn_process}}}
 
 \item{...}{pass additional options to the driver}
 }

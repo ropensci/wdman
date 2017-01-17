@@ -5,7 +5,8 @@
 \title{Start gecko driver}
 \usage{
 gecko(port = 4567L, version = "latest", loglevel = c("info", "fatal",
-  "error", "warn", "config", "debug", "trace"), verbose = TRUE, ...)
+  "error", "warn", "config", "debug", "trace"), verbose = TRUE,
+  retcommand = FALSE, ...)
 }
 \arguments{
 \item{port}{Port to run on}
@@ -18,6 +19,9 @@ sourced run binman::list_versions("geckodriver")}
 warn, info, config, debug, trace]}
 
 \item{verbose}{If TRUE, include status messages (if any)}
+
+\item{retcommand}{If TRUE return only the command that would be passed
+to \code{\link{spawn_process}}}
 
 \item{...}{pass additional options to the driver}
 }

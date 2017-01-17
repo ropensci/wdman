@@ -9,6 +9,8 @@
 #' are: TRACE, DEBUG, INFO, WARN, ERROR, and FATAL. Defaults to FATAL
 #' if not specified.
 #' @param verbose If TRUE, include status messages (if any)
+#' @param retcommand If TRUE return only the command that would be passed
+#'     to \code{\link{spawn_process}}
 #' @param ... pass additional options to the driver
 #'
 #' @return Returns a list with named elements process, output, error, stop
@@ -28,7 +30,8 @@
 
 iedriver <- function(port = 4567L, version = "latest",
                      loglevel = c("FATAL", "TRACE", "DEBUG", "INFO",
-                                  "WARN", "ERROR"), verbose = TRUE, ...){
+                                  "WARN", "ERROR"), verbose = TRUE,
+                     retcommand = FALSE, ...){
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_logical(verbose))
@@ -42,6 +45,9 @@ iedriver <- function(port = 4567L, version = "latest",
   args[["port"]] <- sprintf("/port=%s", port)
   args[["log-level"]] <- sprintf("/log-level=%s", loglevel)
   args[["log-path"]] <- sprintf("/log-file=%s", tFile)
+  if(retcommand){
+    return(paste(c(ieversion[["path"]], args), collapse = " "))
+  }
   iedrv <- subprocess::spawn_process(
     ieversion[["path"]], arguments = args
   )

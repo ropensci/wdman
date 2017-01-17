@@ -23,6 +23,8 @@
 #'     excludes adding the internet explorer browser to Selenium Server.
 #'     NOTE this functionality is Windows OS only.
 #' @param verbose If TRUE, include status messages (if any)
+#' @param retcommand If TRUE return only the command that would be passed
+#'     to \code{\link{spawn_process}}
 #' @param ... pass additional options to the driver
 #' @return Returns a list with named elements process, output, error
 #'     and stop. process is the output from calling \code{\link{spawn_process}}
@@ -45,12 +47,14 @@ selenium <- function(port = 4567L,
                      iedrver = NULL,
                      phantomver = "latest",
                      verbose = TRUE,
+                     retcommand = FALSE,
                      ...){
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_string_or_null(chromever))
   assert_that(is_string_or_null(geckover))
   assert_that(is_string_or_null(phantomver))
+  assert_that(is_logical(retcommand))
   assert_that(is_logical(verbose))
   javapath <- Sys.which("java")
   if(identical(javapath, "")){
@@ -121,6 +125,9 @@ selenium <- function(port = 4567L,
   # Selenium JAR arguments
   selargs[["portswitch"]] <- "-port"
   selargs[["port"]] <- port
+  if(retcommand){
+    return(paste(c(javapath, jvmargs, selargs), collapse = " "))
+  }
   seleniumdrv <- subprocess::spawn_process(
     javapath, arguments = c(jvmargs, selargs)
   )
