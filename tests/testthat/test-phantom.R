@@ -14,8 +14,8 @@ test_that("canCallPhantomJS", {
     `wdman:::generic_start_log` = mock_generic_start_log,
     `wdman:::infun_read` = function(...){"infun"},
     {
-      pDrv <- phantomjs()
-      retCommand <- phantomjs(retcommand = TRUE)
+      pDrv <- phantomjs(version = "latest")
+      retCommand <- phantomjs(version = "latest", retcommand = TRUE)
       expect_identical(pDrv$output(), "infun")
       expect_identical(pDrv$error(), "infun")
       logOut <- pDrv$log()[["stdout"]]

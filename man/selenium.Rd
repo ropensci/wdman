@@ -5,7 +5,7 @@
 \title{Start Selenium Server}
 \usage{
 selenium(port = 4567L, version = "latest", chromever = "latest",
-  geckover = "latest", iedrver = NULL, phantomver = "2.2.1",
+  geckover = "latest", iedrver = NULL, phantomver = "2.1.1",
   check = TRUE, verbose = TRUE, retcommand = FALSE, ...)
 }
 \arguments{

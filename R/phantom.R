@@ -29,7 +29,7 @@
 #' pjs$stop()
 #' }
 
-phantomjs <- function(port = 4567L, version = "2.2.1", check = TRUE,
+phantomjs <- function(port = 4567L, version = "2.1.1", check = TRUE,
                       loglevel = c('INFO', 'ERROR', 'WARN', 'DEBUG'),
                       verbose = TRUE, retcommand = FALSE, ...){
   assert_that(is_integer(port))
