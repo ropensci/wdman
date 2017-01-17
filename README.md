@@ -55,7 +55,7 @@ binaries related to browsers selenium may control. By default the
 `selenium` function will look to use the latest version of each. 
 
 ```
-selServ <- selenium(verbose = FALSE, check = FALSE)
+selServ <- selenium(verbose = FALSE)
 selServ$process
 
 ## Process Handle
@@ -127,7 +127,7 @@ on your Windows.
 
 To run the binaries related to the Selenium/webdriver projects `wdman` 
 uses the R package `subprocess`. Currently the windows version of this
-package uses blocking pipes when it instantiates a process. The causes 
+package uses blocking pipes when it instantiates a process. This causes 
 issues with firefox/geckodriver when called from selenium. A "shim" is 
 required as the stderr pipe is blocking and firefox/geckodriver waits for 
 the pipe to free. 
