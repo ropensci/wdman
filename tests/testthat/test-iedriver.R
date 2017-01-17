@@ -18,6 +18,7 @@ test_that("canCallIEDriver", {
     `wdman:::infun_read` = function(...){"infun"},
     {
       ieDrv <- iedriver()
+      retCommand <- iedriver(retcommand = TRUE)
       expect_identical(ieDrv$output(), "infun")
       expect_identical(ieDrv$error(), "infun")
       logOut <- ieDrv$log()[["stdout"]]
@@ -28,6 +29,7 @@ test_that("canCallIEDriver", {
     }
   )
   expect_identical(ieDrv$process, "hello")
+  expect_true(grepl("some.path /port=4567 /log-level=FATAL", retCommand))
 })
 
 test_that("iedriver_verErrorWorks", {

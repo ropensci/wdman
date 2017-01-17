@@ -48,6 +48,7 @@ test_that("canCallSelenium", {
     },
     {
       selServ <- selenium(iedrver = "latest")
+      retCommand <- selenium(iedrver = "latest", retcommand = TRUE)
       expect_identical(selServ$output(), "infun")
       expect_identical(selServ$error(), "infun")
       logOut <- selServ$log()[["stdout"]]
@@ -58,6 +59,12 @@ test_that("canCallSelenium", {
     }
   )
   expect_identical(selServ$process, "hello")
+  expect_identical(retCommand,
+                   "/usr/bin/java -Dwebdriver.chrome.driver=some.path " %+%
+                     "-Dwebdriver.gecko.driver=some.path " %+%
+                     "-Dphantomjs.binary.path=some.path " %+%
+                     "-Dwebdriver.ie.driver=some.path " %+%
+                     "-jar some.path -port 4567")
 })
 
 test_that("errorIfJavaNotFound", {

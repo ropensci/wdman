@@ -15,6 +15,7 @@ test_that("canCallPhantomJS", {
     `wdman:::infun_read` = function(...){"infun"},
     {
       pDrv <- phantomjs()
+      retCommand <- phantomjs(retcommand = TRUE)
       expect_identical(pDrv$output(), "infun")
       expect_identical(pDrv$error(), "infun")
       logOut <- pDrv$log()[["stdout"]]
@@ -25,6 +26,8 @@ test_that("canCallPhantomJS", {
     }
   )
   expect_identical(pDrv$process, "hello")
+  expect_identical(retCommand,
+                   "some.path --webdriver=4567 --webdriver-loglevel=INFO")
 })
 
 test_that("phantom_verErrorWorks", {

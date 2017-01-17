@@ -15,6 +15,7 @@ test_that("canCallGecko", {
     `wdman:::infun_read` = function(...){"infun"},
     {
       gDrv <- gecko()
+      retCommand <- gecko(retcommand = TRUE)
       expect_identical(gDrv$output(), "infun")
       expect_identical(gDrv$error(), "infun")
       logOut <- gDrv$log()[["stdout"]]
@@ -25,6 +26,8 @@ test_that("canCallGecko", {
     }
   )
   expect_identical(gDrv$process, "hello")
+  expect_identical(retCommand,
+                   "some.path --port=4567 --log=info")
 })
 
 test_that("gecko_verErrorWorks", {

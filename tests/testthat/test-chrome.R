@@ -14,6 +14,7 @@ test_that("canCallChrome", {
     `wdman:::infun_read` = function(...){"infun"},
     {
       cDrv <- chrome()
+      retCommand <- chrome(retcommand = TRUE)
       expect_identical(cDrv$output(), "infun")
       expect_identical(cDrv$error(), "infun")
       logOut <- cDrv$log()[["stdout"]]
@@ -24,6 +25,8 @@ test_that("canCallChrome", {
     }
   )
   expect_identical(cDrv$process, "hello")
+  expect_identical(retCommand,
+                   "some.path --port=4567 --url-base=wd/hub --verbose")
 })
 
 test_that("chrome_verErrorWorks", {
