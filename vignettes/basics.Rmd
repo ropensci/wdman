@@ -271,11 +271,94 @@ The `phantomjs` function manages the PhantomJS binary. It can
 check for updates at https://bitbucket.org/ariya/phantomjs/downloads
 and run the resulting binaries as processes. 
 
+**The `phantomjs` function runs the PhantomJS binary as a standalone
+process in webdriver mode. It takes a default `port` argument `port = 4567L`. Users can then
+connect directly to the "ghostdriver" to drive a PhantomJS browser.
+Currently the default `version` is set to `version = "2.1.1"`. At the
+time of writing `2.5.0-beta` has been released. It currently does not
+have an up-to-date version of ghostdriver associated with it. For this 
+reason it will beunstable/unpredictable to use it in webdriver mode. **
+
+Similarly to the `selenium` function the `phantomjs` function returns a list 
+of four functions and a handle to the underlying running process.
+
+
+```
+pjsDrv <- phantomjs(verbose = FALSE, check = FALSE)
+pjsDrv$process
+
+## Process Handle
+## command   : /home/john/.local/share/binman_phantomjs/linux64/2.1.1/phantomjs-2.1.1-linux-x86_64/bin/phantomjs --webdriver=4567 --webdriver-loglevel=INFO
+## system id : 106709
+## state     : running
+```
+
+```
+pjsDrv$log()
+
+## $stderr
+## character(0)
+## 
+## $stdout
+## [1] "[INFO  - 2017-01-17T19:16:41.984Z] GhostDriver - Main - running on port 4567"
+```
+
+```
+pjsDrv$stop()
+
+## [1] TRUE
+```
+
 ## Gecko Driver
 
 The `gecko` function manages the Gecko Driver binary. It can
 check for updates at https://github.com/mozilla/geckodriver/releases
 and run the resulting binaries as processes. 
+
+**The `gecko` function runs the Gecko Driver binary as a standalone
+process. It takes a default `port` argument `port = 4567L`. Users can then
+connect directly to the gecko driver to drive a firefox browser.
+Currently the default `version` is set to `version = "2.1.1"`.**
+
+
+**A very IMPORTANT point to note is that geckodriver implements the
+W3C webdriver protocol which as at the time of writing is not finalised.
+Currently packages such as RSelenium implement the JSONwireprotocol which
+whilst similar expects different return from the underlying driver.**
+
+**The geckodriver implementation like the W3C webdriver specification is 
+incomplete at this point in time.
+**
+
+Similarly to the `selenium` function the `gecko` function returns a list 
+of four functions and a handle to the underlying running process.
+
+```
+gDrv <- gecko(verbose = FALSE, check = FALSE)
+gDrv$process
+
+## Process Handle
+## command   : /home/john/.local/share/binman_geckodriver/linux64/0.13.0/geckodriver --port=4567 --log=info
+## system id : 107783
+## state     : running
+```
+
+```
+gDrv$log()
+
+## $stderr
+## [1] "1484681330494\tgeckodriver\tINFO\tListening on 127.0.0.1:4567"
+## 
+## $stdout
+## character(0)
+
+```
+
+```
+gDrv$stop()
+
+## [1] TRUE
+```
 
 ## IE Driver
 The `iedriver` function manages the Internet Explorer Driver binary. It can
@@ -283,3 +366,30 @@ check for updates at http://selenium-release.storage.googleapis.com/index.html
 and run the resulting binaries as processes (the iedriver is distributed 
 currently with the Selenium standalone binary amongst other files). 
 
+**The `chrome` function runs the Chrome Driver binary as a standalone
+process. It takes a default `port` argument `port = 4567L`. Users can then
+connect directly to the chrome driver to drive a chrome browser.**
+
+**Please note that additional settings are required to drive an Internet Explorer
+browser. Security settings and zoom level need to be set correctly in the browser. 
+The author of this document needed to set a registry entry (for ie 11). This is outlined at
+https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver in the required
+configuration section.**
+
+Similarly to the `selenium` function the `gecko` function returns a list 
+of four functions and a handle to the underlying running process.
+
+```
+ieDrv <- iedriver(verbose = FALSE, check = FALSE)
+ieDrv$process
+
+```
+
+```
+ieDrv$log()
+```
+
+```
+ieDrv$stop()
+
+```
