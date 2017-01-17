@@ -411,3 +411,15 @@ ieDrv$stop()
 ## [1] TRUE
 
 ```
+
+## Issues and problems
+
+If you experience issues or problems running one of the drivers/functions
+please try running the command in a terminal on your OS initially. 
+
+You can access the command to run by using the `retcommand` argument in 
+each of the main package functions. 
+
+If you continue to have problems consider posting an issue at
+https://github.com/johndharrison/wdman/issues
+
