@@ -52,6 +52,9 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
+  <a href="../articles/index.html">Articles</a>
+</li>
+<li>
   <a href="../news/index.html">News</a>
 </li>
       </ul>
@@ -82,8 +85,8 @@
     
 
     <pre><span class='fu'>selenium</span>(<span class='kw'>port</span> <span class='kw'>=</span> <span class='fl'>4567L</span>, <span class='kw'>version</span> <span class='kw'>=</span> <span class='st'>"latest"</span>, <span class='kw'>chromever</span> <span class='kw'>=</span> <span class='st'>"latest"</span>,
-  <span class='kw'>geckover</span> <span class='kw'>=</span> <span class='st'>"latest"</span>, <span class='kw'>iedrver</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>phantomver</span> <span class='kw'>=</span> <span class='st'>"latest"</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>geckover</span> <span class='kw'>=</span> <span class='st'>"latest"</span>, <span class='kw'>iedrver</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>phantomver</span> <span class='kw'>=</span> <span class='st'>"2.1.1"</span>,
+  <span class='kw'>check</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>retcommand</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -110,12 +113,22 @@ sourced run binman::list_versions(&quot;iedriverserver&quot;), A value of NULL
 excludes adding the internet explorer browser to Selenium Server.
 NOTE this functionality is Windows OS only.</dd>
       <dt>phantomver</dt>
-      <dd>what version of PhantomJS to run. Default = &quot;latest&quot;
-which runs the most recent version. To see other version currently
+      <dd>what version of PhantomJS to run. Default = &quot;2.2.1&quot;
+which runs the most recent stable version. To see other version
+currently
 sourced run binman::list_versions(&quot;phantomjs&quot;), A value of NULL
 excludes adding the PhantomJS headless browser to Selenium Server.</dd>
+      <dt>check</dt>
+      <dd>If TRUE check the versions of selenium available and the
+versions of associated drivers (chromever, geckover, phantomver,
+iedrver). If new versions are available they will be downloaded.</dd>
       <dt>verbose</dt>
       <dd>If TRUE, include status messages (if any)</dd>
+      <dt>retcommand</dt>
+      <dd>If TRUE return only the command that would be passed
+to <code>spawn_process</code></dd>
+      <dt>...</dt>
+      <dd>pass additional options to the driver</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>

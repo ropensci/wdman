@@ -52,6 +52,9 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
+  <a href="../articles/index.html">Articles</a>
+</li>
+<li>
   <a href="../news/index.html">News</a>
 </li>
       </ul>
@@ -81,8 +84,9 @@
     <p>Start IE driver server</p>
     
 
-    <pre><span class='fu'>iedriver</span>(<span class='kw'>port</span> <span class='kw'>=</span> <span class='fl'>4567L</span>, <span class='kw'>version</span> <span class='kw'>=</span> <span class='st'>"latest"</span>, <span class='kw'>loglevel</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"FATAL"</span>, <span class='st'>"TRACE"</span>,
-  <span class='st'>"DEBUG"</span>, <span class='st'>"INFO"</span>, <span class='st'>"WARN"</span>, <span class='st'>"ERROR"</span>), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre><span class='fu'>iedriver</span>(<span class='kw'>port</span> <span class='kw'>=</span> <span class='fl'>4567L</span>, <span class='kw'>version</span> <span class='kw'>=</span> <span class='st'>"latest"</span>, <span class='kw'>check</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>loglevel</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"FATAL"</span>, <span class='st'>"TRACE"</span>, <span class='st'>"DEBUG"</span>, <span class='st'>"INFO"</span>, <span class='st'>"WARN"</span>, <span class='st'>"ERROR"</span>),
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>retcommand</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -92,12 +96,20 @@
       <dd>what version of IE driver server to run. Default = &quot;latest&quot;
 which runs the most recent version. To see other version currently
 sourced run binman::list_versions(&quot;iedriverserver&quot;)</dd>
+      <dt>check</dt>
+      <dd>If TRUE check the versions of IE driver available. If
+new versions are available they will be downloaded.</dd>
       <dt>loglevel</dt>
       <dd>Specifies the log level used by the server. Valid values
 are: TRACE, DEBUG, INFO, WARN, ERROR, and FATAL. Defaults to FATAL
 if not specified.</dd>
       <dt>verbose</dt>
       <dd>If TRUE, include status messages (if any)</dd>
+      <dt>retcommand</dt>
+      <dd>If TRUE return only the command that would be passed
+to <code>spawn_process</code></dd>
+      <dt>...</dt>
+      <dd>pass additional options to the driver</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>

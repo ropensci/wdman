@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>wdman • wdman</title>
+<title>'Webdriver'/'Selenium' Binary Manager • wdman</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
@@ -30,6 +30,9 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="articles/index.html">Articles</a>
 </li>
 <li>
   <a href="news/index.html">News</a>
@@ -75,9 +78,21 @@
 <a href="#installation" class="anchor"> </a>Installation</h2>
 <p>You can install wdman from github with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools::<span class="kw">install_github</span>(<span class="st">"lbartnik/subprocess"</span>)
-devtools::<span class="kw">install_github</span>(<span class="st">"johndharrison/binman"</span>)
 devtools::<span class="kw">install_github</span>(<span class="st">"johndharrison/wdman"</span>)</code></pre></div>
+</div>
+<div id="introduction" class="section level2">
+<h2 class="hasAnchor">
+<a href="#introduction" class="anchor"> </a>Introduction</h2>
+<p><code>wdman</code> (Webdriver Manager) is an R package that allows the user to manage the downloading/running of third party binaries relating to the webdriver/selenium projects. The package was inspired by a similar node package <a href="https://www.npmjs.com/package/webdriver-manager">webdriver-manager</a>.</p>
+<p>The checking/downloading of binaries is handled by the <a href="https://github.com/johndharrison/binman">binman</a> package and the running of the binaries as processes is handled by the <a href="https://github.com/lbartnik/subprocess">subprocess</a> package.</p>
+<p>The <code>wdman</code> package currently manages the following binaries:</p>
+<ul>
+<li><a href="http://selenium-release.storage.googleapis.com/index.html">Selenium standalone binary</a></li>
+<li><a href="https://chromedriver.storage.googleapis.com/index.html">chromedriver</a></li>
+<li><a href="http://phantomjs.org/download.html">PhantomJS binary</a></li>
+<li><a href="https://github.com/mozilla/geckodriver/releases">geckodriver</a></li>
+<li><a href="https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver">iedriver</a></li>
+</ul>
 </div>
 </div>
   </div>
