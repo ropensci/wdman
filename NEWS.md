@@ -3,6 +3,10 @@
 * Added verbose arguments to the driver functions
 * Import semver for parsing semantic versions
 * Added basic vignette on operation.
+* Set default PhantomJS version to 2.1.1 (2.5.0-beta runs old ghostdriver
+  currently).
+* Added a check argument to all driver functions.
+* Added tests and refactored code.
 
 # wdman 0.1.5
 
