@@ -74,7 +74,7 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
   )
 }
 
-chrome_check <- function(verbose){
+chrome_check <- function(verbose, check = TRUE){
   chromeyml <- system.file("yaml", "chromedriver.yml", package = "wdman")
   cyml <- yaml::yaml.load_file(chromeyml)
   platvec <- c("predlfunction", "binman::predl_google_storage", "platform")
@@ -87,8 +87,10 @@ chrome_check <- function(verbose){
     )
   tempyml <- tempfile(fileext = ".yml")
   write(yaml::as.yaml(cyml), tempyml)
-  if(verbose) message("checking chromedriver versions:")
-  process_yaml(tempyml, verbose)
+  if(check){
+    if(verbose) message("checking chromedriver versions:")
+    process_yaml(tempyml, verbose)
+  }
   chromeplat <- cyml[[platvec]]
   list(yaml = cyml, platform = chromeplat)
 }

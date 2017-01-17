@@ -75,7 +75,7 @@ gecko <- function(port = 4567L, version = "latest",
   )
 }
 
-gecko_check <- function(verbose){
+gecko_check <- function(verbose, check = TRUE){
   geckoyml <- system.file("yaml", "geckodriver.yml", package = "wdman")
   gyml <- yaml::yaml.load_file(geckoyml)
   platvec <- c("predlfunction", "binman::predl_github_assets","platform")
@@ -88,8 +88,10 @@ gecko_check <- function(verbose){
     )
   tempyml <- tempfile(fileext = ".yml")
   write(yaml::as.yaml(gyml), tempyml)
-  if(verbose) message("checking geckodriver versions:")
-  process_yaml(tempyml, verbose)
+  if(check){
+    if(verbose) message("checking geckodriver versions:")
+    process_yaml(tempyml, verbose)
+  }
   geckoplat <- gyml[[platvec]]
   list(yaml = gyml, platform = geckoplat)
 }

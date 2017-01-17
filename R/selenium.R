@@ -118,10 +118,12 @@ java_check <- function(){
   javapath
 }
 
-selenium_check <- function(verbose){
+selenium_check <- function(verbose, check = TRUE){
   syml <- system.file("yaml", "seleniumserver.yml", package = "wdman")
-  if(verbose) message("checking Selenium Server versions:")
-  process_yaml(syml, verbose)
+  if(check){
+    if(verbose) message("checking Selenium Server versions:")
+    process_yaml(syml, verbose)
+  }
   selplat <- "generic"
   list(yaml = syml, platform = selplat)
 }
@@ -151,9 +153,9 @@ selenium_ver <- function(platform, version){
 }
 
 selenium_check_drivers <- function(chromever, geckover, phantomver,
-                                   iedrver, verbose, jvmargs){
+                                   iedrver, check, verbose, jvmargs){
   if(!is.null(chromever)){
-    chromecheck <- chrome_check(verbose)
+    chromecheck <- chrome_check(verbose, check)
     cver <- chrome_ver(chromecheck[["platform"]], chromever)
     jvmargs[["chrome"]] <- sprintf(
       "-Dwebdriver.chrome.driver=%s",
@@ -161,7 +163,7 @@ selenium_check_drivers <- function(chromever, geckover, phantomver,
     )
   }
   if(!is.null(geckover)){
-    geckocheck <- gecko_check(verbose)
+    geckocheck <- gecko_check(verbose, check)
     gver <- gecko_ver(geckocheck[["platform"]], geckover)
     jvmargs[["gecko"]] <- sprintf(
       "-Dwebdriver.gecko.driver=%s",
@@ -169,7 +171,7 @@ selenium_check_drivers <- function(chromever, geckover, phantomver,
     )
   }
   if(!is.null(phantomver)){
-    phantomcheck <- phantom_check(verbose)
+    phantomcheck <- phantom_check(verbose, check)
     pver <- phantom_ver(phantomcheck[["platform"]], phantomver)
     jvmargs[["phantom"]] <- sprintf(
       "-Dphantomjs.binary.path=%s",
@@ -177,7 +179,7 @@ selenium_check_drivers <- function(chromever, geckover, phantomver,
     )
   }
   if(!is.null(iedrver)){
-    iecheck <- ie_check(verbose)
+    iecheck <- ie_check(verbose, check)
     iever <- ie_ver(iecheck[["platform"]], iedrver)
     jvmargs[["internetexplorer"]] <- sprintf(
       "-Dwebdriver.ie.driver=%s",

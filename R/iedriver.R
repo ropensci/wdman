@@ -79,7 +79,7 @@ iedriver <- function(port = 4567L, version = "latest",
   )
 }
 
-ie_check <- function(verbose){
+ie_check <- function(verbose, check = TRUE){
   ieyml <- system.file("yaml", "iedriverserver.yml", package = "wdman")
   iyml <- yaml::yaml.load_file(ieyml)
   platvec <- c("predlfunction", "binman::predl_google_storage",
@@ -93,8 +93,10 @@ ie_check <- function(verbose){
   iyml[[platvec[-3]]] <- iyml[[platvec[-3]]][platmatch]
   tempyml <- tempfile(fileext = ".yml")
   write(yaml::as.yaml(iyml), tempyml)
-  if(verbose) message("checking iedriver versions:")
-  process_yaml(tempyml, verbose)
+  if(check){
+    if(verbose) message("checking iedriver versions:")
+    process_yaml(tempyml, verbose)
+  }
   ieplat <- iyml[[platvec[-4]]]
   list(yaml = iyml, platform = ieplat)
 }
@@ -115,7 +117,7 @@ ie_ver <- function(platform, version){
     file.path(app_dir("iedriverserver"), platform, iever)
   )
   iepath <- list.files(iedir,
-                           pattern = "IEDriverServer($|.exe$)",
-                           full.names = TRUE)
+                       pattern = "IEDriverServer($|.exe$)",
+                       full.names = TRUE)
   list(version = iever, dir = iedir, path = iepath)
 }

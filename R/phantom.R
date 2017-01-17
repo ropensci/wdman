@@ -77,7 +77,7 @@ phantomjs <- function(port = 4567L, version = "latest",
   )
 }
 
-phantom_check <- function(verbose){
+phantom_check <- function(verbose, check = TRUE){
   phantomyml <- system.file("yaml", "phantomjs.yml", package = "wdman")
   pjsyml <- yaml::yaml.load_file(phantomyml)
   platvec <- c("predlfunction", "binman::predl_bitbucket_downloads",
@@ -93,8 +93,10 @@ phantom_check <- function(verbose){
   pjsyml[[platvec[-3]]] <- pjsyml[[platvec[-3]]][platmatch]
   tempyml <- tempfile(fileext = ".yml")
   write(yaml::as.yaml(pjsyml), tempyml)
-  if(verbose) message("checking phantomjs versions:")
-  process_yaml(tempyml, verbose)
+  if(check){
+    if(verbose) message("checking phantomjs versions:")
+    process_yaml(tempyml, verbose)
+  }
   phantomplat <- pjsyml[[platvec[-4]]]
   list(yaml = pjsyml, platform = phantomplat)
 }
