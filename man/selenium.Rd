@@ -5,7 +5,7 @@
 \title{Start Selenium Server}
 \usage{
 selenium(port = 4567L, version = "latest", chromever = "latest",
-  geckover = "latest", iedrver = NULL, phantomver = "latest",
+  geckover = "latest", iedrver = NULL, phantomver = "2.2.1",
   check = TRUE, verbose = TRUE, retcommand = FALSE, ...)
 }
 \arguments{
@@ -31,8 +31,9 @@ sourced run binman::list_versions("iedriverserver"), A value of NULL
 excludes adding the internet explorer browser to Selenium Server.
 NOTE this functionality is Windows OS only.}
 
-\item{phantomver}{what version of PhantomJS to run. Default = "latest"
-which runs the most recent version. To see other version currently
+\item{phantomver}{what version of PhantomJS to run. Default = "2.2.1"
+which runs the most recent stable version. To see other version
+currently
 sourced run binman::list_versions("phantomjs"), A value of NULL
 excludes adding the PhantomJS headless browser to Selenium Server.}
 

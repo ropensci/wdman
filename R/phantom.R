@@ -2,8 +2,8 @@
 #'
 #' Start phantomjs in webdriver mode
 #' @param port Port to run on
-#' @param version what version of phantomjs to run. Default = "latest"
-#'     which runs the most recent version. To see other version currently
+#' @param version what version of phantomjs to run. Default = "2.2.1"
+#'     which runs the most recent stable version. To see other version currently
 #'     sourced run binman::list_versions("phantomjs")
 #' @param loglevel Set phantomjs log level [values: fatal, error,
 #'     warn, info, config, debug, trace]
@@ -29,7 +29,7 @@
 #' pjs$stop()
 #' }
 
-phantomjs <- function(port = 4567L, version = "latest", check = TRUE,
+phantomjs <- function(port = 4567L, version = "2.2.1", check = TRUE,
                       loglevel = c('INFO', 'ERROR', 'WARN', 'DEBUG'),
                       verbose = TRUE, retcommand = FALSE, ...){
   assert_that(is_integer(port))

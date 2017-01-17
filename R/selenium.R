@@ -13,8 +13,9 @@
 #'     which runs the most recent version. To see other version currently
 #'     sourced run binman::list_versions("geckodriver"), A value of NULL
 #'     excludes adding the firefox browser to Selenium Server.
-#' @param phantomver what version of PhantomJS to run. Default = "latest"
-#'     which runs the most recent version. To see other version currently
+#' @param phantomver what version of PhantomJS to run. Default = "2.2.1"
+#'     which runs the most recent stable version. To see other version
+#'     currently
 #'     sourced run binman::list_versions("phantomjs"), A value of NULL
 #'     excludes adding the PhantomJS headless browser to Selenium Server.
 #' @param iedrver what version of IEDriverServer to run. Default = "latest"
@@ -48,7 +49,7 @@ selenium <- function(port = 4567L,
                      chromever = "latest",
                      geckover = "latest",
                      iedrver = NULL,
-                     phantomver = "latest",
+                     phantomver = "2.2.1",
                      check = TRUE,
                      verbose = TRUE,
                      retcommand = FALSE,
@@ -64,7 +65,7 @@ selenium <- function(port = 4567L,
   seleniumcheck <- selenium_check(verbose, check = check)
   selplat <- seleniumcheck[["platform"]]
   seleniumversion <- selenium_ver(selplat, version)
-   eopts <- list(...)
+  eopts <- list(...)
   jvmargs <- c(Reduce(c, eopts[names(eopts) == "jvmargs"]))
   selargs <- c(Reduce(c, eopts[names(eopts) == "selargs"]))
   jvmargs <- selenium_check_drivers(chromever, geckover, phantomver,
