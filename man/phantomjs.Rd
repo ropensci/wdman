@@ -4,8 +4,9 @@
 \alias{phantomjs}
 \title{Start phantomjs}
 \usage{
-phantomjs(port = 4567L, version = "latest", loglevel = c("INFO", "ERROR",
-  "WARN", "DEBUG"), verbose = TRUE, retcommand = FALSE, ...)
+phantomjs(port = 4567L, version = "latest", check = TRUE,
+  loglevel = c("INFO", "ERROR", "WARN", "DEBUG"), verbose = TRUE,
+  retcommand = FALSE, ...)
 }
 \arguments{
 \item{port}{Port to run on}
@@ -13,6 +14,9 @@ phantomjs(port = 4567L, version = "latest", loglevel = c("INFO", "ERROR",
 \item{version}{what version of phantomjs to run. Default = "latest"
 which runs the most recent version. To see other version currently
 sourced run binman::list_versions("phantomjs")}
+
+\item{check}{If TRUE check the versions of phantomjs available. If
+new versions are available they will be downloaded.}
 
 \item{loglevel}{Set phantomjs log level [values: fatal, error,
 warn, info, config, debug, trace]}

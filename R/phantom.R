@@ -7,6 +7,8 @@
 #'     sourced run binman::list_versions("phantomjs")
 #' @param loglevel Set phantomjs log level [values: fatal, error,
 #'     warn, info, config, debug, trace]
+#' @param check If TRUE check the versions of phantomjs available. If
+#'     new versions are available they will be downloaded.
 #' @param verbose If TRUE, include status messages (if any)
 #' @param retcommand If TRUE return only the command that would be passed
 #'     to \code{\link{spawn_process}}
@@ -27,14 +29,14 @@
 #' pjs$stop()
 #' }
 
-phantomjs <- function(port = 4567L, version = "latest",
+phantomjs <- function(port = 4567L, version = "latest", check = TRUE,
                       loglevel = c('INFO', 'ERROR', 'WARN', 'DEBUG'),
                       verbose = TRUE, retcommand = FALSE, ...){
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_logical(verbose))
   loglevel <- match.arg(loglevel)
-  phantomcheck <- phantom_check(verbose)
+  phantomcheck <- phantom_check(verbose, check = check)
   phantomplat <- phantomcheck[["platform"]]
   phantomversion <- phantom_ver(phantomplat, version)
   eopts <- list(...)

@@ -4,7 +4,7 @@
 \alias{chrome}
 \title{Start chrome driver}
 \usage{
-chrome(port = 4567L, version = "latest", path = "wd/hub",
+chrome(port = 4567L, version = "latest", path = "wd/hub", check = TRUE,
   verbose = TRUE, retcommand = FALSE, ...)
 }
 \arguments{
@@ -15,6 +15,9 @@ which runs the most recent version. To see other version currently
 sourced run binman::list_versions("chromedriver")}
 
 \item{path}{base URL path prefix for commands, e.g. wd/hub}
+
+\item{check}{If TRUE check the versions of chromedriver available. If
+new versions are available they will be downloaded.}
 
 \item{verbose}{If TRUE, include status messages (if any)}
 

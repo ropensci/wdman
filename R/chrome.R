@@ -6,6 +6,8 @@
 #'     which runs the most recent version. To see other version currently
 #'     sourced run binman::list_versions("chromedriver")
 #' @param path base URL path prefix for commands, e.g. wd/hub
+#' @param check If TRUE check the versions of chromedriver available. If
+#'     new versions are available they will be downloaded.
 #' @param verbose If TRUE, include status messages (if any)
 #' @param retcommand If TRUE return only the command that would be passed
 #'     to \code{\link{spawn_process}}
@@ -27,12 +29,12 @@
 #' }
 
 chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
-                   verbose = TRUE, retcommand = FALSE, ...){
+                   check = TRUE, verbose = TRUE, retcommand = FALSE, ...){
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_string(path))
   assert_that(is_logical(verbose))
-  chromecheck <- chrome_check(verbose)
+  chromecheck <- chrome_check(verbose, check = check)
   chromeplat <- chromecheck[["platform"]]
   chromeversion <- chrome_ver(chromeplat, version)
   eopts <- list(...)

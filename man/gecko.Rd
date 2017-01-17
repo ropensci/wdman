@@ -4,9 +4,9 @@
 \alias{gecko}
 \title{Start gecko driver}
 \usage{
-gecko(port = 4567L, version = "latest", loglevel = c("info", "fatal",
-  "error", "warn", "config", "debug", "trace"), verbose = TRUE,
-  retcommand = FALSE, ...)
+gecko(port = 4567L, version = "latest", check = TRUE,
+  loglevel = c("info", "fatal", "error", "warn", "config", "debug", "trace"),
+  verbose = TRUE, retcommand = FALSE, ...)
 }
 \arguments{
 \item{port}{Port to run on}
@@ -14,6 +14,9 @@ gecko(port = 4567L, version = "latest", loglevel = c("info", "fatal",
 \item{version}{what version of geckodriver to run. Default = "latest"
 which runs the most recent version. To see other version currently
 sourced run binman::list_versions("geckodriver")}
+
+\item{check}{If TRUE check the versions of geckodriver available. If
+new versions are available they will be downloaded.}
 
 \item{loglevel}{Set Gecko log level [values: fatal, error,
 warn, info, config, debug, trace]}

@@ -22,6 +22,9 @@
 #'     sourced run binman::list_versions("iedriverserver"), A value of NULL
 #'     excludes adding the internet explorer browser to Selenium Server.
 #'     NOTE this functionality is Windows OS only.
+#' @param check If TRUE check the versions of selenium available and the
+#'    versions of associated drivers (chromever, geckover, phantomver,
+#'    iedrver). If new versions are available they will be downloaded.
 #' @param verbose If TRUE, include status messages (if any)
 #' @param retcommand If TRUE return only the command that would be passed
 #'     to \code{\link{spawn_process}}
@@ -46,6 +49,7 @@ selenium <- function(port = 4567L,
                      geckover = "latest",
                      iedrver = NULL,
                      phantomver = "latest",
+                     check = TRUE,
                      verbose = TRUE,
                      retcommand = FALSE,
                      ...){
@@ -57,14 +61,15 @@ selenium <- function(port = 4567L,
   assert_that(is_logical(retcommand))
   assert_that(is_logical(verbose))
   javapath <- java_check()
-  seleniumcheck <- selenium_check(verbose)
+  seleniumcheck <- selenium_check(verbose, check = check)
   selplat <- seleniumcheck[["platform"]]
   seleniumversion <- selenium_ver(selplat, version)
    eopts <- list(...)
   jvmargs <- c(Reduce(c, eopts[names(eopts) == "jvmargs"]))
   selargs <- c(Reduce(c, eopts[names(eopts) == "selargs"]))
   jvmargs <- selenium_check_drivers(chromever, geckover, phantomver,
-                                    iedrver, verbose, jvmargs)
+                                    iedrver, check = check,
+                                    verbose = verbose, jvmargs)
   # should be the last JVM argument
   jvmargs[["jar"]] <- "-jar"
   jvmargs[["selpath"]] <- seleniumversion[["path"]]

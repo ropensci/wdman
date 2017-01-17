@@ -8,6 +8,8 @@
 #' @param loglevel Specifies the log level used by the server. Valid values
 #' are: TRACE, DEBUG, INFO, WARN, ERROR, and FATAL. Defaults to FATAL
 #' if not specified.
+#' @param check If TRUE check the versions of IE driver available. If
+#'     new versions are available they will be downloaded.
 #' @param verbose If TRUE, include status messages (if any)
 #' @param retcommand If TRUE return only the command that would be passed
 #'     to \code{\link{spawn_process}}
@@ -28,7 +30,7 @@
 #' ieDrv$stop()
 #' }
 
-iedriver <- function(port = 4567L, version = "latest",
+iedriver <- function(port = 4567L, version = "latest", check = TRUE,
                      loglevel = c("FATAL", "TRACE", "DEBUG", "INFO",
                                   "WARN", "ERROR"), verbose = TRUE,
                      retcommand = FALSE, ...){
@@ -36,7 +38,7 @@ iedriver <- function(port = 4567L, version = "latest",
   assert_that(is_string(version))
   assert_that(is_logical(verbose))
   loglevel <- match.arg(loglevel)
-  iecheck <- ie_check(verbose)
+  iecheck <- ie_check(verbose, check = check)
   ieplat <- iecheck[["platform"]]
   ieversion <- ie_ver(ieplat, version)
   eopts <- list(...)

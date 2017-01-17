@@ -7,6 +7,8 @@
 #'     sourced run binman::list_versions("geckodriver")
 #' @param loglevel Set Gecko log level [values: fatal, error,
 #'     warn, info, config, debug, trace]
+#' @param check If TRUE check the versions of geckodriver available. If
+#'     new versions are available they will be downloaded.
 #' @param verbose If TRUE, include status messages (if any)
 #' @param retcommand If TRUE return only the command that would be passed
 #'     to \code{\link{spawn_process}}
@@ -26,7 +28,7 @@
 #' gDrv$stop()
 #' }
 
-gecko <- function(port = 4567L, version = "latest",
+gecko <- function(port = 4567L, version = "latest", check = TRUE,
                   loglevel = c("info", "fatal", "error", "warn", "config",
                           "debug", "trace"), verbose = TRUE,
                   retcommand = FALSE, ...){
@@ -34,7 +36,7 @@ gecko <- function(port = 4567L, version = "latest",
   assert_that(is_string(version))
   assert_that(is_logical(verbose))
   loglevel <- match.arg(loglevel)
-  geckocheck <- gecko_check(verbose)
+  geckocheck <- gecko_check(verbose, check = check)
   geckoplat <- geckocheck[["platform"]]
   geckoversion <- gecko_ver(geckoplat, version)
   eopts <- list(...)

@@ -6,7 +6,7 @@
 \usage{
 selenium(port = 4567L, version = "latest", chromever = "latest",
   geckover = "latest", iedrver = NULL, phantomver = "latest",
-  verbose = TRUE, retcommand = FALSE, ...)
+  check = TRUE, verbose = TRUE, retcommand = FALSE, ...)
 }
 \arguments{
 \item{port}{Port to run on}
@@ -35,6 +35,10 @@ NOTE this functionality is Windows OS only.}
 which runs the most recent version. To see other version currently
 sourced run binman::list_versions("phantomjs"), A value of NULL
 excludes adding the PhantomJS headless browser to Selenium Server.}
+
+\item{check}{If TRUE check the versions of selenium available and the
+versions of associated drivers (chromever, geckover, phantomver,
+iedrver). If new versions are available they will be downloaded.}
 
 \item{verbose}{If TRUE, include status messages (if any)}
 

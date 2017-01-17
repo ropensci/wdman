@@ -4,9 +4,9 @@
 \alias{iedriver}
 \title{Start IE driver server}
 \usage{
-iedriver(port = 4567L, version = "latest", loglevel = c("FATAL", "TRACE",
-  "DEBUG", "INFO", "WARN", "ERROR"), verbose = TRUE, retcommand = FALSE,
-  ...)
+iedriver(port = 4567L, version = "latest", check = TRUE,
+  loglevel = c("FATAL", "TRACE", "DEBUG", "INFO", "WARN", "ERROR"),
+  verbose = TRUE, retcommand = FALSE, ...)
 }
 \arguments{
 \item{port}{Port to run on}
@@ -14,6 +14,9 @@ iedriver(port = 4567L, version = "latest", loglevel = c("FATAL", "TRACE",
 \item{version}{what version of IE driver server to run. Default = "latest"
 which runs the most recent version. To see other version currently
 sourced run binman::list_versions("iedriverserver")}
+
+\item{check}{If TRUE check the versions of IE driver available. If
+new versions are available they will be downloaded.}
 
 \item{loglevel}{Specifies the log level used by the server. Valid values
 are: TRACE, DEBUG, INFO, WARN, ERROR, and FATAL. Defaults to FATAL
