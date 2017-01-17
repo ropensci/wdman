@@ -56,72 +56,18 @@ selenium <- function(port = 4567L,
   assert_that(is_string_or_null(phantomver))
   assert_that(is_logical(retcommand))
   assert_that(is_logical(verbose))
-  javapath <- Sys.which("java")
-  if(identical(javapath, "")){
-    stop("PATH to JAVA not found. Please check JAVA is installed.")
-  }
-  syml <- system.file("yaml", "seleniumserver.yml", package = "wdman")
-  if(verbose) message("checking Selenium Server versions:")
-  process_yaml(syml, verbose)
-  selplat <- "generic"
-  selver <- binman::list_versions("seleniumserver")[[selplat]]
-  selver <- if(identical(version, "latest")){
-    as.character(max(semver::parse_version(selver)))
-  }else{
-    mtch <- match(version, selver)
-    if(is.na(mtch) || is.null(mtch)){
-      stop("version requested doesnt match versions available = ",
-           paste(selver, collpase = ","))
-    }
-    selver[mtch]
-  }
-  seldir <- normalizePath(
-    file.path(app_dir("seleniumserver"), selplat, selver)
-  )
-  selpath <- list.files(seldir,
-                        pattern = "selenium-server-standalone",
-                        full.names = TRUE)
-  if(file.access(selpath, 1) < 0){
-    Sys.chmod(selpath, '0755')
-  }
-  eopts <- list(...)
+  javapath <- java_check()
+  seleniumcheck <- selenium_check(verbose)
+  selplat <- seleniumcheck[["platform"]]
+  seleniumversion <- selenium_ver(selplat, version)
+   eopts <- list(...)
   jvmargs <- c(Reduce(c, eopts[names(eopts) == "jvmargs"]))
   selargs <- c(Reduce(c, eopts[names(eopts) == "selargs"]))
-  if(!is.null(chromever)){
-    chromecheck <- chrome_check(verbose)
-    cver <- chrome_ver(chromecheck[["platform"]], chromever)
-    jvmargs[["chrome"]] <- sprintf(
-      "-Dwebdriver.chrome.driver=%s",
-      cver[["path"]]
-    )
-  }
-  if(!is.null(geckover)){
-    geckocheck <- gecko_check(verbose)
-    gver <- gecko_ver(geckocheck[["platform"]], geckover)
-    jvmargs[["gecko"]] <- sprintf(
-      "-Dwebdriver.gecko.driver=%s",
-      gver[["path"]]
-    )
-  }
-  if(!is.null(phantomver)){
-    phantomcheck <- phantom_check(verbose)
-    pver <- phantom_ver(phantomcheck[["platform"]], phantomver)
-    jvmargs[["phantom"]] <- sprintf(
-      "-Dphantomjs.binary.path=%s",
-      pver[["path"]]
-    )
-  }
-  if(!is.null(iedrver)){
-    iecheck <- ie_check(verbose)
-    iever <- ie_ver(iecheck[["platform"]], iedrver)
-    jvmargs[["internetexplorer"]] <- sprintf(
-      "-Dwebdriver.ie.driver=%s",
-      iever[["path"]]
-    )
-  }
+  jvmargs <- selenium_check_drivers(chromever, geckover, phantomver,
+                                    iedrver, verbose, jvmargs)
   # should be the last JVM argument
   jvmargs[["jar"]] <- "-jar"
-  jvmargs[["selpath"]] <- selpath
+  jvmargs[["selpath"]] <- seleniumversion[["path"]]
   # Selenium JAR arguments
   selargs[["portswitch"]] <- "-port"
   selargs[["port"]] <- port
@@ -162,4 +108,81 @@ selenium <- function(port = 4567L,
       as.list(log)
     }
   )
+}
+
+java_check <- function(){
+  javapath <- Sys.which("java")
+  if(identical(javapath, "")){
+    stop("PATH to JAVA not found. Please check JAVA is installed.")
+  }
+  javapath
+}
+
+selenium_check <- function(verbose){
+  syml <- system.file("yaml", "seleniumserver.yml", package = "wdman")
+  if(verbose) message("checking Selenium Server versions:")
+  process_yaml(syml, verbose)
+  selplat <- "generic"
+  list(yaml = syml, platform = selplat)
+}
+
+selenium_ver <- function(platform, version){
+  selver <- binman::list_versions("seleniumserver")[[platform]]
+  selver <- if(identical(version, "latest")){
+    as.character(max(semver::parse_version(selver)))
+  }else{
+    mtch <- match(version, selver)
+    if(is.na(mtch) || is.null(mtch)){
+      stop("version requested doesnt match versions available = ",
+           paste(selver, collpase = ","))
+    }
+    selver[mtch]
+  }
+  seldir <- normalizePath(
+    file.path(app_dir("seleniumserver"), platform, selver)
+  )
+  selpath <- list.files(seldir,
+                        pattern = "selenium-server-standalone",
+                        full.names = TRUE)
+  if(file.access(selpath, 1) < 0){
+    Sys.chmod(selpath, '0755')
+  }
+  list(version = selver, dir = seldir, path = selpath)
+}
+
+selenium_check_drivers <- function(chromever, geckover, phantomver,
+                                   iedrver, verbose, jvmargs){
+  if(!is.null(chromever)){
+    chromecheck <- chrome_check(verbose)
+    cver <- chrome_ver(chromecheck[["platform"]], chromever)
+    jvmargs[["chrome"]] <- sprintf(
+      "-Dwebdriver.chrome.driver=%s",
+      cver[["path"]]
+    )
+  }
+  if(!is.null(geckover)){
+    geckocheck <- gecko_check(verbose)
+    gver <- gecko_ver(geckocheck[["platform"]], geckover)
+    jvmargs[["gecko"]] <- sprintf(
+      "-Dwebdriver.gecko.driver=%s",
+      gver[["path"]]
+    )
+  }
+  if(!is.null(phantomver)){
+    phantomcheck <- phantom_check(verbose)
+    pver <- phantom_ver(phantomcheck[["platform"]], phantomver)
+    jvmargs[["phantom"]] <- sprintf(
+      "-Dphantomjs.binary.path=%s",
+      pver[["path"]]
+    )
+  }
+  if(!is.null(iedrver)){
+    iecheck <- ie_check(verbose)
+    iever <- ie_ver(iecheck[["platform"]], iedrver)
+    jvmargs[["internetexplorer"]] <- sprintf(
+      "-Dwebdriver.ie.driver=%s",
+      iever[["path"]]
+    )
+  }
+  jvmargs
 }
