@@ -383,13 +383,31 @@ of four functions and a handle to the underlying running process.
 ieDrv <- iedriver(verbose = FALSE, check = FALSE)
 ieDrv$process
 
+## Process Handle
+## command   : C:\Users\john\AppData\Local\binman\binman_iedriverserver\win64\3.0.0\IEDriverServer.exe /port=4567 /log-level=FATAL /log-file=C:\Users\john\AppData\Local\Temp\RtmpqSdw94\file5247395f2a.txt
+## system id : 7484
+## state     : running
+
 ```
 
 ```
 ieDrv$log()
+
+## $stderr
+## character(0)
+## 
+## $stdout
+## [1] "Started InternetExplorerDriver server (64-bit)"                                          
+## [2] "3.0.0.0"                                                                                 
+## [3] "Listening on port 4567"                                                                  
+## [4] "Log level is set to FATAL"                                                               
+## [5] "Log file is set to C:\\Users\\john\\AppData\\Local\\Temp\\RtmpqSdw94\\file5247395f2a.txt"
+## [6] "Only local connections are allowed"
 ```
 
 ```
 ieDrv$stop()
+
+## [1] TRUE
 
 ```
