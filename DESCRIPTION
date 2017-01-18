@@ -6,8 +6,13 @@ Authors@R: c(
     person("John", "Harrison", , "johndharrison0@gmail.com",
     role = c("aut", "cre"), comment = "R package wdman"))
 Description: There are a number of binary files associated with the 
-    'Webdriver'/'Selenium' project. This package provides functions to 
-    download these binaries and to manage processes involving them.
+    'Webdriver'/'Selenium' project (see <http://www.seleniumhq.org/download/>, 
+    <https://sites.google.com/a/chromium.org/chromedriver/>, 
+    <https://github.com/mozilla/geckodriver>, 
+    <http://phantomjs.org/download.html> and 
+    <https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver> for 
+    more information). This package provides functions to download these 
+    binaries and to manage processes involving them.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
