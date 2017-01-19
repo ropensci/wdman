@@ -50,9 +50,20 @@ iedriver <- function(port = 4567L, version = "latest", check = TRUE,
   if(retcommand){
     return(paste(c(ieversion[["path"]], args), collapse = " "))
   }
-  iedrv <- subprocess::spawn_process(
-    ieversion[["path"]], arguments = args
-  )
+  errTfile <- tempfile(fileext = ".txt")
+  write(character(), errTfile)
+  outTfile <- tempfile(fileext = ".txt")
+  write(character(), outTfile)
+  iedrv <- if(identical(.Platform[["OS.type"]], "windows")){
+    tfile <- tempfile(fileext = ".bat")
+    write(paste(c(ieversion[["path"]], args), collapse = " "), tfile)
+    subprocess::spawn_process(tfile, arguments = c(">", outTfile,
+                                                   "2>", errTfile))
+  }else{
+    subprocess::spawn_process(
+      ieversion[["path"]], arguments = args
+    )
+  }
   if(!is.na(subprocess::process_return_code(iedrv))){
     stop("iedriver couldn't be started",
          subprocess::process_read(iedrv, "stderr"))
@@ -68,14 +79,16 @@ iedriver <- function(port = 4567L, version = "latest", check = TRUE,
   list(
     process = iedrv,
     output = function(timeout = 0L){
-      infun_read(iedrv, log, "stdout", timeout = timeout)
+      infun_read(iedrv, log, "stdout", timeout = timeout,
+                 outfile = outTfile, errfile = errTfile)
     },
     error = function(timeout = 0L){
-      infun_read(iedrv, log, "stderr", timeout = timeout)
+      infun_read(iedrv, log, "stderr", timeout = timeout,
+                 outfile = outTfile, errfile = errTfile)
     },
     stop = function(){subprocess::process_kill(iedrv)},
     log = function(){
-      infun_read(iedrv, log)
+      infun_read(iedrv, log, outfile = outTfile, errfile = errTfile)
       as.list(log)
     }
   )
