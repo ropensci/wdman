@@ -1,7 +1,7 @@
 Package: wdman
 Type: Package
 Title: 'Webdriver'/'Selenium' Binary Manager
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: c(
     person("John", "Harrison", , "johndharrison0@gmail.com",
     role = c("aut", "cre"), comment = "R package wdman"))
