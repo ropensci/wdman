@@ -46,14 +46,27 @@ gecko <- function(port = 4567L, version = "latest", check = TRUE,
   if(retcommand){
     return(paste(c(geckoversion[["path"]], args), collapse = " "))
   }
-  geckodrv <- subprocess::spawn_process(
-    geckoversion[["path"]], arguments = args
-  )
+  errTfile <- tempfile(fileext = ".txt")
+  write(character(), errTfile)
+  outTfile <- tempfile(fileext = ".txt")
+  write(character(), outTfile)
+  geckodrv <- if(identical(.Platform[["OS.type"]], "windows")){
+    tfile <- tempfile(fileext = ".bat")
+    write(paste(c(geckoversion[["path"]], args), collapse = " "), tfile)
+    subprocess::spawn_process(tfile, arguments = c(">", outTfile,
+                                                   "2>", errTfile))
+  }else{
+    subprocess::spawn_process(
+      geckoversion[["path"]], arguments = args
+    )
+  }
   if(!is.na(subprocess::process_return_code(geckodrv))){
     stop("Geckodriver couldn't be started",
          subprocess::process_read(geckodrv, "stderr"))
   }
-  startlog <- generic_start_log(geckodrv)
+  startlog <- generic_start_log(geckodrv,
+                                outfile = outTfile,
+                                errfile = errTfile)
   if(length(startlog[["stderr"]]) >0){
     if(any(grepl("Address in use", startlog[["stderr"]]))){
       subprocess::process_kill(geckodrv)
@@ -64,14 +77,16 @@ gecko <- function(port = 4567L, version = "latest", check = TRUE,
   list(
     process = geckodrv,
     output = function(timeout = 0L){
-      infun_read(geckodrv, log, "stdout", timeout = timeout)
+      infun_read(geckodrv, log, "stdout", timeout = timeout,
+                 outfile = outTfile, errfile = errTfile)
     },
     error = function(timeout = 0L){
-      infun_read(geckodrv, log, "stderr", timeout = timeout)
+      infun_read(geckodrv, log, "stderr", timeout = timeout,
+                 outfile = outTfile, errfile = errTfile)
     },
     stop = function(){subprocess::process_kill(geckodrv)},
     log = function(){
-      infun_read(geckodrv, log)
+      infun_read(geckodrv, log, outfile = outTfile, errfile = errTfile)
       as.list(log)
     }
   )
