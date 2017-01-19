@@ -46,14 +46,27 @@ phantomjs <- function(port = 4567L, version = "2.1.1", check = TRUE,
   if(retcommand){
     return(paste(c(phantomversion[["path"]], args), collapse = " "))
   }
-  phantomdrv <- subprocess::spawn_process(
-    phantomversion[["path"]], arguments = args
-  )
+  errTfile <- tempfile(fileext = ".txt")
+  write(character(), errTfile)
+  outTfile <- tempfile(fileext = ".txt")
+  write(character(), outTfile)
+  phantomdrv <- if(identical(.Platform[["OS.type"]], "windows")){
+    tfile <- tempfile(fileext = ".bat")
+    write(paste(c(phantomversion[["path"]], args), collapse = " "), tfile)
+    subprocess::spawn_process(tfile, arguments = c(">", outTfile,
+                                                   "2>", errTfile))
+  }else{
+    subprocess::spawn_process(
+      phantomversion[["path"]], arguments = args
+    )
+  }
   if(!is.na(subprocess::process_return_code(phantomdrv))){
     stop("PhantomJS couldn't be started",
          subprocess::process_read(phantomdrv, "stderr"))
   }
-  startlog <- generic_start_log(phantomdrv)
+  startlog <- generic_start_log(phantomdrv,
+                                outfile = outTfile,
+                                errfile = errTfile)
   if(length(startlog[["stdout"]]) >0){
     if(any(
       grepl("GhostDriver - main.fail.*sourceURL", startlog[["stdout"]])
@@ -66,14 +79,16 @@ phantomjs <- function(port = 4567L, version = "2.1.1", check = TRUE,
   list(
     process = phantomdrv,
     output = function(timeout = 0L){
-      infun_read(phantomdrv, log, "stdout", timeout = timeout)
+      infun_read(phantomdrv, log, "stdout", timeout = timeout,
+                 outfile = outTfile, errfile = errTfile)
     },
     error = function(timeout = 0L){
-      infun_read(phantomdrv, log, "stderr", timeout = timeout)
+      infun_read(phantomdrv, log, "stderr", timeout = timeout,
+                 outfile = outTfile, errfile = errTfile)
     },
     stop = function(){subprocess::process_kill(phantomdrv)},
     log = function(){
-      infun_read(phantomdrv, log)
+      infun_read(phantomdrv, log, outfile = outTfile, errfile = errTfile)
       as.list(log)
     }
   )

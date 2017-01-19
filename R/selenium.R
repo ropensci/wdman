@@ -80,14 +80,29 @@ selenium <- function(port = 4567L,
   if(retcommand){
     return(paste(c(javapath, jvmargs, selargs), collapse = " "))
   }
-  seleniumdrv <- subprocess::spawn_process(
-    javapath, arguments = c(jvmargs, selargs)
-  )
+  errTfile <- tempfile(fileext = ".txt")
+  write(character(), errTfile)
+  Sys.chmod(errTfile)
+  outTfile <- tempfile(fileext = ".txt")
+  write(character(), outTfile)
+  Sys.chmod(errTfile)
+  seleniumdrv <- if(identical(.Platform[["OS.type"]], "windows")){
+    tfile <- tempfile(fileext = ".bat")
+    write(paste(c(javapath, jvmargs, selargs), collapse = " "), tfile)
+    subprocess::spawn_process(tfile, arguments = c(">", outTfile,
+                                                   "2>", errTfile))
+  }else{
+    subprocess::spawn_process(
+      javapath, arguments = c(jvmargs, selargs)
+    )
+  }
   if(!is.na(subprocess::process_return_code(seleniumdrv))){
     stop("Selenium server couldn't be started",
          subprocess::process_read(seleniumdrv, "stderr"))
   }
-  startlog <- generic_start_log(seleniumdrv, poll = 10000L)
+  startlog <- generic_start_log(seleniumdrv, poll = 10000L,
+                                outfile = outTfile,
+                                errfile = errTfile)
   if(length(startlog[["stderr"]]) >0){
     if(any(grepl("Address already in use", startlog[["stderr"]]))){
       subprocess::process_kill(seleniumdrv)
@@ -103,14 +118,16 @@ selenium <- function(port = 4567L,
   list(
     process = seleniumdrv,
     output = function(timeout = 0L){
-      infun_read(seleniumdrv, log, "stdout", timeout = timeout)
+      infun_read(seleniumdrv, log, "stdout", timeout = timeout,
+                 outfile = outTfile, errfile = errTfile)
     },
     error = function(timeout = 0L){
-      infun_read(seleniumdrv, log, "stderr", timeout = timeout)
+      infun_read(seleniumdrv, log, "stderr", timeout = timeout,
+                 outfile = outTfile, errfile = errTfile)
     },
     stop = function(){subprocess::process_kill(seleniumdrv)},
     log = function(){
-      infun_read(seleniumdrv, log)
+      infun_read(seleniumdrv, log, outfile = outTfile, errfile = errTfile)
       as.list(log)
     }
   )

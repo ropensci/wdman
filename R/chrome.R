@@ -45,14 +45,27 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
   if(retcommand){
     return(paste(c(chromeversion[["path"]], args), collapse = " "))
   }
-  chromedrv <- subprocess::spawn_process(
-    chromeversion[["path"]], arguments = args
-  )
+  errTfile <- tempfile(fileext = ".txt")
+  write(character(), errTfile)
+  outTfile <- tempfile(fileext = ".txt")
+  write(character(), outTfile)
+  chromedrv <- if(identical(.Platform[["OS.type"]], "windows")){
+    tfile <- tempfile(fileext = ".bat")
+    write(paste(c(chromeversion[["path"]], args), collapse = " "), tfile)
+    subprocess::spawn_process(tfile, arguments = c(">", outTfile,
+                                                   "2>", errTfile))
+  }else{
+    subprocess::spawn_process(
+      chromeversion[["path"]], arguments = args
+    )
+  }
   if(!is.na(subprocess::process_return_code(chromedrv))){
     stop("Chromedriver couldn't be started",
          subprocess::process_read(chromedrv, "stderr"))
   }
-  startlog <- generic_start_log(chromedrv)
+  startlog <- generic_start_log(chromedrv,
+                                outfile = outTfile,
+                                errfile = errTfile)
   if(length(startlog[["stderr"]]) >0){
     if(any(grepl("Address already in use", startlog[["stderr"]]))){
       subprocess::process_kill(chromedrv)
@@ -63,14 +76,16 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
   list(
     process = chromedrv,
     output = function(timeout = 0L){
-      infun_read(chromedrv, log, "stdout", timeout = timeout)
+      infun_read(chromedrv, log, "stdout", timeout = timeout,
+                 outfile = outTfile, errfile = errTfile)
     },
     error = function(timeout = 0L){
-      infun_read(chromedrv, log, "stderr", timeout = timeout)
+      infun_read(chromedrv, log, "stderr", timeout = timeout,
+                 outfile = outTfile, errfile = errTfile)
     },
     stop = function(){subprocess::process_kill(chromedrv)},
     log = function(){
-      infun_read(chromedrv, log)
+      infun_read(chromedrv, log, outfile = outTfile, errfile = errTfile)
       as.list(log)
     }
   )
