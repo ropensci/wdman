@@ -14,17 +14,32 @@ test_that("canCallInfun_read", {
         return(list(stdout = "stdout here", stderr = "stderr here"))
       }
     },
+    `wdman:::read_pipes` = function(pipe, ...){
+      out <- list()
+      if(pipe %in% c(subprocess::PIPE_STDOUT)){
+        return("stdout here")
+      }
+      if(pipe %in% c(subprocess::PIPE_STDERR)){
+        return("stderr here")
+      }
+      if(pipe %in% c(subprocess::PIPE_BOTH)){
+        return(list(stdout = "stdout here", stderr = "stderr here"))
+      }
+    },
     {
       testenv <- new.env()
       ifout <- wdman:::infun_read(handle = "",
                                   pipe = subprocess::PIPE_STDOUT,
-                                  env = testenv)
+                                  env = testenv, outfile = "",
+                                  errfile = "")
       iferr <- wdman:::infun_read(handle = "",
                                   pipe = subprocess::PIPE_STDERR,
-                                  env = testenv)
+                                  env = testenv, outfile = "",
+                                  errfile = "")
       ifboth <- wdman:::infun_read(handle = "",
                                    pipe = subprocess::PIPE_BOTH,
-                                   env = testenv)
+                                   env = testenv, outfile = "",
+                                   errfile = "")
       expect_identical(ifboth, list(stdout = "stdout here",
                                     stderr = "stderr here"))
     }
@@ -41,7 +56,9 @@ test_that("canCallInfun_read", {
 test_that("canCallGeneric_start_log", {
   with_mock(
     `subprocess::process_read` = mock_subprocess_process_read_utils,
-    out <- generic_start_log("", poll = 1500L)
+    `wdman:::read_pipes` = mock_subprocess_process_read_utils,
+    out <- generic_start_log("", poll = 1500L, outfile = "",
+                             errfile = "")
   )
   expect_identical(out, list(stdout = character(), stderr = character()))
 })
