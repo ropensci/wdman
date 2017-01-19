@@ -28,7 +28,8 @@ Imports:
     assertthat,
     subprocess (>= 0.8.0),
     yaml,
-    semver(>= 0.2.0)
+    semver(>= 0.2.0),
+    utils
 URL: https://github.com/johndharrison/wdman
 URLNote: https://github.com/johndharrison/wdman
 BugReports: https://github.com/johndharrison/wdman/issues

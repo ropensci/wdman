@@ -63,9 +63,9 @@ read_pipes <- function(env, outfile, errfile, pipe = subprocess::PIPE_BOTH,
                        timeout){
   Sys.sleep(timeout/1000)
   outres <- readLines(outfile)
-  outres <- tail(outres, length(outres) - length(env[["stdout"]]))
+  outres <- utils::tail(outres, length(outres) - length(env[["stdout"]]))
   errres <- readLines(errfile)
-  errres <- tail(errres, length(errres) - length(env[["stderr"]]))
+  errres <- utils::tail(errres, length(errres) - length(env[["stderr"]]))
   if(identical(pipe, subprocess::PIPE_BOTH)){
     return(list(stdout = outres, stderr = errres))
   }
