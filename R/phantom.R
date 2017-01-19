@@ -64,7 +64,9 @@ phantomjs <- function(port = 4567L, version = "2.1.1", check = TRUE,
     stop("PhantomJS couldn't be started",
          subprocess::process_read(phantomdrv, "stderr"))
   }
-  startlog <- generic_start_log(phantomdrv)
+  startlog <- generic_start_log(phantomdrv,
+                                outfile = outTfile,
+                                errfile = errTfile)
   if(length(startlog[["stdout"]]) >0){
     if(any(
       grepl("GhostDriver - main.fail.*sourceURL", startlog[["stdout"]])

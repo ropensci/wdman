@@ -68,7 +68,9 @@ iedriver <- function(port = 4567L, version = "latest", check = TRUE,
     stop("iedriver couldn't be started",
          subprocess::process_read(iedrv, "stderr"))
   }
-  startlog <- generic_start_log(iedrv)
+  startlog <- generic_start_log(iedrv,
+                                outfile = outTfile,
+                                errfile = errTfile)
   if(length(startlog[["stderr"]]) >0){
     if(any(grepl("Address in use", startlog[["stderr"]]))){
       subprocess::process_kill(iedrv)
