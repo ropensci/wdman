@@ -49,13 +49,13 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
   write(character(), errTfile)
   outTfile <- tempfile(fileext = ".txt")
   write(character(), outTfile)
-  seleniumdrv <- if(identical(.Platform[["OS.type"]], "windows")){
+  chromedrv <- if(identical(.Platform[["OS.type"]], "windows")){
     tfile <- tempfile(fileext = ".bat")
     write(paste(c(chromeversion[["path"]], args), collapse = " "), tfile)
     subprocess::spawn_process(tfile, arguments = c(">", outTfile,
                                                    "2>", errTfile))
   }else{
-    chromedrv <- subprocess::spawn_process(
+    subprocess::spawn_process(
       chromeversion[["path"]], arguments = args
     )
   }
