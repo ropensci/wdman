@@ -80,9 +80,18 @@ selenium <- function(port = 4567L,
   if(retcommand){
     return(paste(c(javapath, jvmargs, selargs), collapse = " "))
   }
-  seleniumdrv <- subprocess::spawn_process(
-    javapath, arguments = c(jvmargs, selargs)
-  )
+  seleniumdrv <- if(identical(.Platform[["OS.type"]], "windows")){
+    tfile <- tempfile(fileext = ".bat")
+    errTfile <- tempfile(fileext = ".log")
+    outTfile <- tempfile(fileext = ".log")
+    write(paste(c(javapath, jvmargs, selargs), collapse = " "), tfile)
+    subprocess::spawn_process(tfile, arguments = c(">", outTfile,
+                                                   "2>", errTfile))
+  }else{
+    subprocess::spawn_process(
+      javapath, arguments = c(jvmargs, selargs)
+    )
+  }
   if(!is.na(subprocess::process_return_code(seleniumdrv))){
     stop("Selenium server couldn't be started",
          subprocess::process_read(seleniumdrv, "stderr"))
