@@ -43,10 +43,8 @@ iedriver <- function(port = 4567L, version = "latest", check = TRUE,
   ieversion <- ie_ver(ieplat, version)
   eopts <- list(...)
   args <- c(Reduce(c, eopts[names(eopts) == "args"]))
-  tFile <- tempfile(fileext = ".txt")
   args[["port"]] <- sprintf("/port=%s", port)
   args[["log-level"]] <- sprintf("/log-level=%s", loglevel)
-  args[["log-path"]] <- sprintf("/log-file=%s", tFile)
   if(retcommand){
     return(paste(c(ieversion[["path"]], args), collapse = " "))
   }

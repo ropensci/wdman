@@ -73,7 +73,7 @@ selenium <- function(port = 4567L,
                                     verbose = verbose, jvmargs)
   # should be the last JVM argument
   jvmargs[["jar"]] <- "-jar"
-  jvmargs[["selpath"]] <- seleniumversion[["path"]]
+  jvmargs[["selpath"]] <- shQuote(seleniumversion[["path"]])
   # Selenium JAR arguments
   selargs[["portswitch"]] <- "-port"
   selargs[["port"]] <- port
@@ -170,7 +170,7 @@ selenium_check_drivers <- function(chromever, geckover, phantomver,
     cver <- chrome_ver(chromecheck[["platform"]], chromever)
     jvmargs[["chrome"]] <- sprintf(
       "-Dwebdriver.chrome.driver=%s",
-      cver[["path"]]
+      shQuote(cver[["path"]])
     )
   }
   if(!is.null(geckover)){
@@ -178,7 +178,7 @@ selenium_check_drivers <- function(chromever, geckover, phantomver,
     gver <- gecko_ver(geckocheck[["platform"]], geckover)
     jvmargs[["gecko"]] <- sprintf(
       "-Dwebdriver.gecko.driver=%s",
-      gver[["path"]]
+      shQuote(gver[["path"]])
     )
   }
   if(!is.null(phantomver)){
@@ -186,7 +186,7 @@ selenium_check_drivers <- function(chromever, geckover, phantomver,
     pver <- phantom_ver(phantomcheck[["platform"]], phantomver)
     jvmargs[["phantom"]] <- sprintf(
       "-Dphantomjs.binary.path=%s",
-      pver[["path"]]
+      shQuote(pver[["path"]])
     )
   }
   if(!is.null(iedrver)){
@@ -194,7 +194,7 @@ selenium_check_drivers <- function(chromever, geckover, phantomver,
     iever <- ie_ver(iecheck[["platform"]], iedrver)
     jvmargs[["internetexplorer"]] <- sprintf(
       "-Dwebdriver.ie.driver=%s",
-      iever[["path"]]
+      shQuote(iever[["path"]])
     )
   }
   jvmargs
