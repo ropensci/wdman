@@ -59,11 +59,16 @@ test_that("canCallSelenium", {
     }
   )
   expect_identical(selServ$process, "hello")
-  expect_true(grepl("-Dwebdriver.chrome.driver='some.path' " %+%
-                      "-Dwebdriver.gecko.driver='some.path' " %+%
-                      "-Dphantomjs.binary.path='some.path' " %+%
-                      "-Dwebdriver.ie.driver='some.path' " %+%
-                      "-jar 'some.path' -port 4567", retCommand))
+  exRet <- "-Dwebdriver.chrome.driver='some.path' " %+%
+    "-Dwebdriver.gecko.driver='some.path' " %+%
+    "-Dphantomjs.binary.path='some.path' " %+%
+    "-Dwebdriver.ie.driver='some.path' " %+%
+    "-jar 'some.path' -port 4567"
+  if(identical(.Platform[["OS.type"]], "unix")){
+    expect_true(grepl(exRet, retCommand))
+  }else{
+    expect_true(grepl(gsub("'", "\"", exRet), retCommand))
+  }
 })
 
 test_that("errorIfJavaNotFound", {
