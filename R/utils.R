@@ -71,25 +71,19 @@ read_pipes <- function(env, outfile, errfile, pipe = subprocess::PIPE_BOTH,
 
 unix_spawn_tofile <- function(command, args, outfile, errfile, ...){
   tfile <- tempfile(fileext = ".sh")
-  tfile2 <- tempfile(fileext = ".sh")
   write("#!/bin/sh", tfile)
   write(paste(c(command, args, ">", outfile, "2>", errfile),
               collapse = " "),
         tfile, append = TRUE)
   Sys.chmod(tfile)
-  # write("#!/bin/sh", tfile2)
-  # write(paste(tfile, ">", outfile, "2>", errfile, collapse = " "),
-  #       tfile2, append = TRUE)
-  # Sys.chmod(tfile2)
-  # subprocess::spawn_process(tfile2, ...)
   subprocess::spawn_process(tfile, ...)
 }
 
 windows_spawn_tofile <- function(command, args, outfile, errfile, ...){
   tfile <- tempfile(fileext = ".bat")
-  write(paste(c(command, args), collapse = " "), tfile)
-  subprocess::spawn_process(tfile, arguments = c(">", outfile,
-                                                 "2>", errfile))
+  write(paste(c(command, args, ">", outfile, "2>", errfile),
+             collapse = " "), tfile)
+  subprocess::spawn_process(tfile, ...)
 }
 
 spawn_tofile <- function(command, args, outfile, errfile, ...){
