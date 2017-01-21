@@ -1,9 +1,13 @@
+# wdman 0.2.2
+
+* Moved unix based systems to write pipes to file.
+* Fixed issue with shell escaping paths.
+
 # wdman 0.2.1
 
 * Added a read_pipes internal function for windows drivers
 * Fixed an issue with Windows and blocking pipes. A batch file is now ran
   with stdout/stderr piped to file.
-
 
 # wdman 0.2.0
 
