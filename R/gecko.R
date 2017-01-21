@@ -46,27 +46,16 @@ gecko <- function(port = 4567L, version = "latest", check = TRUE,
   if(retcommand){
     return(paste(c(geckoversion[["path"]], args), collapse = " "))
   }
-  errTfile <- tempfile(fileext = ".txt")
-  write(character(), errTfile)
-  outTfile <- tempfile(fileext = ".txt")
-  write(character(), outTfile)
-  geckodrv <- if(identical(.Platform[["OS.type"]], "windows")){
-    tfile <- tempfile(fileext = ".bat")
-    write(paste(c(geckoversion[["path"]], args), collapse = " "), tfile)
-    subprocess::spawn_process(tfile, arguments = c(">", outTfile,
-                                                   "2>", errTfile))
-  }else{
-    subprocess::spawn_process(
-      geckoversion[["path"]], arguments = args
-    )
-  }
+  pfile <- pipe_files()
+  geckodrv <- spawn_tofile(geckoversion[["path"]],
+                           args, pfile[["out"]], pfile[["err"]])
   if(!is.na(subprocess::process_return_code(geckodrv))){
     stop("Geckodriver couldn't be started",
          subprocess::process_read(geckodrv, "stderr"))
   }
   startlog <- generic_start_log(geckodrv,
-                                outfile = outTfile,
-                                errfile = errTfile)
+                                outfile = pfile[["out"]],
+                                errfile = pfile[["err"]])
   if(length(startlog[["stderr"]]) >0){
     if(any(grepl("Address in use", startlog[["stderr"]]))){
       subprocess::process_kill(geckodrv)
@@ -78,15 +67,15 @@ gecko <- function(port = 4567L, version = "latest", check = TRUE,
     process = geckodrv,
     output = function(timeout = 0L){
       infun_read(geckodrv, log, "stdout", timeout = timeout,
-                 outfile = outTfile, errfile = errTfile)
+                 outfile = pfile[["out"]], errfile = pfile[["err"]])
     },
     error = function(timeout = 0L){
       infun_read(geckodrv, log, "stderr", timeout = timeout,
-                 outfile = outTfile, errfile = errTfile)
+                 outfile = pfile[["out"]], errfile = pfile[["err"]])
     },
     stop = function(){subprocess::process_kill(geckodrv)},
     log = function(){
-      infun_read(geckodrv, log, outfile = outTfile, errfile = errTfile)
+      infun_read(geckodrv, log, outfile = pfile[["out"]], errfile = pfile[["err"]])
       as.list(log)
     }
   )
@@ -121,7 +110,7 @@ gecko_ver <- function(platform, version){
     mtch <- match(version, geckover)
     if(is.na(mtch) || is.null(mtch)){
       stop("version requested doesnt match versions available = ",
-           paste(geckover, collpase = ","))
+           paste(geckover, collapse = ","))
     }
     geckover[mtch]
   }

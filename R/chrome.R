@@ -45,27 +45,20 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
   if(retcommand){
     return(paste(c(chromeversion[["path"]], args), collapse = " "))
   }
+  pfile <- pipe_files()
   errTfile <- tempfile(fileext = ".txt")
   write(character(), errTfile)
   outTfile <- tempfile(fileext = ".txt")
   write(character(), outTfile)
-  chromedrv <- if(identical(.Platform[["OS.type"]], "windows")){
-    tfile <- tempfile(fileext = ".bat")
-    write(paste(c(chromeversion[["path"]], args), collapse = " "), tfile)
-    subprocess::spawn_process(tfile, arguments = c(">", outTfile,
-                                                   "2>", errTfile))
-  }else{
-    subprocess::spawn_process(
-      chromeversion[["path"]], arguments = args
-    )
-  }
+  chromedrv <- spawn_tofile(chromeversion[["path"]],
+                            args, pfile[["out"]], pfile[["err"]])
   if(!is.na(subprocess::process_return_code(chromedrv))){
     stop("Chromedriver couldn't be started",
          subprocess::process_read(chromedrv, "stderr"))
   }
   startlog <- generic_start_log(chromedrv,
-                                outfile = outTfile,
-                                errfile = errTfile)
+                                outfile = pfile[["out"]],
+                                errfile = pfile[["err"]])
   if(length(startlog[["stderr"]]) >0){
     if(any(grepl("Address already in use", startlog[["stderr"]]))){
       subprocess::process_kill(chromedrv)
@@ -77,15 +70,16 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
     process = chromedrv,
     output = function(timeout = 0L){
       infun_read(chromedrv, log, "stdout", timeout = timeout,
-                 outfile = outTfile, errfile = errTfile)
+                 outfile = pfile[["out"]], errfile = pfile[["err"]])
     },
     error = function(timeout = 0L){
       infun_read(chromedrv, log, "stderr", timeout = timeout,
-                 outfile = outTfile, errfile = errTfile)
+                 outfile = pfile[["out"]], errfile = pfile[["err"]])
     },
     stop = function(){subprocess::process_kill(chromedrv)},
     log = function(){
-      infun_read(chromedrv, log, outfile = outTfile, errfile = errTfile)
+      infun_read(chromedrv, log,
+                 outfile = pfile[["out"]], errfile = pfile[["err"]])
       as.list(log)
     }
   )
@@ -120,7 +114,7 @@ chrome_ver <- function(platform, version){
     mtch <- match(version, chromever)
     if(is.na(mtch) || is.null(mtch)){
       stop("version requested doesnt match versions available = ",
-           paste(chromever, collpase = ","))
+           paste(chromever, collapse = ","))
     }
     chromever[mtch]
   }

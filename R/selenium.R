@@ -73,36 +73,23 @@ selenium <- function(port = 4567L,
                                     verbose = verbose, jvmargs)
   # should be the last JVM argument
   jvmargs[["jar"]] <- "-jar"
-  jvmargs[["selpath"]] <- seleniumversion[["path"]]
+  jvmargs[["selpath"]] <- shQuote(seleniumversion[["path"]])
   # Selenium JAR arguments
   selargs[["portswitch"]] <- "-port"
   selargs[["port"]] <- port
   if(retcommand){
     return(paste(c(javapath, jvmargs, selargs), collapse = " "))
   }
-  errTfile <- tempfile(fileext = ".txt")
-  write(character(), errTfile)
-  Sys.chmod(errTfile)
-  outTfile <- tempfile(fileext = ".txt")
-  write(character(), outTfile)
-  Sys.chmod(errTfile)
-  seleniumdrv <- if(identical(.Platform[["OS.type"]], "windows")){
-    tfile <- tempfile(fileext = ".bat")
-    write(paste(c(javapath, jvmargs, selargs), collapse = " "), tfile)
-    subprocess::spawn_process(tfile, arguments = c(">", outTfile,
-                                                   "2>", errTfile))
-  }else{
-    subprocess::spawn_process(
-      javapath, arguments = c(jvmargs, selargs)
-    )
-  }
+  pfile <- pipe_files()
+  seleniumdrv <- spawn_tofile(javapath, args = c(jvmargs, selargs),
+                              pfile[["out"]], pfile[["err"]])
   if(!is.na(subprocess::process_return_code(seleniumdrv))){
     stop("Selenium server couldn't be started",
          subprocess::process_read(seleniumdrv, "stderr"))
   }
   startlog <- generic_start_log(seleniumdrv, poll = 10000L,
-                                outfile = outTfile,
-                                errfile = errTfile)
+                                outfile = pfile[["out"]],
+                                errfile = pfile[["err"]])
   if(length(startlog[["stderr"]]) >0){
     if(any(grepl("Address already in use", startlog[["stderr"]]))){
       subprocess::process_kill(seleniumdrv)
@@ -119,15 +106,16 @@ selenium <- function(port = 4567L,
     process = seleniumdrv,
     output = function(timeout = 0L){
       infun_read(seleniumdrv, log, "stdout", timeout = timeout,
-                 outfile = outTfile, errfile = errTfile)
+                 outfile = pfile[["out"]], errfile = pfile[["err"]])
     },
     error = function(timeout = 0L){
       infun_read(seleniumdrv, log, "stderr", timeout = timeout,
-                 outfile = outTfile, errfile = errTfile)
+                 outfile = pfile[["out"]], errfile = pfile[["err"]])
     },
     stop = function(){subprocess::process_kill(seleniumdrv)},
     log = function(){
-      infun_read(seleniumdrv, log, outfile = outTfile, errfile = errTfile)
+      infun_read(seleniumdrv, log,
+                 outfile = pfile[["out"]], errfile = pfile[["err"]])
       as.list(log)
     }
   )
@@ -159,7 +147,7 @@ selenium_ver <- function(platform, version){
     mtch <- match(version, selver)
     if(is.na(mtch) || is.null(mtch)){
       stop("version requested doesnt match versions available = ",
-           paste(selver, collpase = ","))
+           paste(selver, collapse = ","))
     }
     selver[mtch]
   }
@@ -182,7 +170,7 @@ selenium_check_drivers <- function(chromever, geckover, phantomver,
     cver <- chrome_ver(chromecheck[["platform"]], chromever)
     jvmargs[["chrome"]] <- sprintf(
       "-Dwebdriver.chrome.driver=%s",
-      cver[["path"]]
+      shQuote(cver[["path"]])
     )
   }
   if(!is.null(geckover)){
@@ -190,7 +178,7 @@ selenium_check_drivers <- function(chromever, geckover, phantomver,
     gver <- gecko_ver(geckocheck[["platform"]], geckover)
     jvmargs[["gecko"]] <- sprintf(
       "-Dwebdriver.gecko.driver=%s",
-      gver[["path"]]
+      shQuote(gver[["path"]])
     )
   }
   if(!is.null(phantomver)){
@@ -198,7 +186,7 @@ selenium_check_drivers <- function(chromever, geckover, phantomver,
     pver <- phantom_ver(phantomcheck[["platform"]], phantomver)
     jvmargs[["phantom"]] <- sprintf(
       "-Dphantomjs.binary.path=%s",
-      pver[["path"]]
+      shQuote(pver[["path"]])
     )
   }
   if(!is.null(iedrver)){
@@ -206,7 +194,7 @@ selenium_check_drivers <- function(chromever, geckover, phantomver,
     iever <- ie_ver(iecheck[["platform"]], iedrver)
     jvmargs[["internetexplorer"]] <- sprintf(
       "-Dwebdriver.ie.driver=%s",
-      iever[["path"]]
+      shQuote(iever[["path"]])
     )
   }
   jvmargs
