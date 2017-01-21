@@ -6,11 +6,7 @@ os_arch <- function(string = ""){
 
 infun_read <- function(handle, env, pipe = subprocess::PIPE_BOTH,
                        timeout = 0L, outfile, errfile){
-  msg <- if(identical(.Platform[["OS.type"]], "windows")){
-    read_pipes(env, outfile, errfile, pipe = pipe, timeout = timeout)
-  }else{
-    subprocess::process_read(handle, pipe = pipe, timeout = timeout)
-  }
+  msg <- read_pipes(env, outfile, errfile, pipe = pipe, timeout = timeout)
 
   if(identical(pipe, subprocess::PIPE_BOTH)){
     env[["stdout"]] <- c(env[["stdout"]], msg[["stdout"]])
@@ -33,12 +29,8 @@ generic_start_log <- function(handle, poll = 3000L, increment = 500L,
     begin <- Sys.time()
     errchk <- tryCatch(
       {
-        if(identical(.Platform[["OS.type"]], "windows")){
-          read_pipes(startlog, outfile, errfile,
-                     timeout = min(increment, poll))
-        }else{
-          subprocess::process_read(handle, timeout = min(increment, poll))
-        }
+        read_pipes(startlog, outfile, errfile,
+                   timeout = min(increment, poll))
       },
       error = function(e){
         e
@@ -75,4 +67,43 @@ read_pipes <- function(env, outfile, errfile, pipe = subprocess::PIPE_BOTH,
   if(identical(pipe, subprocess::PIPE_STDERR)){
     return(errres)
   }
+}
+
+unix_spawn_tofile <- function(command, args, outfile, errfile, ...){
+  tfile <- tempfile(fileext = ".sh")
+  tfile2 <- tempfile(fileext = ".sh")
+  write("#!/bin/sh", tfile)
+  write(paste(c(command, args, ">", outfile, "2>", errfile),
+              collapse = " "),
+        tfile, append = TRUE)
+  Sys.chmod(tfile)
+  # write("#!/bin/sh", tfile2)
+  # write(paste(tfile, ">", outfile, "2>", errfile, collapse = " "),
+  #       tfile2, append = TRUE)
+  # Sys.chmod(tfile2)
+  # subprocess::spawn_process(tfile2, ...)
+  subprocess::spawn_process(tfile, ...)
+}
+
+windows_spawn_tofile <- function(command, args, outfile, errfile, ...){
+  tfile <- tempfile(fileext = ".bat")
+  write(paste(c(command, args), collapse = " "), tfile)
+  subprocess::spawn_process(tfile, arguments = c(">", outTfile,
+                                                 "2>", errTfile))
+}
+
+spawn_tofile <- function(command, args, outfile, errfile, ...){
+  if(identical(.Platform[["OS.type"]], "windows")){
+    windows_spawn_tofile(command, args, outfile, errfile, ...)
+  }else{
+    unix_spawn_tofile(command, args, outfile, errfile, ...)
+  }
+}
+
+pipe_files <- function(){
+  errTfile <- tempfile(fileext = ".txt")
+  write(character(), errTfile)
+  outTfile <- tempfile(fileext = ".txt")
+  write(character(), outTfile)
+  list(out = outTfile, err = errTfile)
 }
