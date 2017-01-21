@@ -88,8 +88,8 @@ unix_spawn_tofile <- function(command, args, outfile, errfile, ...){
 windows_spawn_tofile <- function(command, args, outfile, errfile, ...){
   tfile <- tempfile(fileext = ".bat")
   write(paste(c(command, args), collapse = " "), tfile)
-  subprocess::spawn_process(tfile, arguments = c(">", outTfile,
-                                                 "2>", errTfile))
+  subprocess::spawn_process(tfile, arguments = c(">", outfile,
+                                                 "2>", errfile))
 }
 
 spawn_tofile <- function(command, args, outfile, errfile, ...){
