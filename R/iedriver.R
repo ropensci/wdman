@@ -50,27 +50,16 @@ iedriver <- function(port = 4567L, version = "latest", check = TRUE,
   if(retcommand){
     return(paste(c(ieversion[["path"]], args), collapse = " "))
   }
-  errTfile <- tempfile(fileext = ".txt")
-  write(character(), errTfile)
-  outTfile <- tempfile(fileext = ".txt")
-  write(character(), outTfile)
-  iedrv <- if(identical(.Platform[["OS.type"]], "windows")){
-    tfile <- tempfile(fileext = ".bat")
-    write(paste(c(ieversion[["path"]], args), collapse = " "), tfile)
-    subprocess::spawn_process(tfile, arguments = c(">", outTfile,
-                                                   "2>", errTfile))
-  }else{
-    subprocess::spawn_process(
-      ieversion[["path"]], arguments = args
-    )
-  }
+  pfile <- pipe_files()
+  iedrv <- spawn_tofile(ieversion[["path"]],
+                        args, pfile[["out"]], pfile[["err"]])
   if(!is.na(subprocess::process_return_code(iedrv))){
     stop("iedriver couldn't be started",
          subprocess::process_read(iedrv, "stderr"))
   }
   startlog <- generic_start_log(iedrv,
-                                outfile = outTfile,
-                                errfile = errTfile)
+                                outfile = pfile[["out"]],
+                                errfile = pfile[["err"]])
   if(length(startlog[["stderr"]]) >0){
     if(any(grepl("Address in use", startlog[["stderr"]]))){
       subprocess::process_kill(iedrv)
@@ -82,15 +71,15 @@ iedriver <- function(port = 4567L, version = "latest", check = TRUE,
     process = iedrv,
     output = function(timeout = 0L){
       infun_read(iedrv, log, "stdout", timeout = timeout,
-                 outfile = outTfile, errfile = errTfile)
+                 outfile = pfile[["out"]], errfile = pfile[["err"]])
     },
     error = function(timeout = 0L){
       infun_read(iedrv, log, "stderr", timeout = timeout,
-                 outfile = outTfile, errfile = errTfile)
+                 outfile = pfile[["out"]], errfile = pfile[["err"]])
     },
     stop = function(){subprocess::process_kill(iedrv)},
     log = function(){
-      infun_read(iedrv, log, outfile = outTfile, errfile = errTfile)
+      infun_read(iedrv, log, outfile = pfile[["out"]], errfile = pfile[["err"]])
       as.list(log)
     }
   )
@@ -126,7 +115,7 @@ ie_ver <- function(platform, version){
     mtch <- match(version, iever)
     if(is.na(mtch) || is.null(mtch)){
       stop("version requested doesnt match versions available = ",
-           paste(iever, collpase = ","))
+           paste(iever, collapse = ","))
     }
     iever[mtch]
   }
