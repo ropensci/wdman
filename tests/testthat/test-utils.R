@@ -62,3 +62,35 @@ test_that("canCallGeneric_start_log", {
   )
   expect_identical(out, list(stdout = character(), stderr = character()))
 })
+
+
+test_that("canRead_pipes", {
+  outfile <- tempfile(fileext = ".txt")
+  write(c("hello", "i am out"), outfile)
+  errfile <- tempfile(fileext = ".txt")
+  write(c("world", "i am err"), errfile)
+  env <- list(stdout = "hello", stderr = "world")
+  bothres <- read_pipes(env, outfile, errfile, timeout = 20)
+  outres <- read_pipes(env, outfile, errfile, subprocess::PIPE_STDOUT,
+                       timeout = 20)
+  errres <- read_pipes(env, outfile, errfile, subprocess::PIPE_STDERR,
+                       timeout = 20)
+  expect_identical(bothres, list(stdout = "i am out", stderr = "i am err"))
+  expect_identical(outres, "i am out")
+  expect_identical(errres, "i am err")
+})
+
+test_that("canWindows_spawn_tofile", {
+  outfile <- tempfile(fileext = ".txt")
+  errfile <- tempfile(fileext = ".txt")
+  with_mock(
+    `subprocess::spawn_process`= function(command, ...){
+      readLines(command)
+    },
+    out <- windows_spawn_tofile("hello", "world", outfile, errfile)
+  )
+  exRes <- paste(c(shQuote("hello"), "world", ">",
+                   shQuote(outfile), "2>", shQuote(errfile)),
+                 collapse = " ")
+  expect_identical(out, exRes)
+})
