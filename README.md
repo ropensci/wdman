@@ -128,20 +128,6 @@ driver is also given. This is set to `iedrver = NULL` so not ran by default.
 Set it to `iedrver = "latest"` or a specific version string to include it
 on your Windows.
 
-### Issues with Windows and Firefox/GeckoDriver
-
-To run the binaries related to the Selenium/webdriver projects `wdman` 
-uses the R package `subprocess`. Currently the windows version of this
-package uses blocking pipes when it instantiates a process. This causes 
-issues with firefox/geckodriver when called from selenium. A "shim" is 
-required as the stderr pipe is blocking and firefox/geckodriver waits for 
-the pipe to free. 
-
-An example of implementing this shim for windows can be seen in the 
-[Rselenium](https://github.com/ropensci/RSelenium) package. The 
-`rsDriver` function currently implements such a shim. It basically 
-clears the error pipe so the firefox/geckodriver can finish its startup.
-
 ## Further details
 
 For further details please see the package vignette:
