@@ -60,7 +60,7 @@
       <h1>wdman: Basics</h1>
                         <h4 class="author">John D Harrison</h4>
             
-            <h4 class="date">2017-01-17</h4>
+            <h4 class="date">2017-01-23</h4>
           </div>
 
     
@@ -212,12 +212,6 @@ selServ$process
 <html><body><a href="#available-browsers" class="anchor"> </a></body></html>Available browsers</h3>
 <p>By default the <code>selenium</code> function includes paths to chromedriver/geckodriver/ phantomjs so that the Chrome/Firefox and PhantomJS browsers are available respectively. All versions (chromever, geckover etc) are given as “latest”. If the user passes a value of NULL for any driver it will be excluded.</p>
 <p>On Windows operating systems the option to included the Internet Explorer driver is also given. This is set to <code>iedrver = NULL</code> so not ran by default. Set it to <code>iedrver = "latest"</code> or a specific version string to include it on your Windows.</p>
-</div>
-<div id="issues-with-windows-and-firefoxgeckodriver" class="section level3">
-<h3 class="hasAnchor">
-<html><body><a href="#issues-with-windows-and-firefoxgeckodriver" class="anchor"> </a></body></html>Issues with Windows and Firefox/GeckoDriver</h3>
-<p>To run the binaries related to the Selenium/webdriver projects <code>wdman</code> uses the R package <code>subprocess</code>. Currently the windows version of this package uses blocking pipes when it instantiates a process. The causes issues with firefox/geckodriver when called from selenium. A “shim” is required as the stderr pipe is blocking and firefox/geckodriver waits for the pipe to free.</p>
-<p>An example of implementing this shim for windows can be seen in the <a href="https://github.com/ropensci/RSelenium">Rselenium</a> package. The <code>rsDriver</code> function currently implements such a shim. It basically clears the error pipe so the firefox/geckodriver can finish its startup.</p>
 </div>
 </div>
 <div id="chrome-driver" class="section level2">
