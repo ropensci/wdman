@@ -1,6 +1,6 @@
 # wdman 0.2.3
 
-* Fixed issue with checking for JAVA (thanks Michal Libura #4)
+* Fixed issue with checking for JAVA (thanks Michal Libura #15)
 
 # wdman 0.2.2
 
