@@ -1,3 +1,7 @@
+# wdman 0.2.3
+
+* Fixed issue with checking for JAVA (thanks Michal Libura #4)
+
 # wdman 0.2.2
 
 * Moved unix based systems to write pipes to file.

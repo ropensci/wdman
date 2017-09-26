@@ -123,7 +123,7 @@ selenium <- function(port = 4567L,
 
 java_check <- function(){
   javapath <- Sys.which("java")
-  if(identical(javapath, "")){
+  if(identical(unname(javapath), "")){
     stop("PATH to JAVA not found. Please check JAVA is installed.")
   }
   javapath
