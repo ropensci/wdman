@@ -1,17 +1,21 @@
 context("iedriver")
 
+normalizePath <- function(...) base::normalizePath(...)
+list.files <- function(...) base::list.files(...)
+Sys.info <- function(...) base::Sys.info(...)
+
 test_that("canCallIEDriver", {
   with_mock(
     `binman::process_yaml` = function(...){},
     `binman::list_versions` = mock_binman_list_versions_iedriver,
     `binman::app_dir` = mock_binman_app_dir,
-    `base::normalizePath` = mock_base_normalizePath,
-    `base::list.files` = mock_base_list.files,
+     normalizePath = mock_base_normalizePath,
+     list.files = mock_base_list.files,
     `subprocess::spawn_process` = mock_subprocess_spawn_process,
     `subprocess::process_return_code` =
       mock_subprocess_process_return_code,
     `subprocess::process_kill` = mock_subprocess_process_kill,
-    `base::Sys.info` = function(...){
+      Sys.info = function(...){
       structure("Windows", .Names = "sysname")
     },
     `wdman:::generic_start_log` = mock_generic_start_log,
@@ -47,14 +51,14 @@ test_that("pickUpErrorFromReturnCode", {
     `binman::process_yaml` = function(...){},
     `binman::list_versions` = mock_binman_list_versions_iedriver,
     `binman::app_dir` = mock_binman_app_dir,
-    `base::normalizePath` = mock_base_normalizePath,
-    `base::list.files` = mock_base_list.files,
+     normalizePath = mock_base_normalizePath,
+     list.files = mock_base_list.files,
     `subprocess::spawn_process` = mock_subprocess_spawn_process,
     `subprocess::process_return_code` = function(...){"some error"},
     `subprocess::process_read` =
       mock_subprocess_process_read_selenium,
     `wdman:::generic_start_log` = mock_generic_start_log,
-    `base::Sys.info` = function(...){
+     Sys.info = function(...){
       structure("Windows", .Names = "sysname")
     },
     {
@@ -69,8 +73,8 @@ test_that("pickUpErrorFromPortInUse", {
     `binman::process_yaml` = function(...){},
     `binman::list_versions` = mock_binman_list_versions_iedriver,
     `binman::app_dir` = mock_binman_app_dir,
-    `base::normalizePath` = mock_base_normalizePath,
-    `base::list.files` = mock_base_list.files,
+     normalizePath = mock_base_normalizePath,
+     list.files = mock_base_list.files,
     `subprocess::spawn_process` = mock_subprocess_spawn_process,
     `subprocess::process_return_code` =
       mock_subprocess_process_return_code,
@@ -80,7 +84,7 @@ test_that("pickUpErrorFromPortInUse", {
     `wdman:::generic_start_log` = function(...){
       list(stderr = "Address in use")
     },
-    `base::Sys.info` = function(...){
+    Sys.info = function(...){
       structure("Windows", .Names = "sysname")
     },
     {
