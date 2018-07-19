@@ -1,12 +1,17 @@
 context("selenium")
 
+normalizePath <- function(...) base::normalizePath(...)
+list.files <- function(...) base::list.files(...)
+Sys.info <- function(...) base::Sys.info(...)
+Sys.which <- function(...) base::Sys.which(...)
+
 test_that("canCallSelenium", {
   with_mock(
     `binman::process_yaml` = function(...){},
     `binman::list_versions` = mock_binman_list_versions_selenium,
     `binman::app_dir` = mock_binman_app_dir,
-    `base::normalizePath` = mock_base_normalizePath,
-    `base::list.files` = mock_base_list.files,
+     normalizePath = mock_base_normalizePath,
+     list.files = mock_base_list.files,
     `subprocess::spawn_process` = mock_subprocess_spawn_process,
     `subprocess::process_return_code` =
       mock_subprocess_process_return_code,
@@ -15,7 +20,7 @@ test_that("canCallSelenium", {
     `subprocess::process_kill` = mock_subprocess_process_kill,
     `wdman:::generic_start_log` = mock_generic_start_log,
     `wdman:::infun_read` = function(...){"infun"},
-    `base::Sys.info` = function(...){
+     Sys.info = function(...){
       structure("Windows", .Names = "sysname")
     },
     # CHROME
@@ -73,14 +78,14 @@ test_that("canCallSelenium", {
 
 test_that("errorIfJavaNotFound", {
   with_mock(
-    `base::Sys.which`= function(...){""},
+     Sys.which= function(...){""},
     expect_error(selenium(), "PATH to JAVA not found")
   )
 })
 
 test_that("errorIfVersionNotFound", {
   with_mock(
-    `base::Sys.which`= function(...){"im here"},
+     Sys.which= function(...){"im here"},
     `binman::process_yaml` = function(...){},
     `binman::list_versions` = mock_binman_list_versions_selenium,
     expect_error(selenium(version = "nothere"),
@@ -93,14 +98,14 @@ test_that("pickUpErrorFromReturnCode", {
     `binman::process_yaml` = function(...){},
     `binman::list_versions` = mock_binman_list_versions_selenium,
     `binman::app_dir` = mock_binman_app_dir,
-    `base::normalizePath` = mock_base_normalizePath,
-    `base::list.files` = mock_base_list.files,
+     normalizePath = mock_base_normalizePath,
+     list.files = mock_base_list.files,
     `subprocess::spawn_process` = mock_subprocess_spawn_process,
     `subprocess::process_return_code` = function(...){"some error"},
     `subprocess::process_read` =
       mock_subprocess_process_read_selenium,
     `wdman:::generic_start_log` = mock_generic_start_log,
-    `base::Sys.info` = function(...){
+     Sys.info = function(...){
       structure("Windows", .Names = "sysname")
     },
     # CHROME
@@ -141,8 +146,8 @@ test_that("pickUpErrorFromPortInUse", {
     `binman::process_yaml` = function(...){},
     `binman::list_versions` = mock_binman_list_versions_selenium,
     `binman::app_dir` = mock_binman_app_dir,
-    `base::normalizePath` = mock_base_normalizePath,
-    `base::list.files` = mock_base_list.files,
+     normalizePath = mock_base_normalizePath,
+     list.files = mock_base_list.files,
     `subprocess::spawn_process` = mock_subprocess_spawn_process,
     `subprocess::process_return_code` =
       mock_subprocess_process_return_code,
@@ -152,7 +157,7 @@ test_that("pickUpErrorFromPortInUse", {
     `wdman:::generic_start_log` = function(...){
       list(stderr = "Address already in use")
     },
-    `base::Sys.info` = function(...){
+     Sys.info = function(...){
       structure("Windows", .Names = "sysname")
     },
     # CHROME
@@ -192,8 +197,8 @@ test_that("pickUpWarningOnNoStderr", {
     `binman::process_yaml` = function(...){},
     `binman::list_versions` = mock_binman_list_versions_selenium,
     `binman::app_dir` = mock_binman_app_dir,
-    `base::normalizePath` = mock_base_normalizePath,
-    `base::list.files` = mock_base_list.files,
+     normalizePath = mock_base_normalizePath,
+     list.files = mock_base_list.files,
     `subprocess::spawn_process` = mock_subprocess_spawn_process,
     `subprocess::process_return_code` =
       mock_subprocess_process_return_code,
@@ -201,7 +206,7 @@ test_that("pickUpWarningOnNoStderr", {
       mock_subprocess_process_read_selenium,
     `wdman:::generic_start_log` =
       function(...){list(stdout = character(), stderr = character())},
-    `base::Sys.info` = function(...){
+     Sys.info = function(...){
       structure("Windows", .Names = "sysname")
     },
     # CHROME

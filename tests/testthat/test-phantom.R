@@ -1,12 +1,16 @@
 context("phantom")
 
+normalizePath <- function(...) base::normalizePath(...)
+list.files <- function(...) base::list.files(...)
+
+
 test_that("canCallPhantomJS", {
   with_mock(
     `binman::process_yaml` = function(...){},
     `binman::list_versions` = mock_binman_list_versions_phantomjs,
     `binman::app_dir` = mock_binman_app_dir,
-    `base::normalizePath` = mock_base_normalizePath,
-    `base::list.files` = mock_base_list.files,
+     normalizePath = mock_base_normalizePath,
+     list.files = mock_base_list.files,
     `subprocess::spawn_process` = mock_subprocess_spawn_process,
     `subprocess::process_return_code` =
       mock_subprocess_process_return_code,
@@ -45,8 +49,8 @@ test_that("pickUpErrorFromReturnCode", {
     `binman::process_yaml` = function(...){},
     `binman::list_versions` = mock_binman_list_versions_phantomjs,
     `binman::app_dir` = mock_binman_app_dir,
-    `base::normalizePath` = mock_base_normalizePath,
-    `base::list.files` = mock_base_list.files,
+     normalizePath = mock_base_normalizePath,
+     list.files = mock_base_list.files,
     `subprocess::spawn_process` = mock_subprocess_spawn_process,
     `subprocess::process_return_code` = function(...){"some error"},
     `subprocess::process_read` =
@@ -64,8 +68,8 @@ test_that("pickUpErrorFromPortInUse", {
     `binman::process_yaml` = function(...){},
     `binman::list_versions` = mock_binman_list_versions_phantomjs,
     `binman::app_dir` = mock_binman_app_dir,
-    `base::normalizePath` = mock_base_normalizePath,
-    `base::list.files` = mock_base_list.files,
+     normalizePath = mock_base_normalizePath,
+     list.files = mock_base_list.files,
     `subprocess::spawn_process` = mock_subprocess_spawn_process,
     `subprocess::process_return_code` =
       mock_subprocess_process_return_code,
