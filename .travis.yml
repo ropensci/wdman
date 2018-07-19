@@ -2,8 +2,6 @@ dist: trusty
 sudo: required
 language: R
 cache: packages
-r_github_packages:
-- ropensci/binman
 env:
   matrix:
   - NOT_CRAN=true
