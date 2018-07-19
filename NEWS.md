@@ -1,3 +1,7 @@
+# wdman 0.2.4
+
+* Fixed tests for CRAN re-submission.
+
 # wdman 0.2.3
 
 * Fixed issue with checking for JAVA (thanks Michal Libura #15)
