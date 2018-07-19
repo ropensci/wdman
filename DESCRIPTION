@@ -1,10 +1,12 @@
 Package: wdman
 Type: Package
 Title: 'Webdriver'/'Selenium' Binary Manager
-Version: 0.2.2
+Version: 0.2.3
 Authors@R: c(
     person("John", "Harrison", , "johndharrison0@gmail.com",
-    role = c("aut", "cre"), comment = "R package wdman"))
+    role = "aut", comment = "original author"),
+    person("Ju Yeong", "Kim", , "jkim2345@fredhutch.org",
+    role = "cre", comment = "rOpenSci maintainer"))
 Description: There are a number of binary files associated with the
     'Webdriver'/'Selenium' project (see <http://www.seleniumhq.org/download/>,
     <https://sites.google.com/a/chromium.org/chromedriver/>,
@@ -30,8 +32,8 @@ Imports:
     yaml,
     semver(>= 0.2.0),
     utils
-URL: https://github.com/johndharrison/wdman
-URLNote: https://github.com/johndharrison/wdman
-BugReports: https://github.com/johndharrison/wdman/issues
+URL: https://github.com/ropensci/wdman
+URLNote: https://github.com/ropensci/wdman
+BugReports: https://github.com/ropensci/wdman/issues
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr

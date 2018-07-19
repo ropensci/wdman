@@ -2,7 +2,7 @@ wdman
 ==========================
 | CRAN version       | Travis build status   | Appveyor build status   | Coverage |
 | :-------------: |:-------------:|:-------------:|:-------------:|
-| [![](http://www.r-pkg.org/badges/version/wdman)](https://CRAN.R-project.org/package=wdman) | [![Build Status](https://travis-ci.org/johndharrison/binman.svg?branch=master)](https://travis-ci.org/johndharrison/wdman) | [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/johndharrison/wdman?branch=master&svg=true)](https://ci.appveyor.com/project/johndharrison/wdman) | [![codecov](https://codecov.io/gh/johndharrison/wdman/branch/master/graph/badge.svg)](https://codecov.io/gh/johndharrison/wdman)|
+| [![](http://www.r-pkg.org/badges/version/wdman)](https://CRAN.R-project.org/package=wdman) | [![Build Status](https://travis-ci.org/ropensci/binman.svg?branch=master)](https://travis-ci.org/ropensci/wdman) | [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/o8q2d6gdm9su5mcy?svg=true)](https://ci.appveyor.com/project/juyeongkim/wdman) | [![codecov](https://codecov.io/gh/ropensci/wdman/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/wdman)|
 
 ## Installation
 
@@ -11,7 +11,7 @@ You can install wdman from github with:
 
 ```
 # install.packages("devtools")
-devtools::install_github("johndharrison/wdman")
+devtools::install_github("ropensci/wdman")
 ```
 The package can also be installed from CRAN:
 
@@ -26,7 +26,7 @@ the downloading/running of third party binaries relating to the webdriver/seleni
 projects. The package was inspired by a similar node package 
 [webdriver-manager](https://www.npmjs.com/package/webdriver-manager).
 
-The checking/downloading of binaries is handled by the [binman](https://github.com/johndharrison/binman) package and the
+The checking/downloading of binaries is handled by the [binman](https://github.com/ropensci/binman) package and the
 running of the binaries as processes is handled by the [subprocess](https://github.com/lbartnik/subprocess) package.
 
 
