@@ -3,7 +3,7 @@ sudo: required
 language: R
 cache: packages
 r_github_packages:
-- johndharrison/wdman
+- ropensci/binman
 env:
   matrix:
   - NOT_CRAN=true
