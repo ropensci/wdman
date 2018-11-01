@@ -1,5 +1,5 @@
 ---
-title: "wdman: Basics"
+title: "Basics"
 author: "John D Harrison"
 date: "`r Sys.Date()`"
 output: 
@@ -7,24 +7,19 @@ output:
     toc: true
     toc_depth: 3
 vignette: >
-  %\VignetteIndexEntry{wdman: Basics}
+  %\VignetteIndexEntry{Basics}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-The goal of this vignette is to describe the basic functionality of the 
-`wdman` package.
+The goal of this vignette is to describe the basic functionality of the `wdman` package.
+
 
 ## Introduction
 
-`wdman` (Webdriver Manager) is an R package that allows the user to manage
-the downloading/running of third party binaries relating to the webdriver/selenium
-projects. The package was inspired by a similar node package 
-[webdriver-manager](https://www.npmjs.com/package/webdriver-manager).
+`wdman` (Webdriver Manager) is an R package that allows the user to manage the downloading/running of third party binaries relating to the webdriver/selenium projects. The package was inspired by a similar node package [webdriver-manager](https://www.npmjs.com/package/webdriver-manager).
 
-The checking/downloading of binaries is handled by the [binman](https://github.com/ropensci/binman) package and the
-running of the binaries as processes is handled by the [subprocess](https://github.com/lbartnik/subprocess) package.
-
+The checking/downloading of binaries is handled by the [binman](https://github.com/ropensci/binman) package and the running of the binaries as processes is handled by the [subprocess](https://github.com/lbartnik/subprocess) package.
 
 The `wdman` package currently manages the following binaries:
 
@@ -36,23 +31,19 @@ The `wdman` package currently manages the following binaries:
 
 Associated with the above are five functions to download/manage the binaries:
 
-* selenium(...)
-* chrome(...)
-* phantomjs(...)
-* gecko(...)
-* iedriver(...)
+* `selenium(...)`
+* `chrome(...)`
+* `phantomjs(...)`
+* `gecko(...)`
+* `iedriver(...)`
 
-The driver functions take a number of common arguments (verbose, check, 
-retcommand) which we describe: 
+The driver functions take a number of common arguments (verbose, check, retcommand) which we describe: 
 
 ### Verbosity
 
-Each of the driver functions has a `verbose` argument which controls 
-message output to the user. If `verbose = TRUE` then messages are relayed
-to the user to inform them when drivers are checked/downloaded/ran. The
-default value for the driver functions is `TRUE`.
+Each of the driver functions has a `verbose` argument which controls message output to the user. If `verbose = TRUE` then messages are relayed to the user to inform them when drivers are checked/downloaded/ran. The default value for the driver functions is `TRUE`.
 
-```
+```R
 selServ <- selenium(verbose = TRUE)
 
 ## checking Selenium Server versions:
@@ -94,56 +85,46 @@ selServ$stop()
 
 versus's
 
-```
+```R
 selServ <- selenium(verbose = FALSE)
 selServ$stop()
 
 ## [1] TRUE
 ```
 
-
 ### Check for updates 
 
-Each driver function has a `check` argument. If `check= TRUE` the 
-function will liaise with the driver repository for any updates. If new
-driver versions are available these will be downloaded. The
-[binman](https://github.com/ropensci/binman) package is used for
-this purpose.
+Each driver function has a `check` argument. If `check= TRUE` the function will liaise with the driver repository for any updates. If new
+driver versions are available these will be downloaded. The [binman](https://github.com/ropensci/binman) package is used for this purpose.
 
 ### Command line output
 
-For diagnostic purposes each driver function has a `retcommand` argument.
-If `retcommand = TRUE` the command that would have been launched as a 
-process is instead returned as a string. As an example:
+For diagnostic purposes each driver function has a `retcommand` argument. If `retcommand = TRUE` the command that would have been launched as a process is instead returned as a string. As an example:
 
-```
+```R
 selCommand <- selenium(retcommand = TRUE, verbose = FALSE, check = FALSE)
 selCommand
 
 ## [1] "/usr/bin/java -Dwebdriver.chrome.driver=/home/john/.local/share/binman_chromedriver/linux64/2.27/chromedriver -Dwebdriver.gecko.driver=/home/john/.local/share/binman_geckodriver/linux64/0.13.0/geckodriver -Dphantomjs.binary.path=/home/john/.local/share/binman_phantomjs/linux64/2.1.1/phantomjs-2.1.1-linux-x86_64/bin/phantomjs -jar /home/john/.local/share/binman_seleniumserver/generic/3.0.1/selenium-server-standalone-3.0.1.jar -port 4567"
 ```
 
-```
+```R
 chromeCommand <- chrome(retcommand = TRUE, verbose = FALSE, check = FALSE)
 chromeCommand
 
 ## [1] "/home/john/.local/share/binman_chromedriver/linux64/2.27/chromedriver --port=4567 --url-base=wd/hub --verbose"
 ```
 
+
 ## Selenium Standalone
 
-The `selenium` function manages the Selenium Standalone binary. It can
-check for updates at http://selenium-release.storage.googleapis.com/index.html
-and run the resulting binaries as processes. 
+The `selenium` function manages the Selenium Standalone binary. It can check for updates at http://selenium-release.storage.googleapis.com/index.html and run the resulting binaries as processes.
 
 ### Running the Selenium binary
 
-The binary takes a port argument which defaults to `port = 4567L`. There
-are a number of optional arguments to use a particular version of the
-binaries related to browsers selenium may control. By default the
-`selenium` function will look to use the latest version of each. 
+The binary takes a port argument which defaults to `port = 4567L`. There are a number of optional arguments to use a particular version of the binaries related to browsers selenium may control. By default the `selenium` function will look to use the latest version of each.
 
-```
+```R
 selServ <- selenium(verbose = FALSE, check = FALSE)
 selServ$process
 
@@ -153,13 +134,11 @@ selServ$process
 ## state     : running
 ```
 
-The selenium function returns a list of functions and a handle representing 
-the running process.
+The selenium function returns a list of functions and a handle representing the running process.
 
-The returned `output`, `error` and `log` functions give access to the 
-stdout/stderr pipes and the cumulative stdout/stderr messages rerspectively.
+The returned `output`, `error` and `log` functions give access to the stdout/stderr pipes and the cumulative stdout/stderr messages rerspectively.
 
-```
+```R
 selServ$log()
 
 ## $stderr
@@ -194,7 +173,7 @@ selServ$log()
 
 The `stop` function sends a signal that terminates the process:
 
-```
+```R
 selServ$stop()
 
 ## [1] TRUE
@@ -202,30 +181,21 @@ selServ$stop()
 
 ### Available browsers
 
-By default the `selenium` function includes paths to chromedriver/geckodriver/
-phantomjs so that the Chrome/Firefox and PhantomJS browsers are available 
-respectively. All versions (chromever, geckover etc) are given as "latest". 
-If the user passes a value of NULL for any driver it will be excluded.
+By default the `selenium` function includes paths to chromedriver/geckodriver/ phantomjs so that the Chrome/Firefox and PhantomJS browsers are available respectively. All versions (chromever, geckover etc) are given as "latest". If the user passes a value of NULL for any driver, it will be excluded.
 
-On Windows operating systems the option to included the Internet Explorer
-driver is also given. This is set to `iedrver = NULL` so not ran by default.
-Set it to `iedrver = "latest"` or a specific version string to include it
-on your Windows.
+On Windows operating systems the option to included the Internet Explorer driver is also given. This is set to `iedrver = NULL` so not ran by default. Set it to `iedrver = "latest"` or a specific version string to include it on your Windows.
+
 
 ## Chrome Driver
 
-The `chrome` function manages the Chrome Driver binary. It can
-check for updates at https://chromedriver.storage.googleapis.com/index.html
-and run the resulting binaries as processes. 
+The `chrome` function manages the Chrome Driver binary. It can check for updates at https://chromedriver.storage.googleapis.com/index.html
+and run the resulting binaries as processes.
 
-**The `chrome` function runs the Chrome Driver binary as a standalone
-process. It takes a default `port` argument `port = 4567L`. Users can then
-connect directly to the chrome driver to drive a chrome browser.**
+**The `chrome` function runs the Chrome Driver binary as a standalone process. It takes a default `port` argument `port = 4567L`. Users can then connect directly to the chrome driver to drive a chrome browser.**
 
-Similarly to the `selenium` function the `chrome` function returns a list 
-of four functions and a handle to the underlying running process.
+Similarly to the `selenium` function, the `chrome` function returns a list of four functions and a handle to the underlying running process.
 
-```
+```R
 cDrv <- chrome(verbose = FALSE, check = FALSE)
 cDrv$process
 
@@ -235,7 +205,7 @@ cDrv$process
 ## state     : running
 ```
 
-```
+```R
 cDrv$log()
 
 ## $stderr
@@ -246,30 +216,22 @@ cDrv$log()
 ## [2] "Only local connections are allowed."
 ```
 
-```
+```R
 cDrv$stop()
 
 ## [1] TRUE
 ```
+
+
 ## PhantomJS
 
-The `phantomjs` function manages the PhantomJS binary. It can
-check for updates at https://bitbucket.org/ariya/phantomjs/downloads
-and run the resulting binaries as processes. 
+The `phantomjs` function manages the PhantomJS binary. It can check for updates at https://bitbucket.org/ariya/phantomjs/downloads and run the resulting binaries as processes.
 
-**The `phantomjs` function runs the PhantomJS binary as a standalone
-process in webdriver mode. It takes a default `port` argument `port = 4567L`. Users can then
-connect directly to the "ghostdriver" to drive a PhantomJS browser.
-Currently the default `version` is set to `version = "2.1.1"`. At the
-time of writing `2.5.0-beta` has been released. It currently does not
-have an up-to-date version of ghostdriver associated with it. For this 
-reason it will beunstable/unpredictable to use it in webdriver mode. **
+**The `phantomjs` function runs the PhantomJS binary as a standalone process in webdriver mode. It takes a default `port` argument `port = 4567L`. Users can then connect directly to the "ghostdriver" to drive a PhantomJS browser. Currently the default `version` is set to `version = "2.1.1"`. At the time of writing `2.5.0-beta` has been released. It currently does not have an up-to-date version of ghostdriver associated with it. For this reason it will beunstable/unpredictable to use it in webdriver mode. **
 
-Similarly to the `selenium` function the `phantomjs` function returns a list 
-of four functions and a handle to the underlying running process.
+Similarly to the `selenium` function, the `phantomjs` function returns a list of four functions and a handle to the underlying running process.
 
-
-```
+```R
 pjsDrv <- phantomjs(verbose = FALSE, check = FALSE)
 pjsDrv$process
 
@@ -279,7 +241,7 @@ pjsDrv$process
 ## state     : running
 ```
 
-```
+```R
 pjsDrv$log()
 
 ## $stderr
@@ -289,37 +251,26 @@ pjsDrv$log()
 ## [1] "[INFO  - 2017-01-17T19:16:41.984Z] GhostDriver - Main - running on port 4567"
 ```
 
-```
+```R
 pjsDrv$stop()
 
 ## [1] TRUE
 ```
 
+
 ## Gecko Driver
 
-The `gecko` function manages the Gecko Driver binary. It can
-check for updates at https://github.com/mozilla/geckodriver/releases
-and run the resulting binaries as processes. 
+The `gecko` function manages the Gecko Driver binary. It can check for updates at https://github.com/mozilla/geckodriver/releases and run the resulting binaries as processes.
 
-**The `gecko` function runs the Gecko Driver binary as a standalone
-process. It takes a default `port` argument `port = 4567L`. Users can then
-connect directly to the gecko driver to drive a firefox browser.
-Currently the default `version` is set to `version = "2.1.1"`.**
+**The `gecko` function runs the Gecko Driver binary as a standalone process. It takes a default `port` argument `port = 4567L`. Users can then connect directly to the gecko driver to drive a firefox browser. Currently the default `version` is set to `version = "2.1.1"`.**
 
+**A very IMPORTANT point to note is that geckodriver implements the W3C webdriver protocol which as at the time of writing is not finalised. Currently packages such as RSelenium implement the JSONwireprotocol which whilst similar expects different return from the underlying driver.**
 
-**A very IMPORTANT point to note is that geckodriver implements the
-W3C webdriver protocol which as at the time of writing is not finalised.
-Currently packages such as RSelenium implement the JSONwireprotocol which
-whilst similar expects different return from the underlying driver.**
+**The geckodriver implementation like the W3C webdriver specification is incomplete at this point in time.**
 
-**The geckodriver implementation like the W3C webdriver specification is 
-incomplete at this point in time.
-**
+Similarly to the `selenium` function, the `gecko` function returns a list of four functions and a handle to the underlying running process.
 
-Similarly to the `selenium` function the `gecko` function returns a list 
-of four functions and a handle to the underlying running process.
-
-```
+```R
 gDrv <- gecko(verbose = FALSE, check = FALSE)
 gDrv$process
 
@@ -329,7 +280,7 @@ gDrv$process
 ## state     : running
 ```
 
-```
+```R
 gDrv$log()
 
 ## $stderr
@@ -337,35 +288,27 @@ gDrv$log()
 ## 
 ## $stdout
 ## character(0)
-
 ```
 
-```
+```R
 gDrv$stop()
 
 ## [1] TRUE
 ```
 
+
 ## IE Driver
-The `iedriver` function manages the Internet Explorer Driver binary. It can
-check for updates at http://selenium-release.storage.googleapis.com/index.html
-and run the resulting binaries as processes (the iedriver is distributed 
-currently with the Selenium standalone binary amongst other files). 
 
-**The `chrome` function runs the Chrome Driver binary as a standalone
-process. It takes a default `port` argument `port = 4567L`. Users can then
-connect directly to the chrome driver to drive a chrome browser.**
+The `iedriver` function manages the Internet Explorer Driver binary. It can check for updates at http://selenium-release.storage.googleapis.com/index.html
+and run the resulting binaries as processes (the iedriver is distributed currently with the Selenium standalone binary amongst other files). 
 
-**Please note that additional settings are required to drive an Internet Explorer
-browser. Security settings and zoom level need to be set correctly in the browser. 
-The author of this document needed to set a registry entry (for ie 11). This is outlined at
-https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver in the required
-configuration section.**
+**The `chrome` function runs the Chrome Driver binary as a standalone process. It takes a default `port` argument `port = 4567L`. Users can then connect directly to the chrome driver to drive a chrome browser.**
 
-Similarly to the `selenium` function the `gecko` function returns a list 
-of four functions and a handle to the underlying running process.
+**Please note that additional settings are required to drive an Internet Explorer browser. Security settings and zoom level need to be set correctly in the browser. The author of this document needed to set a registry entry (for ie 11). This is outlined at https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver in the required configuration section.**
 
-```
+Similarly to the `selenium` function the `gecko` function returns a list of four functions and a handle to the underlying running process.
+
+```R
 ieDrv <- iedriver(verbose = FALSE, check = FALSE)
 ieDrv$process
 
@@ -373,10 +316,9 @@ ieDrv$process
 ## command   : C:\Users\john\AppData\Local\binman\binman_iedriverserver\win64\3.0.0\IEDriverServer.exe /port=4567 /log-level=FATAL /log-file=C:\Users\john\AppData\Local\Temp\RtmpqSdw94\file5247395f2a.txt
 ## system id : 7484
 ## state     : running
-
 ```
 
-```
+```R
 ieDrv$log()
 
 ## $stderr
@@ -391,21 +333,13 @@ ieDrv$log()
 ## [6] "Only local connections are allowed"
 ```
 
-```
+```R
 ieDrv$stop()
 
 ## [1] TRUE
-
 ```
+
 
 ## Issues and problems
 
-If you experience issues or problems running one of the drivers/functions
-please try running the command in a terminal on your OS initially. 
-
-You can access the command to run by using the `retcommand` argument in 
-each of the main package functions. 
-
-If you continue to have problems consider posting an issue at
-https://github.com/ropensci/wdman/issues
-
+If you experience issues or problems running one of the drivers/functions, please try running the command in a terminal on your OS initially. You can access the command to run by using the `retcommand` argument in each of the main package functions. If you continue to have problems, consider posting an issue at https://github.com/ropensci/wdman/issues
