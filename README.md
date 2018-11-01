@@ -1,34 +1,15 @@
-wdman
-==========================
+# wdman
+
 | CRAN version       | Travis build status   | Appveyor build status   | Coverage |
 | :-------------: |:-------------:|:-------------:|:-------------:|
 | [![](http://www.r-pkg.org/badges/version/wdman)](https://CRAN.R-project.org/package=wdman) | [![Build Status](https://travis-ci.org/ropensci/binman.svg?branch=master)](https://travis-ci.org/ropensci/wdman) | [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/o8q2d6gdm9su5mcy?svg=true)](https://ci.appveyor.com/project/juyeongkim/wdman) | [![codecov](https://codecov.io/gh/ropensci/wdman/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/wdman)|
 
-## Installation
-
-You can install wdman from github with:
-
-
-```
-# install.packages("devtools")
-devtools::install_github("ropensci/wdman")
-```
-The package can also be installed from CRAN:
-
-```
-install.packages("wdman")
-```
 
 ## Introduction
 
-`wdman` (Webdriver Manager) is an R package that allows the user to manage
-the downloading/running of third party binaries relating to the webdriver/selenium
-projects. The package was inspired by a similar node package 
-[webdriver-manager](https://www.npmjs.com/package/webdriver-manager).
+`wdman` (Webdriver Manager) is an R package that allows the user to manage the downloading/running of third party binaries relating to the webdriver/selenium projects. The package was inspired by a similar node package [webdriver-manager](https://www.npmjs.com/package/webdriver-manager).
 
-The checking/downloading of binaries is handled by the [binman](https://github.com/ropensci/binman) package and the
-running of the binaries as processes is handled by the [subprocess](https://github.com/lbartnik/subprocess) package.
-
+The checking/downloading of binaries is handled by the [`binman`](https://github.com/ropensci/binman) package, and the running of the binaries as processes is handled by the [`subprocess`](https://github.com/lbartnik/subprocess) package.
 
 The `wdman` package currently manages the following binaries:
 
@@ -40,26 +21,38 @@ The `wdman` package currently manages the following binaries:
 
 Associated with the above are five functions to download/manage the binaries:
 
-* selenium(...)
-* chrome(...)
-* phantomjs(...)
-* gecko(...)
-* iedriver(...)
+* `selenium(...)`
+* `chrome(...)`
+* `phantomjs(...)`
+* `gecko(...)`
+* `iedriver(...)`
+
+
+## Installation
+
+You can install `wdman` from GitHub with:
+
+```R
+# install.packages("devtools")
+devtools::install_github("ropensci/wdman")
+```
+
+The package can also be installed from CRAN:
+
+```R
+install.packages("wdman")
+```
 
 
 ## Example
 
-As an example we show how one would run the Selenuium standalone binary
-as a process:
+As an example, we show how one would run the Selenuium standalone binary as a process:
 
 ### Running the Selenium binary
 
-The binary takes a port argument which defaults to `port = 4567L`. There
-are a number of optional arguments to use a particular version of the
-binaries related to browsers selenium may control. By default the
-`selenium` function will look to use the latest version of each. 
+The binary takes a port argument which defaults to `port = 4567L`. There are a number of optional arguments to use a particular version of the binaries related to browsers selenium may control. By default, the `selenium` function will look to use the latest version of each. 
 
-```
+```R
 selServ <- selenium(verbose = FALSE)
 selServ$process
 
@@ -69,13 +62,11 @@ selServ$process
 ## state     : running
 ```
 
-The selenium function returns a list of functions and a handle representing 
-the running process.
+The `selenium` function returns a list of functions and a handle representing the running process.
 
-The returned `output`, `error` and `log` functions give access to the 
-stdout/stderr pipes and the cumulative stdout/stderr messages rerspectively.
+The returned `output`, `error` and `log` functions give access to the stdout/stderr pipes and the cumulative stdout/stderr messages rerspectively.
 
-```
+```R
 selServ$log()
 
 ## $stderr
@@ -110,7 +101,7 @@ selServ$log()
 
 The `stop` function sends a signal that terminates the process:
 
-```
+```R
 selServ$stop()
 
 ## [1] TRUE
@@ -118,18 +109,15 @@ selServ$stop()
 
 ### Available browsers
 
-By default the `selenium` function includes paths to chromedriver/geckodriver/
-phantomjs so that the Chrome/Firefox and PhantomJS browsers are available 
-respectively. All versions (chromever, geckover etc) are given as "latest". 
-If the user passes a value of NULL for any driver it will be excluded.
+By default, the `selenium` function includes paths to chromedriver/geckodriver/phantomjs so that the Chrome/Firefox and PhantomJS browsers are available respectively. All versions (chromever, geckover etc) are given as `"latest"`. If the user passes a value of `NULL` for any driver, it will be excluded.
 
-On Windows operating systems the option to included the Internet Explorer
-driver is also given. This is set to `iedrver = NULL` so not ran by default.
-Set it to `iedrver = "latest"` or a specific version string to include it
-on your Windows.
+On Windows operating systems, the option to included the Internet Explorer driver is also given. This is set to `iedrver = NULL` so not ran by default. Set it to `iedrver = "latest"` or a specific version string to include it on your Windows.
+
 
 ## Further details
 
-For further details please see the package vignette:
+For further details, please see [the package vignette](https://ropensci.github.io/wdman/articles/basics.html).
 
-[wdman: Basics](http://rpubs.com/johndharrison/wdman-Basics)
+---
+
+[![](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
