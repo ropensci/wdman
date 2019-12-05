@@ -116,7 +116,7 @@ On Windows operating systems, the option to included the Internet Explorer drive
 
 ## Further details
 
-For further details, please see [the package vignette](https://ropensci.github.io/wdman/articles/basics.html).
+For further details, please see [the package vignette](https://docs.ropensci.org/wdman/articles/basics.html).
 
 ---
 
