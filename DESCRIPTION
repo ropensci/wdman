@@ -32,7 +32,7 @@ Imports:
     yaml,
     semver(>= 0.2.0),
     utils
-URL: https://github.com/ropensci/wdman
+URL: https://docs.ropensci.org/wdman, https://github.com/ropensci/wdman
 URLNote: https://github.com/ropensci/wdman
 BugReports: https://github.com/ropensci/wdman/issues
 RoxygenNote: 6.0.1
