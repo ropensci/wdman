@@ -1,3 +1,7 @@
+# wdman 0.2.5
+
+* Replaced subprocess (archived in CRAN) with [processx](https://processx.r-lib.org/).
+
 # wdman 0.2.4
 
 * Fixed tests for CRAN re-submission.

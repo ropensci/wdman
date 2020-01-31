@@ -10,15 +10,17 @@
 #'     new versions are available they will be downloaded.
 #' @param verbose If TRUE, include status messages (if any)
 #' @param retcommand If TRUE return only the command that would be passed
-#'     to \code{\link{spawn_process}}
+#'     to \code{\link[processx]{process}}
 #' @param ... pass additional options to the driver
 #'
-#' @return Returns a list with named elements process, output, error, stop
-#'     and log. process is the output from calling \code{\link{spawn_process}}
-#'     output, error and stop are functions calling
-#'     \code{\link{process_read}}, \code{\link{process_read}} with "stderr"
-#'     pipe and \code{\link{process_kill}}  respectively  on process.
-#'     log is a function which returns the contents of the log file.
+#' @return Returns a list with named elements \code{process}, \code{output},
+#'     \code{error}, \code{stop}, and \code{log}.
+#'     \code{process} is the object from calling \code{\link[processx]{process}}.
+#'     \code{output} and \code{error} are the functions reading the latest
+#'     messages from "stdout" and "stderr" since the last call whereas \code{log}
+#'     is the function that reads all messages.
+#'     Lastly, \code{stop} call the \code{kill} method in
+#'     \code{\link[processx]{process}} to the kill the \code{process}.
 #' @export
 #'
 #' @examples
@@ -52,16 +54,16 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
   write(character(), outTfile)
   chromedrv <- spawn_tofile(chromeversion[["path"]],
                             args, pfile[["out"]], pfile[["err"]])
-  if(!is.na(subprocess::process_return_code(chromedrv))){
-    stop("Chromedriver couldn't be started",
-         subprocess::process_read(chromedrv, "stderr"))
+  if(isFALSE(chromedrv$is_alive())){
+    err <- paste0(readLines(pfile[["err"]]), collapse = "\n")
+    stop("Chromedriver couldn't be started\n", err)
   }
   startlog <- generic_start_log(chromedrv,
                                 outfile = pfile[["out"]],
                                 errfile = pfile[["err"]])
   if(length(startlog[["stderr"]]) >0){
     if(any(grepl("Address already in use", startlog[["stderr"]]))){
-      subprocess::process_kill(chromedrv)
+      chromedrv$kill()
       stop("Chrome Driver signals port = ", port, " is already in use.")
     }
   }
@@ -76,7 +78,7 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
       infun_read(chromedrv, log, "stderr", timeout = timeout,
                  outfile = pfile[["out"]], errfile = pfile[["err"]])
     },
-    stop = function(){subprocess::process_kill(chromedrv)},
+    stop = function(){chromedrv$kill()},
     log = function(){
       infun_read(chromedrv, log,
                  outfile = pfile[["out"]], errfile = pfile[["err"]])

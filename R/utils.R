@@ -4,18 +4,18 @@ os_arch <- function(string = ""){
   paste0(string, arch)
 }
 
-infun_read <- function(handle, env, pipe = subprocess::PIPE_BOTH,
+infun_read <- function(handle, env, pipe = "both",
                        timeout = 0L, outfile, errfile){
   msg <- read_pipes(env, outfile, errfile, pipe = pipe, timeout = timeout)
 
-  if(identical(pipe, subprocess::PIPE_BOTH)){
+  if(identical(pipe, "both")){
     env[["stdout"]] <- c(env[["stdout"]], msg[["stdout"]])
     env[["stderr"]] <- c(env[["stderr"]], msg[["stderr"]])
   }
-  if(identical(pipe, subprocess::PIPE_STDOUT)){
+  if(identical(pipe, "stdout")){
     env[["stdout"]] <- c(env[["stdout"]], msg)
   }
-  if(identical(pipe, subprocess::PIPE_STDERR)){
+  if(identical(pipe, "stderr")){
     env[["stderr"]] <- c(env[["stderr"]], msg)
   }
   msg
@@ -51,20 +51,20 @@ generic_start_log <- function(handle, poll = 3000L, increment = 500L,
   paste0(chr1, chr2)
 }
 
-read_pipes <- function(env, outfile, errfile, pipe = subprocess::PIPE_BOTH,
+read_pipes <- function(env, outfile, errfile, pipe = "both",
                        timeout){
   Sys.sleep(timeout/1000)
   outres <- readLines(outfile)
   outres <- utils::tail(outres, length(outres) - length(env[["stdout"]]))
   errres <- readLines(errfile)
   errres <- utils::tail(errres, length(errres) - length(env[["stderr"]]))
-  if(identical(pipe, subprocess::PIPE_BOTH)){
+  if(identical(pipe, "both")){
     return(list(stdout = outres, stderr = errres))
   }
-  if(identical(pipe, subprocess::PIPE_STDOUT)){
+  if(identical(pipe, "stdout")){
     return(outres)
   }
-  if(identical(pipe, subprocess::PIPE_STDERR)){
+  if(identical(pipe, "stderr")){
     return(errres)
   }
 }
@@ -76,7 +76,7 @@ unix_spawn_tofile <- function(command, args, outfile, errfile, ...){
                 shQuote(outfile), "2>", shQuote(errfile)), collapse = " "),
         tfile, append = TRUE)
   Sys.chmod(tfile)
-  subprocess::spawn_process(tfile, ...)
+  processx::process$new(tfile)
 }
 
 windows_spawn_tofile <- function(command, args, outfile, errfile, ...){
@@ -84,7 +84,7 @@ windows_spawn_tofile <- function(command, args, outfile, errfile, ...){
   write(paste(c(shQuote(command), args, ">",
                 shQuote(outfile), "2>", shQuote(errfile)), collapse = " "),
         tfile)
-  subprocess::spawn_process(tfile, ...)
+  processx::process$new(tfile)
 }
 
 spawn_tofile <- function(command, args, outfile, errfile, ...){

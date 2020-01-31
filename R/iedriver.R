@@ -12,15 +12,17 @@
 #'     new versions are available they will be downloaded.
 #' @param verbose If TRUE, include status messages (if any)
 #' @param retcommand If TRUE return only the command that would be passed
-#'     to \code{\link{spawn_process}}
+#'     to \code{\link[processx]{process}}
 #' @param ... pass additional options to the driver
 #'
-#' @return Returns a list with named elements process, output, error, stop
-#'     and log. process is the output from calling \code{\link{spawn_process}}
-#'     output, error and stop are functions calling
-#'     \code{\link{process_read}}, \code{\link{process_read}} with "stderr"
-#'     pipe and \code{\link{process_kill}}  respectively  on process.
-#'     log is a function which returns the contents of the log file.
+#' @return Returns a list with named elements \code{process}, \code{output},
+#'     \code{error}, \code{stop}, and \code{log}.
+#'     \code{process} is the object from calling \code{\link[processx]{process}}.
+#'     \code{output} and \code{error} are the functions reading the latest
+#'     messages from "stdout" and "stderr" since the last call whereas \code{log}
+#'     is the function that reads all messages.
+#'     Lastly, \code{stop} call the \code{kill} method in
+#'     \code{\link[processx]{process}} to the kill the \code{process}.
 #' @export
 #'
 #' @examples
@@ -51,16 +53,16 @@ iedriver <- function(port = 4567L, version = "latest", check = TRUE,
   pfile <- pipe_files()
   iedrv <- spawn_tofile(ieversion[["path"]],
                         args, pfile[["out"]], pfile[["err"]])
-  if(!is.na(subprocess::process_return_code(iedrv))){
-    stop("iedriver couldn't be started",
-         subprocess::process_read(iedrv, "stderr"))
+  if(isFALSE(iedrv$is_alive())){
+    err <- paste0(readLines(pfile[["err"]]), collapse = "\n")
+    stop("iedriver couldn't be started\n", err)
   }
   startlog <- generic_start_log(iedrv,
                                 outfile = pfile[["out"]],
                                 errfile = pfile[["err"]])
   if(length(startlog[["stderr"]]) >0){
-    if(any(grepl("Address in use", startlog[["stderr"]]))){
-      subprocess::process_kill(iedrv)
+    if(any(grepl("Address already in use", startlog[["stderr"]]))){
+      iedrv$kill()
       stop("IE Driver signals port = ", port, " is already in use.")
     }
   }
@@ -75,7 +77,7 @@ iedriver <- function(port = 4567L, version = "latest", check = TRUE,
       infun_read(iedrv, log, "stderr", timeout = timeout,
                  outfile = pfile[["out"]], errfile = pfile[["err"]])
     },
-    stop = function(){subprocess::process_kill(iedrv)},
+    stop = function(){iedrv$kill()},
     log = function(){
       infun_read(iedrv, log, outfile = pfile[["out"]], errfile = pfile[["err"]])
       as.list(log)

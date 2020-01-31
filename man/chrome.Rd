@@ -4,8 +4,15 @@
 \alias{chrome}
 \title{Start chrome driver}
 \usage{
-chrome(port = 4567L, version = "latest", path = "wd/hub", check = TRUE,
-  verbose = TRUE, retcommand = FALSE, ...)
+chrome(
+  port = 4567L,
+  version = "latest",
+  path = "wd/hub",
+  check = TRUE,
+  verbose = TRUE,
+  retcommand = FALSE,
+  ...
+)
 }
 \arguments{
 \item{port}{Port to run on}
@@ -22,17 +29,19 @@ new versions are available they will be downloaded.}
 \item{verbose}{If TRUE, include status messages (if any)}
 
 \item{retcommand}{If TRUE return only the command that would be passed
-to \code{\link{spawn_process}}}
+to \code{\link[processx]{process}}}
 
 \item{...}{pass additional options to the driver}
 }
 \value{
-Returns a list with named elements process, output, error, stop
-    and log. process is the output from calling \code{\link{spawn_process}}
-    output, error and stop are functions calling
-    \code{\link{process_read}}, \code{\link{process_read}} with "stderr"
-    pipe and \code{\link{process_kill}}  respectively  on process.
-    log is a function which returns the contents of the log file.
+Returns a list with named elements \code{process}, \code{output},
+    \code{error}, \code{stop}, and \code{log}.
+    \code{process} is the object from calling \code{\link[processx]{process}}.
+    \code{output} and \code{error} are the functions reading the latest
+    messages from "stdout" and "stderr" since the last call whereas \code{log}
+    is the function that reads all messages.
+    Lastly, \code{stop} call the \code{kill} method in
+    \code{\link[processx]{process}} to the kill the \code{process}.
 }
 \description{
 Start chrome driver

@@ -5,3 +5,5 @@
 ^codecov\.yml$
 ^docs$
 ^.github$
+^codemeta\.json$
+^cran-comments\.md$

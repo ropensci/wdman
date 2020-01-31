@@ -3,7 +3,6 @@
 \docType{package}
 \name{wdman}
 \alias{wdman}
-\alias{wdman-package}
 \title{wdman.}
 \description{
 wdman.

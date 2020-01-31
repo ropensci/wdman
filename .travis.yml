@@ -2,12 +2,12 @@ dist: trusty
 sudo: required
 language: R
 cache: packages
-env:
-  matrix:
-  - NOT_CRAN=true
+#env:
+#  matrix:
+#  - NOT_CRAN=true
 r:
 - oldrel
 - release
 - devel
-after_success:
-- Rscript -e 'covr::codecov()'
+#after_success:
+#- Rscript -e 'covr::codecov()'
