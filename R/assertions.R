@@ -100,7 +100,7 @@ assertthat::on_failure(is_data.frame) <- function(call, env) {
 }
 
 contains_required <- function(x, required) {
-  is.list(x) && (required %in% names(x))
+  is.list(x) && all(required %in% names(x))
 }
 
 assertthat::on_failure(contains_required) <- function(call, env) {
