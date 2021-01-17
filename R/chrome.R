@@ -87,6 +87,11 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
   )
 }
 
+# Figure out if installing on an Intel or M1 mac
+mac_machine <- function() {
+   ifelse(Sys.info()['machine']=="arm64", "mac64-m1", "mac[3264]{2}$")
+}
+
 chrome_check <- function(verbose, check = TRUE){
   chromeyml <- system.file("yaml", "chromedriver.yml", package = "wdman")
   cyml <- yaml::yaml.load_file(chromeyml)
@@ -95,9 +100,16 @@ chrome_check <- function(verbose, check = TRUE){
     switch(Sys.info()["sysname"],
            Linux = grep(os_arch("linux"), cyml[[platvec]], value = TRUE),
            Windows = grep("win", cyml[[platvec]], value = TRUE),
-           Darwin = grep("mac", cyml[[platvec]], value = TRUE),
+           Darwin = grep(mac_machine(), cyml[[platvec]], value = TRUE),
            stop("Unknown OS")
     )
+  platregexvec <- c("predlfunction", "binman::predl_google_storage", "platformregex")
+
+  # Need regex that can tell mac64 and mac64_m1 apart
+  if (cyml[[platvec]] %in% c("mac64", "mac64-m1")) {
+    cyml[[platregexvec]] <- paste0(cyml[[platvec]], "\\.")
+  }
+  
   tempyml <- tempfile(fileext = ".yml")
   write(yaml::as.yaml(cyml), tempyml)
   if(check){
