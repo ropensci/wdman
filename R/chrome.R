@@ -112,7 +112,6 @@ chrome_check <- function(verbose, check = TRUE){
   
   tempyml <- tempfile(fileext = ".yml")
   write(yaml::as.yaml(cyml), tempyml)
-  cat(yaml::as.yaml(cyml))
   if(check){
     if(verbose) message("checking chromedriver versions:")
     process_yaml(tempyml, verbose)
