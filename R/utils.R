@@ -76,7 +76,7 @@ unix_spawn_tofile <- function(command, args, outfile, errfile, ...){
                 shQuote(outfile), "2>", shQuote(errfile)), collapse = " "),
         tfile, append = TRUE)
   Sys.chmod(tfile)
-  processx::process$new(tfile)
+  processx::process$new(tfile, cleanup_tree = TRUE)
 }
 
 windows_spawn_tofile <- function(command, args, outfile, errfile, ...){
@@ -84,7 +84,7 @@ windows_spawn_tofile <- function(command, args, outfile, errfile, ...){
   write(paste(c(shQuote(command), args, ">",
                 shQuote(outfile), "2>", shQuote(errfile)), collapse = " "),
         tfile)
-  processx::process$new(tfile)
+  processx::process$new(tfile, cleanup_tree = TRUE)
 }
 
 spawn_tofile <- function(command, args, outfile, errfile, ...){
