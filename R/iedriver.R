@@ -62,7 +62,7 @@ iedriver <- function(port = 4567L, version = "latest", check = TRUE,
                                 errfile = pfile[["err"]])
   if(length(startlog[["stderr"]]) >0){
     if(any(grepl("Address already in use", startlog[["stderr"]]))){
-      iedrv$kill()
+      kill_process(iedrv)
       stop("IE Driver signals port = ", port, " is already in use.")
     }
   }
@@ -77,7 +77,7 @@ iedriver <- function(port = 4567L, version = "latest", check = TRUE,
       infun_read(iedrv, log, "stderr", timeout = timeout,
                  outfile = pfile[["out"]], errfile = pfile[["err"]])
     },
-    stop = function(){iedrv$kill()},
+    stop = function(){kill_process(iedrv)},
     log = function(){
       infun_read(iedrv, log, outfile = pfile[["out"]], errfile = pfile[["err"]])
       as.list(log)

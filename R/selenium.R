@@ -96,7 +96,7 @@ selenium <- function(port = 4567L,
                                 errfile = pfile[["err"]])
   if(length(startlog[["stderr"]]) >0){
     if(any(grepl("Address already in use", startlog[["stderr"]]))){
-      seleniumdrv$kill()
+      kill_process(seleniumdrv)
       stop("Selenium server signals port = ", port, " is already in use.")
     }
   }else{
@@ -116,7 +116,7 @@ selenium <- function(port = 4567L,
       infun_read(seleniumdrv, log, "stderr", timeout = timeout,
                  outfile = pfile[["out"]], errfile = pfile[["err"]])
     },
-    stop = function(){seleniumdrv$kill()},
+    stop = function(){kill_process(seleniumdrv)},
     log = function(){
       infun_read(seleniumdrv, log,
                  outfile = pfile[["out"]], errfile = pfile[["err"]])

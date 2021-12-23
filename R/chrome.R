@@ -63,7 +63,7 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
                                 errfile = pfile[["err"]])
   if(length(startlog[["stderr"]]) >0){
     if(any(grepl("Address already in use", startlog[["stderr"]]))){
-      chromedrv$kill()
+      kill_process(chromedrv)
       stop("Chrome Driver signals port = ", port, " is already in use.")
     }
   }
@@ -78,7 +78,7 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
       infun_read(chromedrv, log, "stderr", timeout = timeout,
                  outfile = pfile[["out"]], errfile = pfile[["err"]])
     },
-    stop = function(){chromedrv$kill()},
+    stop = function(){kill_process(chromedrv)},
     log = function(){
       infun_read(chromedrv, log,
                  outfile = pfile[["out"]], errfile = pfile[["err"]])

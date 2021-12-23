@@ -76,7 +76,7 @@ unix_spawn_tofile <- function(command, args, outfile, errfile, ...){
                 shQuote(outfile), "2>", shQuote(errfile)), collapse = " "),
         tfile, append = TRUE)
   Sys.chmod(tfile)
-  processx::process$new(tfile)
+  processx::process$new(tfile, cleanup_tree = TRUE)
 }
 
 windows_spawn_tofile <- function(command, args, outfile, errfile, ...){
@@ -84,7 +84,7 @@ windows_spawn_tofile <- function(command, args, outfile, errfile, ...){
   write(paste(c(shQuote(command), args, ">",
                 shQuote(outfile), "2>", shQuote(errfile)), collapse = " "),
         tfile)
-  processx::process$new(tfile)
+  processx::process$new(tfile, cleanup_tree = TRUE)
 }
 
 spawn_tofile <- function(command, args, outfile, errfile, ...){
@@ -101,4 +101,12 @@ pipe_files <- function(){
   outTfile <- tempfile(fileext = ".txt")
   write(character(), outTfile)
   list(out = outTfile, err = errTfile)
+}
+
+kill_process <- function(p){
+  # Kill a process and all its child processes, returning true if process was
+  # killed and false if not
+  r <- p$kill()
+  p$kill_tree()
+  r
 }
