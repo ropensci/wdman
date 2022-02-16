@@ -2,7 +2,7 @@ is_string <- function(x) {
   is.character(x) && length(x) == 1 && !is.na(x)
 }
 
-assertthat::on_failure(is_string) <-  function(call, env) {
+assertthat::on_failure(is_string) <- function(call, env) {
   paste0(deparse(call$x), " is not a string")
 }
 
@@ -10,7 +10,7 @@ is_string_or_null <- function(x) {
   is_string(x) || is.null(x)
 }
 
-assertthat::on_failure(is_string_or_null) <-  function(call, env) {
+assertthat::on_failure(is_string_or_null) <- function(call, env) {
   paste0(env$x, " is not a string or null")
 }
 
@@ -42,7 +42,7 @@ is_url <- function(x) {
   is_string(x) && grepl("^https?://", x, useBytes = TRUE)
 }
 
-assertthat::on_failure(is_url) <-  function(call, env) {
+assertthat::on_failure(is_url) <- function(call, env) {
   paste0(deparse(call$x), " is not a url")
 }
 
@@ -50,7 +50,7 @@ is_file <- function(x) {
   is_string(x) && file.exists(x)
 }
 
-assertthat::on_failure(is_file) <-  function(call, env) {
+assertthat::on_failure(is_file) <- function(call, env) {
   paste0(deparse(call$x), " is not a file")
 }
 

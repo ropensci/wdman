@@ -30,10 +30,10 @@
 #' pjs$output()
 #' pjs$stop()
 #' }
-
+#'
 phantomjs <- function(port = 4567L, version = "2.1.1", check = TRUE,
-                      loglevel = c('INFO', 'ERROR', 'WARN', 'DEBUG'),
-                      verbose = TRUE, retcommand = FALSE, ...){
+                      loglevel = c("INFO", "ERROR", "WARN", "DEBUG"),
+                      verbose = TRUE, retcommand = FALSE, ...) {
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_logical(verbose))
@@ -45,23 +45,26 @@ phantomjs <- function(port = 4567L, version = "2.1.1", check = TRUE,
   args <- c(Reduce(c, eopts[names(eopts) == "args"]))
   args[["webdriver"]] <- sprintf("--webdriver=%s", port)
   args[["log-level"]] <- sprintf("--webdriver-loglevel=%s", loglevel)
-  if(retcommand){
+  if (retcommand) {
     return(paste(c(phantomversion[["path"]], args), collapse = " "))
   }
   pfile <- pipe_files()
-  phantomdrv <- spawn_tofile(phantomversion[["path"]],
-                             args, pfile[["out"]], pfile[["err"]])
-  if(isFALSE(phantomdrv$is_alive())){
+  phantomdrv <- spawn_tofile(
+    phantomversion[["path"]],
+    args, pfile[["out"]], pfile[["err"]]
+  )
+  if (isFALSE(phantomdrv$is_alive())) {
     err <- paste0(readLines(pfile[["err"]]), collapse = "\n")
     stop("PhantomJS couldn't be started\n", err)
   }
   startlog <- generic_start_log(phantomdrv,
-                                outfile = pfile[["out"]],
-                                errfile = pfile[["err"]])
-  if(length(startlog[["stdout"]]) >0){
-    if(any(
+    outfile = pfile[["out"]],
+    errfile = pfile[["err"]]
+  )
+  if (length(startlog[["stdout"]]) > 0) {
+    if (any(
       grepl("GhostDriver - main.fail.*sourceURL", startlog[["stdout"]])
-    )){
+    )) {
       kill_process(phantomdrv)
       stop("PhantomJS signals port = ", port, " is already in use.")
     }
@@ -69,56 +72,67 @@ phantomjs <- function(port = 4567L, version = "2.1.1", check = TRUE,
   log <- as.environment(startlog)
   list(
     process = phantomdrv,
-    output = function(timeout = 0L){
-      infun_read(phantomdrv, log, "stdout", timeout = timeout,
-                 outfile = pfile[["out"]], errfile = pfile[["err"]])
+    output = function(timeout = 0L) {
+      infun_read(phantomdrv, log, "stdout",
+        timeout = timeout,
+        outfile = pfile[["out"]], errfile = pfile[["err"]]
+      )
     },
-    error = function(timeout = 0L){
-      infun_read(phantomdrv, log, "stderr", timeout = timeout,
-                 outfile = pfile[["out"]], errfile = pfile[["err"]])
+    error = function(timeout = 0L) {
+      infun_read(phantomdrv, log, "stderr",
+        timeout = timeout,
+        outfile = pfile[["out"]], errfile = pfile[["err"]]
+      )
     },
-    stop = function(){kill_process(phantomdrv)},
-    log = function(){
+    stop = function() {
+      kill_process(phantomdrv)
+    },
+    log = function() {
       infun_read(phantomdrv, log,
-                 outfile = pfile[["out"]], errfile = pfile[["err"]])
+        outfile = pfile[["out"]], errfile = pfile[["err"]]
+      )
       as.list(log)
     }
   )
 }
 
-phantom_check <- function(verbose, check = TRUE){
+phantom_check <- function(verbose, check = TRUE) {
   phantomyml <- system.file("yaml", "phantomjs.yml", package = "wdman")
   pjsyml <- yaml::yaml.load_file(phantomyml)
-  platvec <- c("predlfunction", "binman::predl_bitbucket_downloads",
-               "platform", "platformregex")
+  platvec <- c(
+    "predlfunction", "binman::predl_bitbucket_downloads",
+    "platform", "platformregex"
+  )
   platmatch <-
     switch(Sys.info()["sysname"],
-           Linux = grep(os_arch("linux"), pjsyml[[platvec[-4]]]),
-           Windows = grep("win", pjsyml[[platvec[-4]]]),
-           Darwin = grep("mac", pjsyml[[platvec[-4]]]),
-           stop("Unknown OS")
+      Linux = grep(os_arch("linux"), pjsyml[[platvec[-4]]]),
+      Windows = grep("win", pjsyml[[platvec[-4]]]),
+      Darwin = grep("mac", pjsyml[[platvec[-4]]]),
+      stop("Unknown OS")
     )
   pjsyml[[platvec[-4]]] <- pjsyml[[platvec[-4]]][platmatch]
   pjsyml[[platvec[-3]]] <- pjsyml[[platvec[-3]]][platmatch]
   tempyml <- tempfile(fileext = ".yml")
   write(yaml::as.yaml(pjsyml), tempyml)
-  if(check){
-    if(verbose) message("checking phantomjs versions:")
+  if (check) {
+    if (verbose) message("checking phantomjs versions:")
     process_yaml(tempyml, verbose)
   }
   phantomplat <- pjsyml[[platvec[-4]]]
   list(yaml = pjsyml, platform = phantomplat)
 }
 
-phantom_ver <- function(platform, version){
+phantom_ver <- function(platform, version) {
   phantomver <- binman::list_versions("phantomjs")[[platform]]
-  phantomver <- if(identical(version, "latest")){
+  phantomver <- if (identical(version, "latest")) {
     as.character(max(semver::parse_version(phantomver)))
-  }else{
+  } else {
     mtch <- match(version, phantomver)
-    if(is.na(mtch) || is.null(mtch)){
-      stop("version requested doesnt match versions available = ",
-           paste(phantomver, collapse = ","))
+    if (is.na(mtch) || is.null(mtch)) {
+      stop(
+        "version requested doesnt match versions available = ",
+        paste(phantomver, collapse = ",")
+      )
     }
     phantomver[mtch]
   }
@@ -126,11 +140,12 @@ phantom_ver <- function(platform, version){
     file.path(app_dir("phantomjs"), platform, phantomver)
   )
   phantompath <- list.files(phantomdir,
-                            pattern = "phantomjs($|\\.exe$)",
-                            recursive = TRUE,
-                            full.names = TRUE)
-  if(file.access(phantompath, 1) < 0){
-    Sys.chmod(phantompath, '0755')
+    pattern = "phantomjs($|\\.exe$)",
+    recursive = TRUE,
+    full.names = TRUE
+  )
+  if (file.access(phantompath, 1) < 0) {
+    Sys.chmod(phantompath, "0755")
   }
   list(version = phantomver, dir = phantomdir, path = phantompath)
 }

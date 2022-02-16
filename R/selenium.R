@@ -47,7 +47,7 @@
 #' selServ$output()
 #' selServ$stop()
 #' }
-
+#'
 selenium <- function(port = 4567L,
                      version = "latest",
                      chromever = "latest",
@@ -57,7 +57,7 @@ selenium <- function(port = 4567L,
                      check = TRUE,
                      verbose = TRUE,
                      retcommand = FALSE,
-                     ...){
+                     ...) {
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_string_or_null(chromever))
@@ -73,85 +73,99 @@ selenium <- function(port = 4567L,
   jvmargs <- c(Reduce(c, eopts[names(eopts) == "jvmargs"]))
   selargs <- c(Reduce(c, eopts[names(eopts) == "selargs"]))
   jvmargs <- selenium_check_drivers(chromever, geckover, phantomver,
-                                    iedrver, check = check,
-                                    verbose = verbose, jvmargs)
+    iedrver,
+    check = check,
+    verbose = verbose, jvmargs
+  )
   # should be the last JVM argument
   jvmargs[["jar"]] <- "-jar"
   jvmargs[["selpath"]] <- shQuote(seleniumversion[["path"]])
   # Selenium JAR arguments
   selargs[["portswitch"]] <- "-port"
   selargs[["port"]] <- port
-  if(retcommand){
+  if (retcommand) {
     return(paste(c(javapath, jvmargs, selargs), collapse = " "))
   }
   pfile <- pipe_files()
-  seleniumdrv <- spawn_tofile(javapath, args = c(jvmargs, selargs),
-                              pfile[["out"]], pfile[["err"]])
-  if(isFALSE(seleniumdrv$is_alive())){
+  seleniumdrv <- spawn_tofile(javapath,
+    args = c(jvmargs, selargs),
+    pfile[["out"]], pfile[["err"]]
+  )
+  if (isFALSE(seleniumdrv$is_alive())) {
     err <- paste0(readLines(pfile[["err"]]), collapse = "\n")
     stop("Selenium server  couldn't be started\n", err)
   }
   startlog <- generic_start_log(seleniumdrv, # poll = 10000L,
-                                outfile = pfile[["out"]],
-                                errfile = pfile[["err"]])
-  if(length(startlog[["stderr"]]) >0){
-    if(any(grepl("Address already in use", startlog[["stderr"]]))){
+    outfile = pfile[["out"]],
+    errfile = pfile[["err"]]
+  )
+  if (length(startlog[["stderr"]]) > 0) {
+    if (any(grepl("Address already in use", startlog[["stderr"]]))) {
       kill_process(seleniumdrv)
       stop("Selenium server signals port = ", port, " is already in use.")
     }
-  }else{
+  } else {
     warning(
       "No output to stderr yet detected. Please check ",
       "log and that process is running manually."
-      )
+    )
   }
   log <- as.environment(startlog)
   list(
     process = seleniumdrv,
-    output = function(timeout = 0L){
-      infun_read(seleniumdrv, log, "stdout", timeout = timeout,
-                 outfile = pfile[["out"]], errfile = pfile[["err"]])
+    output = function(timeout = 0L) {
+      infun_read(seleniumdrv, log, "stdout",
+        timeout = timeout,
+        outfile = pfile[["out"]], errfile = pfile[["err"]]
+      )
     },
-    error = function(timeout = 0L){
-      infun_read(seleniumdrv, log, "stderr", timeout = timeout,
-                 outfile = pfile[["out"]], errfile = pfile[["err"]])
+    error = function(timeout = 0L) {
+      infun_read(seleniumdrv, log, "stderr",
+        timeout = timeout,
+        outfile = pfile[["out"]], errfile = pfile[["err"]]
+      )
     },
-    stop = function(){kill_process(seleniumdrv)},
-    log = function(){
+    stop = function() {
+      kill_process(seleniumdrv)
+    },
+    log = function() {
       infun_read(seleniumdrv, log,
-                 outfile = pfile[["out"]], errfile = pfile[["err"]])
+        outfile = pfile[["out"]], errfile = pfile[["err"]]
+      )
       as.list(log)
     }
   )
 }
 
-java_check <- function(){
+java_check <- function() {
   javapath <- Sys.which("java")
-  if(identical(unname(javapath), "")){
+  if (identical(unname(javapath), "")) {
     stop("PATH to JAVA not found. Please check JAVA is installed.")
   }
   javapath
 }
 
-selenium_check <- function(verbose, check = TRUE){
+selenium_check <- function(verbose, check = TRUE) {
   syml <- system.file("yaml", "seleniumserver.yml", package = "wdman")
-  if(check){
-    if(verbose) message("checking Selenium Server versions:")
+  if (check) {
+    if (verbose) message("checking Selenium Server versions:")
     process_yaml(syml, verbose)
   }
   selplat <- "generic"
   list(yaml = syml, platform = selplat)
 }
 
-selenium_ver <- function(platform, version){
+selenium_ver <- function(platform, version) {
   selver <- binman::list_versions("seleniumserver")[[platform]]
-  selver <- if(identical(version, "latest")){
+  selver <- if (identical(version, "latest")) {
     as.character(max(semver::parse_version(selver)))
-  }else{
+  } else {
     mtch <- match(version, selver)
-    if(is.na(mtch) || is.null(mtch)){
-      stop("version requested doesnt match versions available = ",
-           paste(selver, collapse = ","))
+    if (is.na(mtch) || is.null(mtch)) {
+      stop(
+        "version requested doesnt match versions available = ",
+        paste(selver, collapse = ",")
+      )
     }
     selver[mtch]
   }
@@ -159,17 +173,18 @@ selenium_ver <- function(platform, version){
     file.path(app_dir("seleniumserver"), platform, selver)
   )
   selpath <- list.files(seldir,
-                        pattern = "selenium-server-standalone",
-                        full.names = TRUE)
-  if(file.access(selpath, 1) < 0){
-    Sys.chmod(selpath, '0755')
+    pattern = "selenium-server-standalone",
+    full.names = TRUE
+  )
+  if (file.access(selpath, 1) < 0) {
+    Sys.chmod(selpath, "0755")
   }
   list(version = selver, dir = seldir, path = selpath)
 }
 
 selenium_check_drivers <- function(chromever, geckover, phantomver,
-                                   iedrver, check, verbose, jvmargs){
-  if(!is.null(chromever)){
+                                   iedrver, check, verbose, jvmargs) {
+  if (!is.null(chromever)) {
     chromecheck <- chrome_check(verbose, check)
     cver <- chrome_ver(chromecheck[["platform"]], chromever)
     jvmargs[["chrome"]] <- sprintf(
@@ -177,7 +192,7 @@ selenium_check_drivers <- function(chromever, geckover, phantomver,
       shQuote(cver[["path"]])
     )
   }
-  if(!is.null(geckover)){
+  if (!is.null(geckover)) {
     geckocheck <- gecko_check(verbose, check)
     gver <- gecko_ver(geckocheck[["platform"]], geckover)
     jvmargs[["gecko"]] <- sprintf(
@@ -185,7 +200,7 @@ selenium_check_drivers <- function(chromever, geckover, phantomver,
       shQuote(gver[["path"]])
     )
   }
-  if(!is.null(phantomver)){
+  if (!is.null(phantomver)) {
     phantomcheck <- phantom_check(verbose, check)
     pver <- phantom_ver(phantomcheck[["platform"]], phantomver)
     jvmargs[["phantom"]] <- sprintf(
@@ -193,7 +208,7 @@ selenium_check_drivers <- function(chromever, geckover, phantomver,
       shQuote(pver[["path"]])
     )
   }
-  if(!is.null(iedrver)){
+  if (!is.null(iedrver)) {
     iecheck <- ie_check(verbose, check)
     iever <- ie_ver(iecheck[["platform"]], iedrver)
     jvmargs[["internetexplorer"]] <- sprintf(

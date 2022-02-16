@@ -29,9 +29,9 @@
 #' cDrv$output()
 #' cDrv$stop()
 #' }
-
+#'
 chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
-                   check = TRUE, verbose = TRUE, retcommand = FALSE, ...){
+                   check = TRUE, verbose = TRUE, retcommand = FALSE, ...) {
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_string(path))
@@ -44,7 +44,7 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
   args[["port"]] <- sprintf("--port=%s", port)
   args[["url-base"]] <- sprintf("--url-base=%s", path)
   args[["verbose"]] <- "--verbose"
-  if(retcommand){
+  if (retcommand) {
     return(paste(c(chromeversion[["path"]], args), collapse = " "))
   }
   pfile <- pipe_files()
@@ -52,17 +52,20 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
   write(character(), errTfile)
   outTfile <- tempfile(fileext = ".txt")
   write(character(), outTfile)
-  chromedrv <- spawn_tofile(chromeversion[["path"]],
-                            args, pfile[["out"]], pfile[["err"]])
-  if(isFALSE(chromedrv$is_alive())){
+  chromedrv <- spawn_tofile(
+    chromeversion[["path"]],
+    args, pfile[["out"]], pfile[["err"]]
+  )
+  if (isFALSE(chromedrv$is_alive())) {
     err <- paste0(readLines(pfile[["err"]]), collapse = "\n")
     stop("Chromedriver couldn't be started\n", err)
   }
   startlog <- generic_start_log(chromedrv,
-                                outfile = pfile[["out"]],
-                                errfile = pfile[["err"]])
-  if(length(startlog[["stderr"]]) >0){
-    if(any(grepl("Address already in use", startlog[["stderr"]]))){
+    outfile = pfile[["out"]],
+    errfile = pfile[["err"]]
+  )
+  if (length(startlog[["stderr"]]) > 0) {
+    if (any(grepl("Address already in use", startlog[["stderr"]]))) {
       kill_process(chromedrv)
       stop("Chrome Driver signals port = ", port, " is already in use.")
     }
@@ -70,18 +73,25 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
   log <- as.environment(startlog)
   list(
     process = chromedrv,
-    output = function(timeout = 0L){
-      infun_read(chromedrv, log, "stdout", timeout = timeout,
-                 outfile = pfile[["out"]], errfile = pfile[["err"]])
+    output = function(timeout = 0L) {
+      infun_read(chromedrv, log, "stdout",
+        timeout = timeout,
+        outfile = pfile[["out"]], errfile = pfile[["err"]]
+      )
     },
-    error = function(timeout = 0L){
-      infun_read(chromedrv, log, "stderr", timeout = timeout,
-                 outfile = pfile[["out"]], errfile = pfile[["err"]])
+    error = function(timeout = 0L) {
+      infun_read(chromedrv, log, "stderr",
+        timeout = timeout,
+        outfile = pfile[["out"]], errfile = pfile[["err"]]
+      )
     },
-    stop = function(){kill_process(chromedrv)},
-    log = function(){
+    stop = function() {
+      kill_process(chromedrv)
+    },
+    log = function() {
       infun_read(chromedrv, log,
-                 outfile = pfile[["out"]], errfile = pfile[["err"]])
+        outfile = pfile[["out"]], errfile = pfile[["err"]]
+      )
       as.list(log)
     }
   )
@@ -89,19 +99,19 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
 
 # Figure out if installing on an Intel or M1 mac
 mac_machine <- function() {
-   ifelse(Sys.info()['machine']=="arm64", "mac64-m1", "mac[3264]{2}$")
+  ifelse(Sys.info()["machine"] == "arm64", "mac64-m1", "mac[3264]{2}$")
 }
 
-chrome_check <- function(verbose, check = TRUE){
+chrome_check <- function(verbose, check = TRUE) {
   chromeyml <- system.file("yaml", "chromedriver.yml", package = "wdman")
   cyml <- yaml::yaml.load_file(chromeyml)
   platvec <- c("predlfunction", "binman::predl_google_storage", "platform")
   cyml[[platvec]] <-
     switch(Sys.info()["sysname"],
-           Linux = grep(os_arch("linux"), cyml[[platvec]], value = TRUE),
-           Windows = grep("win", cyml[[platvec]], value = TRUE),
-           Darwin = grep(mac_machine(), cyml[[platvec]], value = TRUE),
-           stop("Unknown OS")
+      Linux = grep(os_arch("linux"), cyml[[platvec]], value = TRUE),
+      Windows = grep("win", cyml[[platvec]], value = TRUE),
+      Darwin = grep(mac_machine(), cyml[[platvec]], value = TRUE),
+      stop("Unknown OS")
     )
   platregexvec <- c("predlfunction", "binman::predl_google_storage", "platformregex")
 
@@ -109,26 +119,28 @@ chrome_check <- function(verbose, check = TRUE){
   if (cyml[[platvec]] %in% c("mac64", "mac64-m1")) {
     cyml[[platregexvec]] <- paste0(cyml[[platvec]], "\\.")
   }
-  
+
   tempyml <- tempfile(fileext = ".yml")
   write(yaml::as.yaml(cyml), tempyml)
-  if(check){
-    if(verbose) message("checking chromedriver versions:")
+  if (check) {
+    if (verbose) message("checking chromedriver versions:")
     process_yaml(tempyml, verbose)
   }
   chromeplat <- cyml[[platvec]]
   list(yaml = cyml, platform = chromeplat)
 }
 
-chrome_ver <- function(platform, version){
+chrome_ver <- function(platform, version) {
   chromever <- binman::list_versions("chromedriver")[[platform]]
-  chromever <- if(identical(version, "latest")){
+  chromever <- if (identical(version, "latest")) {
     as.character(max(package_version(chromever)))
-  }else{
+  } else {
     mtch <- match(version, chromever)
-    if(is.na(mtch) || is.null(mtch)){
-      stop("version requested doesnt match versions available = ",
-           paste(chromever, collapse = ","))
+    if (is.na(mtch) || is.null(mtch)) {
+      stop(
+        "version requested doesnt match versions available = ",
+        paste(chromever, collapse = ",")
+      )
     }
     chromever[mtch]
   }
@@ -136,7 +148,8 @@ chrome_ver <- function(platform, version){
     file.path(app_dir("chromedriver"), platform, chromever)
   )
   chromepath <- list.files(chromedir,
-                           pattern = "chromedriver($|.exe$)",
-                           full.names = TRUE)
+    pattern = "chromedriver($|.exe$)",
+    full.names = TRUE
+  )
   list(version = chromever, dir = chromedir, path = chromepath)
 }

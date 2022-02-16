@@ -31,11 +31,13 @@
 #' ieDrv$output()
 #' ieDrv$stop()
 #' }
-
+#'
 iedriver <- function(port = 4567L, version = "latest", check = TRUE,
-                     loglevel = c("FATAL", "TRACE", "DEBUG", "INFO",
-                                  "WARN", "ERROR"), verbose = TRUE,
-                     retcommand = FALSE, ...){
+                     loglevel = c(
+                       "FATAL", "TRACE", "DEBUG", "INFO",
+                       "WARN", "ERROR"
+                     ), verbose = TRUE,
+                     retcommand = FALSE, ...) {
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_logical(verbose))
@@ -47,21 +49,24 @@ iedriver <- function(port = 4567L, version = "latest", check = TRUE,
   args <- c(Reduce(c, eopts[names(eopts) == "args"]))
   args[["port"]] <- sprintf("/port=%s", port)
   args[["log-level"]] <- sprintf("/log-level=%s", loglevel)
-  if(retcommand){
+  if (retcommand) {
     return(paste(c(ieversion[["path"]], args), collapse = " "))
   }
   pfile <- pipe_files()
-  iedrv <- spawn_tofile(ieversion[["path"]],
-                        args, pfile[["out"]], pfile[["err"]])
-  if(isFALSE(iedrv$is_alive())){
+  iedrv <- spawn_tofile(
+    ieversion[["path"]],
+    args, pfile[["out"]], pfile[["err"]]
+  )
+  if (isFALSE(iedrv$is_alive())) {
     err <- paste0(readLines(pfile[["err"]]), collapse = "\n")
     stop("iedriver couldn't be started\n", err)
   }
   startlog <- generic_start_log(iedrv,
-                                outfile = pfile[["out"]],
-                                errfile = pfile[["err"]])
-  if(length(startlog[["stderr"]]) >0){
-    if(any(grepl("Address already in use", startlog[["stderr"]]))){
+    outfile = pfile[["out"]],
+    errfile = pfile[["err"]]
+  )
+  if (length(startlog[["stderr"]]) > 0) {
+    if (any(grepl("Address already in use", startlog[["stderr"]]))) {
       kill_process(iedrv)
       stop("IE Driver signals port = ", port, " is already in use.")
     }
@@ -69,53 +74,63 @@ iedriver <- function(port = 4567L, version = "latest", check = TRUE,
   log <- as.environment(startlog)
   list(
     process = iedrv,
-    output = function(timeout = 0L){
-      infun_read(iedrv, log, "stdout", timeout = timeout,
-                 outfile = pfile[["out"]], errfile = pfile[["err"]])
+    output = function(timeout = 0L) {
+      infun_read(iedrv, log, "stdout",
+        timeout = timeout,
+        outfile = pfile[["out"]], errfile = pfile[["err"]]
+      )
     },
-    error = function(timeout = 0L){
-      infun_read(iedrv, log, "stderr", timeout = timeout,
-                 outfile = pfile[["out"]], errfile = pfile[["err"]])
+    error = function(timeout = 0L) {
+      infun_read(iedrv, log, "stderr",
+        timeout = timeout,
+        outfile = pfile[["out"]], errfile = pfile[["err"]]
+      )
     },
-    stop = function(){kill_process(iedrv)},
-    log = function(){
+    stop = function() {
+      kill_process(iedrv)
+    },
+    log = function() {
       infun_read(iedrv, log, outfile = pfile[["out"]], errfile = pfile[["err"]])
       as.list(log)
     }
   )
 }
 
-ie_check <- function(verbose, check = TRUE){
+ie_check <- function(verbose, check = TRUE) {
   ieyml <- system.file("yaml", "iedriverserver.yml", package = "wdman")
   iyml <- yaml::yaml.load_file(ieyml)
-  platvec <- c("predlfunction", "binman::predl_google_storage",
-               "platform", "platformregex")
+  platvec <- c(
+    "predlfunction", "binman::predl_google_storage",
+    "platform", "platformregex"
+  )
   platmatch <-
     switch(Sys.info()["sysname"],
-           Windows = grep(os_arch("win"), iyml[[platvec[-4]]]),
-           stop("IEDriverServer not available for this platform")
+      Windows = grep(os_arch("win"), iyml[[platvec[-4]]]),
+      stop("IEDriverServer not available for this platform")
     )
   iyml[[platvec[-4]]] <- iyml[[platvec[-4]]][platmatch]
   iyml[[platvec[-3]]] <- iyml[[platvec[-3]]][platmatch]
   tempyml <- tempfile(fileext = ".yml")
   write(yaml::as.yaml(iyml), tempyml)
-  if(check){
-    if(verbose) message("checking iedriver versions:")
+  if (check) {
+    if (verbose) message("checking iedriver versions:")
     process_yaml(tempyml, verbose)
   }
   ieplat <- iyml[[platvec[-4]]]
   list(yaml = iyml, platform = ieplat)
 }
 
-ie_ver <- function(platform, version){
+ie_ver <- function(platform, version) {
   iever <- binman::list_versions("iedriverserver")[[platform]]
-  iever <- if(identical(version, "latest")){
+  iever <- if (identical(version, "latest")) {
     as.character(max(semver::parse_version(iever)))
-  }else{
+  } else {
     mtch <- match(version, iever)
-    if(is.na(mtch) || is.null(mtch)){
-      stop("version requested doesnt match versions available = ",
-           paste(iever, collapse = ","))
+    if (is.na(mtch) || is.null(mtch)) {
+      stop(
+        "version requested doesnt match versions available = ",
+        paste(iever, collapse = ",")
+      )
     }
     iever[mtch]
   }
@@ -123,7 +138,8 @@ ie_ver <- function(platform, version){
     file.path(app_dir("iedriverserver"), platform, iever)
   )
   iepath <- list.files(iedir,
-                       pattern = "IEDriverServer($|.exe$)",
-                       full.names = TRUE)
+    pattern = "IEDriverServer($|.exe$)",
+    full.names = TRUE
+  )
   list(version = iever, dir = iedir, path = iepath)
 }

@@ -30,11 +30,13 @@
 #' gDrv$output()
 #' gDrv$stop()
 #' }
-
+#'
 gecko <- function(port = 4567L, version = "latest", check = TRUE,
-                  loglevel = c("info", "fatal", "error", "warn", "config",
-                          "debug", "trace"), verbose = TRUE,
-                  retcommand = FALSE, ...){
+                  loglevel = c(
+                    "info", "fatal", "error", "warn", "config",
+                    "debug", "trace"
+                  ), verbose = TRUE,
+                  retcommand = FALSE, ...) {
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_logical(verbose))
@@ -46,21 +48,24 @@ gecko <- function(port = 4567L, version = "latest", check = TRUE,
   args <- c(Reduce(c, eopts[names(eopts) == "args"]))
   args[["port"]] <- sprintf("--port=%s", port)
   args[["log"]] <- sprintf("--log=%s", loglevel)
-  if(retcommand){
+  if (retcommand) {
     return(paste(c(geckoversion[["path"]], args), collapse = " "))
   }
   pfile <- pipe_files()
-  geckodrv <- spawn_tofile(geckoversion[["path"]],
-                           args, pfile[["out"]], pfile[["err"]])
-  if(isFALSE(geckodrv$is_alive())){
+  geckodrv <- spawn_tofile(
+    geckoversion[["path"]],
+    args, pfile[["out"]], pfile[["err"]]
+  )
+  if (isFALSE(geckodrv$is_alive())) {
     err <- paste0(readLines(pfile[["err"]]), collapse = "\n")
     stop("Geckodriver couldn't be started\n", err)
   }
   startlog <- generic_start_log(geckodrv,
-                                outfile = pfile[["out"]],
-                                errfile = pfile[["err"]])
-  if(length(startlog[["stderr"]]) >0){
-    if(any(grepl("Address already in use", startlog[["stderr"]]))){
+    outfile = pfile[["out"]],
+    errfile = pfile[["err"]]
+  )
+  if (length(startlog[["stderr"]]) > 0) {
+    if (any(grepl("Address already in use", startlog[["stderr"]]))) {
       kill_process(geckodrv)
       stop("Gecko Driver signals port = ", port, " is already in use.")
     }
@@ -68,52 +73,60 @@ gecko <- function(port = 4567L, version = "latest", check = TRUE,
   log <- as.environment(startlog)
   list(
     process = geckodrv,
-    output = function(timeout = 0L){
-      infun_read(geckodrv, log, "stdout", timeout = timeout,
-                 outfile = pfile[["out"]], errfile = pfile[["err"]])
+    output = function(timeout = 0L) {
+      infun_read(geckodrv, log, "stdout",
+        timeout = timeout,
+        outfile = pfile[["out"]], errfile = pfile[["err"]]
+      )
     },
-    error = function(timeout = 0L){
-      infun_read(geckodrv, log, "stderr", timeout = timeout,
-                 outfile = pfile[["out"]], errfile = pfile[["err"]])
+    error = function(timeout = 0L) {
+      infun_read(geckodrv, log, "stderr",
+        timeout = timeout,
+        outfile = pfile[["out"]], errfile = pfile[["err"]]
+      )
     },
-    stop = function(){kill_process(geckodrv)},
-    log = function(){
+    stop = function() {
+      kill_process(geckodrv)
+    },
+    log = function() {
       infun_read(geckodrv, log, outfile = pfile[["out"]], errfile = pfile[["err"]])
       as.list(log)
     }
   )
 }
 
-gecko_check <- function(verbose, check = TRUE){
+gecko_check <- function(verbose, check = TRUE) {
   geckoyml <- system.file("yaml", "geckodriver.yml", package = "wdman")
   gyml <- yaml::yaml.load_file(geckoyml)
-  platvec <- c("predlfunction", "binman::predl_github_assets","platform")
+  platvec <- c("predlfunction", "binman::predl_github_assets", "platform")
   gyml[[platvec]] <-
     switch(Sys.info()["sysname"],
-           Linux = grep(os_arch("linux"), gyml[[platvec]], value = TRUE),
-           Windows = grep(os_arch("win"), gyml[[platvec]], value = TRUE),
-           Darwin = grep("mac", gyml[[platvec]], value = TRUE),
-           stop("Unknown OS")
+      Linux = grep(os_arch("linux"), gyml[[platvec]], value = TRUE),
+      Windows = grep(os_arch("win"), gyml[[platvec]], value = TRUE),
+      Darwin = grep("mac", gyml[[platvec]], value = TRUE),
+      stop("Unknown OS")
     )
   tempyml <- tempfile(fileext = ".yml")
   write(yaml::as.yaml(gyml), tempyml)
-  if(check){
-    if(verbose) message("checking geckodriver versions:")
+  if (check) {
+    if (verbose) message("checking geckodriver versions:")
     process_yaml(tempyml, verbose)
   }
   geckoplat <- gyml[[platvec]]
   list(yaml = gyml, platform = geckoplat)
 }
 
-gecko_ver <- function(platform, version){
+gecko_ver <- function(platform, version) {
   geckover <- binman::list_versions("geckodriver")[[platform]]
-  geckover <- if(identical(version, "latest")){
+  geckover <- if (identical(version, "latest")) {
     as.character(max(semver::parse_version(geckover)))
-  }else{
+  } else {
     mtch <- match(version, geckover)
-    if(is.na(mtch) || is.null(mtch)){
-      stop("version requested doesnt match versions available = ",
-           paste(geckover, collapse = ","))
+    if (is.na(mtch) || is.null(mtch)) {
+      stop(
+        "version requested doesnt match versions available = ",
+        paste(geckover, collapse = ",")
+      )
     }
     geckover[mtch]
   }
@@ -121,7 +134,8 @@ gecko_ver <- function(platform, version){
     file.path(app_dir("geckodriver"), platform, geckover)
   )
   geckopath <- list.files(geckodir,
-                          pattern = "geckodriver($|.exe$)",
-                          full.names = TRUE)
+    pattern = "geckodriver($|.exe$)",
+    full.names = TRUE
+  )
   list(version = geckover, dir = geckodir, path = geckopath)
 }
