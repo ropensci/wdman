@@ -61,7 +61,7 @@ gecko <- function(port = 4567L, version = "latest", check = TRUE,
                                 errfile = pfile[["err"]])
   if(length(startlog[["stderr"]]) >0){
     if(any(grepl("Address already in use", startlog[["stderr"]]))){
-      geckodrv$kill()
+      kill_process(geckodrv)
       stop("Gecko Driver signals port = ", port, " is already in use.")
     }
   }
@@ -76,7 +76,7 @@ gecko <- function(port = 4567L, version = "latest", check = TRUE,
       infun_read(geckodrv, log, "stderr", timeout = timeout,
                  outfile = pfile[["out"]], errfile = pfile[["err"]])
     },
-    stop = function(){geckodrv$kill()},
+    stop = function(){kill_process(geckodrv)},
     log = function(){
       infun_read(geckodrv, log, outfile = pfile[["out"]], errfile = pfile[["err"]])
       as.list(log)

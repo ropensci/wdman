@@ -62,7 +62,7 @@ phantomjs <- function(port = 4567L, version = "2.1.1", check = TRUE,
     if(any(
       grepl("GhostDriver - main.fail.*sourceURL", startlog[["stdout"]])
     )){
-      phantomdrv$kill()
+      kill_process(phantomdrv)
       stop("PhantomJS signals port = ", port, " is already in use.")
     }
   }
@@ -77,7 +77,7 @@ phantomjs <- function(port = 4567L, version = "2.1.1", check = TRUE,
       infun_read(phantomdrv, log, "stderr", timeout = timeout,
                  outfile = pfile[["out"]], errfile = pfile[["err"]])
     },
-    stop = function(){phantomdrv$kill()},
+    stop = function(){kill_process(phantomdrv)},
     log = function(){
       infun_read(phantomdrv, log,
                  outfile = pfile[["out"]], errfile = pfile[["err"]])
