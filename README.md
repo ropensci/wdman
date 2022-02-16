@@ -1,8 +1,8 @@
 # wdman
 
-| CRAN version       | Travis build status   | Appveyor build status   | Coverage |
-| :-------------: |:-------------:|:-------------:|:-------------:|
-| [![](http://www.r-pkg.org/badges/version/wdman)](https://CRAN.R-project.org/package=wdman) | [![Build Status](https://travis-ci.org/ropensci/binman.svg?branch=master)](https://travis-ci.org/ropensci/wdman) | [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/o8q2d6gdm9su5mcy?svg=true)](https://ci.appveyor.com/project/juyeongkim/wdman) | [![codecov](https://codecov.io/gh/ropensci/wdman/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/wdman)|
+[![](http://www.r-pkg.org/badges/version/wdman)](https://CRAN.R-project.org/package=wdman)
+[![R-CMD-check](https://github.com/ropensci/wdman/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/wdman/actions)
+[![codecov](https://codecov.io/gh/ropensci/wdman/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/wdman)
 
 
 ## Introduction
