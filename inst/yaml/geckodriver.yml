@@ -9,6 +9,7 @@ predlfunction:
     - win32
     - win64
     history: 3
+    fileregex: "\\.(gz|zip)$"
     versionregex:
     - "^v"
     - ""
