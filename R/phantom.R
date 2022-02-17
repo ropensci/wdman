@@ -34,6 +34,10 @@
 phantomjs <- function(port = 4567L, version = "2.1.1", check = TRUE,
                       loglevel = c("INFO", "ERROR", "WARN", "DEBUG"),
                       verbose = TRUE, retcommand = FALSE, ...) {
+  warning(
+    "PhantomJS development is suspended until further notice: ",
+    "https://github.com/ariya/phantomjs/issues/15344"
+  )
   assert_that(is_integer(port))
   assert_that(is_string(version))
   assert_that(is_logical(verbose))
