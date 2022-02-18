@@ -3,7 +3,7 @@ predlfunction:
   "binman::predl_google_storage":
     url: https://www.googleapis.com/storage/v1/b/chromedriver/o
     platform:
-    - mac64-m1
+    - mac64_m1
     - mac64
     - linux32
     - linux64

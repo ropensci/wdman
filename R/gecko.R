@@ -103,9 +103,16 @@ gecko_check <- function(verbose, check = TRUE) {
     switch(Sys.info()["sysname"],
       Linux = grep(os_arch("linux"), gyml[[platvec]], value = TRUE),
       Windows = grep(os_arch("win"), gyml[[platvec]], value = TRUE),
-      Darwin = grep("mac", gyml[[platvec]], value = TRUE),
+      Darwin = grep(mac_machine(), gyml[[platvec]], value = TRUE),
       stop("Unknown OS")
     )
+
+  # Need regex that can tell mac64 and macos-aarch64 apart
+  if (gyml[[platvec]] %in% c("macos", "macos-aarch64")) {
+    platregexvec <- c("predlfunction", "binman::predl_github_assets", "platformregex")
+    gyml[[platregexvec]] <- paste0(gyml[[platvec]], "\\.")
+  }
+
   tempyml <- tempfile(fileext = ".yml")
   write(yaml::as.yaml(gyml), tempyml)
   if (check) {

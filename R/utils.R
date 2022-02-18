@@ -121,3 +121,8 @@ kill_process <- function(p) {
   p$kill_tree()
   r
 }
+
+# Figure out if installing on an Intel or M1 mac
+mac_machine <- function() {
+  ifelse(Sys.info()[["machine"]] != "arm64", "mac(64_|os-)", "mac(64|os)$")
+}
