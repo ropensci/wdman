@@ -1,6 +1,6 @@
 # wdman
 
-[![](http://www.r-pkg.org/badges/version/wdman)](https://CRAN.R-project.org/package=wdman)
+[![](https://www.r-pkg.org/badges/version/wdman)](https://CRAN.R-project.org/package=wdman)
 [![R-CMD-check](https://github.com/ropensci/wdman/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/wdman/actions)
 [![codecov](https://codecov.io/gh/ropensci/wdman/branch/master/graph/badge.svg)](https://app.codecov.io/gh/ropensci/wdman)
 
@@ -15,7 +15,7 @@ The `wdman` package currently manages the following binaries:
 
 * [Selenium standalone binary](http://selenium-release.storage.googleapis.com/index.html)
 * [chromedriver](https://chromedriver.storage.googleapis.com/index.html)
-* [PhantomJS binary](http://phantomjs.org/download.html)
+* [PhantomJS binary](https://phantomjs.org/download.html)
 * [geckodriver](https://github.com/mozilla/geckodriver/releases)
 * [iedriver](https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver)
 
@@ -97,4 +97,4 @@ For further details, please see [the package vignette](https://docs.ropensci.org
 
 ---
 
-[![](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org/)
+[![](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)

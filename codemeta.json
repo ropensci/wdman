@@ -162,7 +162,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "93.284KB",
+  "fileSize": "93.287KB",
   "releaseNotes": "https://github.com/ropensci/wdman/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/wdman/blob/master/README.md",
   "contIntegration": ["https://github.com/ropensci/wdman/actions", "https://codecov.io/gh/ropensci/wdman"],
