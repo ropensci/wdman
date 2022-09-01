@@ -2,7 +2,7 @@
 
 [![](http://www.r-pkg.org/badges/version/wdman)](https://CRAN.R-project.org/package=wdman)
 [![R-CMD-check](https://github.com/ropensci/wdman/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/wdman/actions)
-[![codecov](https://codecov.io/gh/ropensci/wdman/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/wdman)
+[![codecov](https://codecov.io/gh/ropensci/wdman/branch/master/graph/badge.svg)](https://app.codecov.io/gh/ropensci/wdman)
 
 
 ## Introduction
@@ -97,4 +97,4 @@ For further details, please see [the package vignette](https://docs.ropensci.org
 
 ---
 
-[![](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
+[![](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org/)
