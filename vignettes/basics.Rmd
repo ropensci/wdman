@@ -45,7 +45,9 @@ Each of the driver functions has a `verbose` argument which controls message out
 
 ```R
 selServ <- selenium(verbose = TRUE)
+```
 
+```
 ## checking Selenium Server versions:
 
 ## BEGIN: PREDOWNLOAD
@@ -88,7 +90,9 @@ versus's
 ```R
 selServ <- selenium(verbose = FALSE)
 selServ$stop()
+```
 
+```
 ## TRUE
 ```
 
@@ -104,14 +108,18 @@ For diagnostic purposes each driver function has a `retcommand` argument. If `re
 ```R
 selCommand <- selenium(retcommand = TRUE, verbose = FALSE, check = FALSE)
 selCommand
+```
 
+```
 ## [1] "/usr/bin/java -Dwebdriver.chrome.driver='/Users/jkim/Library/Application Support/binman_chromedriver/mac64/80.0.3987.16/chromedriver' -Dwebdriver.gecko.driver='/Users/jkim/Library/Application Support/binman_geckodriver/macos/0.26.0/geckodriver' -Dphantomjs.binary.path='/Users/jkim/Library/Application Support/binman_phantomjs/macosx/2.1.1/phantomjs-2.1.1-macosx/bin/phantomjs' -jar '/Users/jkim/Library/Application Support/binman_seleniumserver/generic/4.0.0-alpha-2/selenium-server-standalone-4.0.0-alpha-2.jar' -port 4567"
 ```
 
 ```R
 chromeCommand <- chrome(retcommand = TRUE, verbose = FALSE, check = FALSE)
 chromeCommand
+```
 
+```
 ## [1] "/Users/jkim/Library/Application Support/binman_chromedriver/mac64/80.0.3987.16/chromedriver --port=4567 --url-base=wd/hub --verbose"
 ```
 
@@ -127,7 +135,9 @@ The binary takes a port argument which defaults to `port = 4567L`. There are a n
 ```R
 selServ <- selenium(verbose = FALSE, check = FALSE)
 selServ$process
+```
 
+```
 ## PROCESS 'file50e6163b37b8.sh', running, pid 21289.
 ```
 
@@ -137,7 +147,9 @@ The returned `output`, `error` and `log` functions give access to the stdout/std
 
 ```R
 selServ$log()
+```
 
+```
 ## $stderr
 ## [1] "13:25:51.744 INFO [GridLauncherV3.parse] - Selenium server version: 4.0.0-alpha-2, revision: f148142cf8"         
 ## [2] "13:25:52.174 INFO [GridLauncherV3.lambda$buildLaunchers$3] - Launching a standalone Selenium Server on port 4567"
@@ -152,7 +164,9 @@ The `stop` function sends a signal that terminates the process:
 
 ```R
 selServ$stop()
+```
 
+```
 ## TRUE
 ```
 
@@ -175,13 +189,17 @@ Similarly to the `selenium` function, the `chrome` function returns a list of fo
 ```R
 cDrv <- chrome(verbose = FALSE, check = FALSE)
 cDrv$process
+```
 
+```
 ## PROCESS 'file534c4e940dd8.sh', running, pid 21386.
 ```
 
 ```R
 cDrv$log()
+```
 
+```
 ## $stderr
 ## character(0)
 
@@ -193,7 +211,9 @@ cDrv$log()
 
 ```R
 cDrv$stop()
+```
 
+```
 ## TRUE
 ```
 
@@ -209,13 +229,17 @@ Similarly to the `selenium` function, the `phantomjs` function returns a list of
 ```R
 pjsDrv <- phantomjs(verbose = FALSE, check = FALSE)
 pjsDrv$process
+```
 
+```
 ## PROCESS 'file5394b74d790.sh', running, pid 21443.
 ```
 
 ```R
 pjsDrv$log()
+```
 
+```
 ## $stderr
 ## character(0)
 
@@ -225,7 +249,9 @@ pjsDrv$log()
 
 ```R
 pjsDrv$stop()
+```
 
+```
 ## TRUE
 ```
 
@@ -245,13 +271,17 @@ Similarly to the `selenium` function, the `gecko` function returns a list of fou
 ```R
 gDrv <- gecko(verbose = FALSE, check = FALSE)
 gDrv$process
+```
 
+```
 ## PROCESS 'file53946017eccb.sh', running, pid 21458.
 ```
 
 ```R
 gDrv$log()
+```
 
+```
 ## $stderr
 ## character(0)
 
@@ -280,7 +310,9 @@ Similarly to the `selenium` function the `gecko` function returns a list of four
 ```R
 ieDrv <- iedriver(verbose = FALSE, check = FALSE)
 ieDrv$process
+```
 
+```
 ## Process Handle
 ## command   : C:\Users\john\AppData\Local\binman\binman_iedriverserver\win64\3.0.0\IEDriverServer.exe /port=4567 /log-level=FATAL /log-file=C:\Users\john\AppData\Local\Temp\RtmpqSdw94\file5247395f2a.txt
 ## system id : 7484
@@ -289,7 +321,9 @@ ieDrv$process
 
 ```R
 ieDrv$log()
+```
 
+```
 ## $stderr
 ## character(0)
 ## 
@@ -304,7 +338,9 @@ ieDrv$log()
 
 ```R
 ieDrv$stop()
+```
 
+```
 ## [1] TRUE
 ```
 

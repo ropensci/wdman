@@ -1,3 +1,7 @@
+# wdman 0.2.6
+
+* Fixing Mac install problem introduced by new chromedriver binaries for Mac M1 (#26)
+
 # wdman 0.2.5
 
 * Replaced subprocess (archived in CRAN) with [processx](https://processx.r-lib.org/).

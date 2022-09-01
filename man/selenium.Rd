@@ -76,4 +76,5 @@ selServ <- selenium()
 selServ$output()
 selServ$stop()
 }
+
 }

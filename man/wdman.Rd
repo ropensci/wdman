@@ -3,7 +3,12 @@
 \docType{package}
 \name{wdman}
 \alias{wdman}
-\title{wdman.}
+\title{wdman}
 \description{
-wdman.
+Webdriver/Selenium Binary Manager
+}
+\details{
+There are a number of binary files associated with the
+Webdriver/Selenium project. This package provides functions to download
+these binaries and to manage processes involving them.
 }

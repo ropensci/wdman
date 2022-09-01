@@ -1,24 +1,26 @@
 {
-  "@context": [
-    "https://doi.org/10.5063/schema/codemeta-2.0",
-    "http://schema.org"
-  ],
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "wdman",
-  "description": "There are a number of binary files associated with the\n    'Webdriver'/'Selenium' project (see <http://www.seleniumhq.org/download/>,\n    <https://sites.google.com/a/chromium.org/chromedriver/>,\n    <https://github.com/mozilla/geckodriver>,\n    <http://phantomjs.org/download.html> and\n    <https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver> for\n    more information). This package provides functions to download these\n    binaries and to manage processes involving them.",
+  "description": "There are a number of binary files associated with the 'Webdriver'/'Selenium' project. This package provides functions to download these binaries and to manage processes involving them.",
   "name": "wdman: 'Webdriver'/'Selenium' Binary Manager",
-  "codeRepository": "https://github.com/ropensci/wdman",
   "relatedLink": "https://docs.ropensci.org/wdman",
+  "codeRepository": "https://github.com/ropensci/wdman",
   "issueTracker": "https://github.com/ropensci/wdman/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.6.2",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.6.2 (2019-12-12)",
+  "runtimePlatform": "R version 4.2.1 (2022-06-23)",
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  },
   "author": [
     {
       "@type": "Person",
@@ -27,9 +29,6 @@
       "email": "johndharrison0@gmail.com"
     }
   ],
-  "contributor": {},
-  "copyrightHolder": {},
-  "funder": {},
   "maintainer": [
     {
       "@type": "Person",
@@ -88,14 +87,14 @@
       "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
     }
   ],
-  "softwareRequirements": [
-    {
+  "softwareRequirements": {
+    "1": {
       "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
       "version": ">= 3.2"
     },
-    {
+    "2": {
       "@type": "SoftwareApplication",
       "identifier": "binman",
       "name": "binman",
@@ -107,7 +106,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=binman"
     },
-    {
+    "3": {
       "@type": "SoftwareApplication",
       "identifier": "assertthat",
       "name": "assertthat",
@@ -119,7 +118,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=assertthat"
     },
-    {
+    "4": {
       "@type": "SoftwareApplication",
       "identifier": "processx",
       "name": "processx",
@@ -131,7 +130,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=processx"
     },
-    {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "yaml",
       "name": "yaml",
@@ -143,7 +142,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=yaml"
     },
-    {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "semver",
       "name": "semver",
@@ -156,27 +155,16 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=semver"
     },
-    {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "utils",
       "name": "utils"
-    }
-  ],
+    },
+    "SystemRequirements": null
+  },
+  "fileSize": "93.24KB",
   "releaseNotes": "https://github.com/ropensci/wdman/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/wdman/blob/master/README.md",
-  "fileSize": "17.934KB",
-  "contIntegration": [
-    "https://travis-ci.org/ropensci/wdman",
-    "https://ci.appveyor.com/project/juyeongkim/wdman",
-    "https://codecov.io/gh/ropensci/wdman"
-  ],
-  "keywords": [
-    "r",
-    "selenium",
-    "webdriver",
-    "webdriver-manager",
-    "rselenium",
-    "r-package",
-    "rstats"
-  ]
+  "contIntegration": ["https://github.com/ropensci/wdman/actions", "https://codecov.io/gh/ropensci/wdman"],
+  "keywords": ["r", "selenium", "webdriver", "webdriver-manager", "rselenium", "r-package", "rstats"]
 }
