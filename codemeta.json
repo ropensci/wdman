@@ -4,7 +4,7 @@
   "identifier": "wdman",
   "description": "There are a number of binary files associated with the 'Webdriver'/'Selenium' project. This package provides functions to download these binaries and to manage processes involving them.",
   "name": "wdman: 'Webdriver'/'Selenium' Binary Manager",
-  "relatedLink": "https://docs.ropensci.org/wdman",
+  "relatedLink": "https://docs.ropensci.org/wdman/",
   "codeRepository": "https://github.com/ropensci/wdman",
   "issueTracker": "https://github.com/ropensci/wdman/issues",
   "license": "https://spdx.org/licenses/MIT",
@@ -104,7 +104,7 @@
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=binman"
+      "sameAs": "https://github.com/ropensci/binman"
     },
     "3": {
       "@type": "SoftwareApplication",
@@ -162,7 +162,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "93.24KB",
+  "fileSize": "93.284KB",
   "releaseNotes": "https://github.com/ropensci/wdman/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/wdman/blob/master/README.md",
   "contIntegration": ["https://github.com/ropensci/wdman/actions", "https://codecov.io/gh/ropensci/wdman"],

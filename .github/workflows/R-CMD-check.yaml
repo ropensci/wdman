@@ -44,7 +44,6 @@ jobs:
         with:
           extra-packages: |
             rcmdcheck
-            github::ropensci/binman
 
       - uses: r-lib/actions/check-r-package@v1
 
