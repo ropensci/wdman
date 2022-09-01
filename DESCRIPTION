@@ -26,8 +26,6 @@ Imports:
     yaml,
     semver(>= 0.2.0),
     utils
-Remotes:
-    github::ropensci/binman
 URL: https://docs.ropensci.org/wdman/, https://github.com/ropensci/wdman
 URLNote: https://github.com/ropensci/wdman
 BugReports: https://github.com/ropensci/wdman/issues

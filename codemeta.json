@@ -104,7 +104,7 @@
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://github.com/ropensci/binman"
+      "sameAs": "https://CRAN.R-project.org/package=binman"
     },
     "3": {
       "@type": "SoftwareApplication",
@@ -162,7 +162,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "93.287KB",
+  "fileSize": "93.25KB",
   "releaseNotes": "https://github.com/ropensci/wdman/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/wdman/blob/master/README.md",
   "contIntegration": ["https://github.com/ropensci/wdman/actions", "https://codecov.io/gh/ropensci/wdman"],
