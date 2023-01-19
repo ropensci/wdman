@@ -143,7 +143,7 @@ chrome_ver <- function(platform, version) {
     file.path(app_dir("chromedriver"), platform, chromever)
   )
   chromepath <- list.files(chromedir,
-    pattern = "chromedriver($|.exe$)",
+    pattern = "^chromedriver($|.exe$)",
     full.names = TRUE
   )
   list(version = chromever, dir = chromedir, path = chromepath)
