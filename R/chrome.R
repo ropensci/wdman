@@ -100,7 +100,7 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
 chrome_check <- function(verbose, check = TRUE) {
   chromeyml <- system.file("yaml", "chromedriver.yml", package = "wdman")
   cyml <- yaml::yaml.load_file(chromeyml)
-  platvec <- c("predlfunction", "binman::predl_google_storage", "platform")
+  platvec <- c("predlfunction", "wdman::predl_chrome_for_testing", "platform")
   cyml[[platvec]] <-
     switch(Sys.info()["sysname"],
       Linux = grep(os_arch("linux"), cyml[[platvec]], value = TRUE),
@@ -111,7 +111,7 @@ chrome_check <- function(verbose, check = TRUE) {
 
   # Need regex that can tell mac64 and mac64_m1 apart
   if (cyml[[platvec]] %in% c("mac64", "mac64_m1")) {
-    platregexvec <- c("predlfunction", "binman::predl_google_storage", "platformregex")
+    platregexvec <- c("predlfunction", "wdman::predl_chrome_for_testing", "platformregex")
     cyml[[platregexvec]] <- paste0(cyml[[platvec]], "\\.")
   }
 

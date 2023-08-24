@@ -29,5 +29,5 @@ Imports:
 URL: https://docs.ropensci.org/wdman/, https://github.com/ropensci/wdman
 URLNote: https://github.com/ropensci/wdman
 BugReports: https://github.com/ropensci/wdman/issues
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 VignetteBuilder: knitr

@@ -1,7 +1,7 @@
 name: chromedriver
 predlfunction:
-  "binman::predl_google_storage":
-    url: https://www.googleapis.com/storage/v1/b/chromedriver/o
+  "wdman::predl_chrome_for_testing":
+    url: https://googlechromelabs.github.io/chrome-for-testing/latest-versions-per-milestone-with-downloads.json
     platform:
     - mac64_m1
     - mac64
