@@ -13,5 +13,5 @@ predlfunction:
 dlfunction:
   "binman::download_files": []
 postdlfunction:
-  "binman::unziptar_dlfiles":
+  "wdman::unziptar_dlfiles":
     chmod: TRUE

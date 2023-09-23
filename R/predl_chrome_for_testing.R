@@ -48,3 +48,13 @@ predl_chrome_for_testing <- function(url, platform, history,
                         win64    = "win32")[names(app_links)]
   assign_directory(app_links, appname)
 }
+
+#' @export
+unziptar_dlfiles <- function(...) {
+  x <- binman::unziptar_dlfiles(...)
+  for (f in x) {
+    dir <- tools::file_path_sans_ext(f)
+    file.copy(list.files(dir, full.names = TRUE), dirname(dir))
+  }
+  x
+}
