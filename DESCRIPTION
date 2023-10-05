@@ -20,7 +20,8 @@ Suggests:
     testthat (>= 3.1.7),
     covr,
     knitr,
-    rmarkdown
+    rmarkdown,
+    R6
 Imports:
     binman,
     assertthat,
