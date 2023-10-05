@@ -50,4 +50,7 @@ jobs:
           upload-snapshots: true
 
       - name: Check drivers
-        run: Rscript inst/etc/checks.R
+        run: |
+          Rscript -e 'install.packages("devtools")'
+          Rscript -e 'devtools::install(".")'
+          Rscript inst/etc/checks.R
