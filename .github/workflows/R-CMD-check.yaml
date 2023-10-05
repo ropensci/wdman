@@ -51,6 +51,6 @@ jobs:
 
       - name: Check drivers
         run: |
-          Rscript -e 'install.packages("devtools")'
-          Rscript -e 'devtools::install(".")'
+          Rscript -e "install.packages('devtools')"
+          Rscript -e "devtools::install('.')"
           Rscript inst/etc/checks.R
