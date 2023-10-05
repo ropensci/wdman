@@ -44,7 +44,7 @@ test_that("canCallIEDriver", {
   expect_identical(logOut, "super duper")
   expect_identical(logErr, "no error here")
   expect_identical(ieDrv$stop(), "stopped")
-  expect_identical(ieDrv$process, "hello")
+  expect_identical(ieDrv$process$test, "hello")
   expect_true(grepl("some.path /port=4567 /log-level=FATAL", retCommand))
 })
 
