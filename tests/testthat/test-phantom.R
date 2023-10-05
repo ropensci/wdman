@@ -6,7 +6,6 @@ test_that("canCallPhantomJS", {
     process_yaml = binman_process_yaml,
     list_versions = mock_binman_list_versions_phantomjs,
     app_dir = mock_binman_app_dir,
-    .package = "binman"
   )
   local_mocked_bindings(
     normalizePath = mock_base_normalizePath,
@@ -47,7 +46,6 @@ test_that("canCallPhantomJS", {
 test_that("phantom_verErrorWorks", {
   local_mocked_bindings(
     list_versions = mock_binman_list_versions_phantomjs,
-    .package = "binman"
   )
   expect_error(
     wdman:::phantom_ver("linux64", "noversion"),
@@ -60,7 +58,6 @@ test_that("pickUpErrorFromReturnCode", {
     process_yaml = binman_process_yaml,
     list_versions = mock_binman_list_versions_phantomjs,
     app_dir = mock_binman_app_dir,
-    .package = "binman"
   )
   local_mocked_bindings(
     normalizePath = mock_base_normalizePath,
@@ -89,7 +86,6 @@ test_that("pickUpErrorFromPortInUse", {
     process_yaml = binman_process_yaml,
     list_versions = mock_binman_list_versions_phantomjs,
     app_dir = mock_binman_app_dir,
-    .package = "binman"
   )
   local_mocked_bindings(
     normalizePath = mock_base_normalizePath,

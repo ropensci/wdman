@@ -8,7 +8,6 @@ test_that("canCallSelenium", {
     process_yaml = binman_process_yaml,
     list_versions = mock_binman_list_versions_selenium,
     app_dir = mock_binman_app_dir,
-    .package = "binman"
   )
   local_mocked_bindings(
     normalizePath = mock_base_normalizePath,
@@ -49,7 +48,7 @@ test_that("canCallSelenium", {
   expect_identical(logOut, "super duper")
   expect_identical(logErr, "no error here")
   expect_identical(selServ$stop(), "stopped")
-  expect_identical(selServ$process, "hello")
+  expect_identical(selServ$process$test, "hello")
   exRet <- "-Dwebdriver.chrome.driver='some.path' " %+%
     "-Dwebdriver.gecko.driver='some.path' " %+%
     "-Dphantomjs.binary.path='some.path' " %+%
@@ -66,7 +65,8 @@ test_that("errorIfJavaNotFound", {
   local_mocked_bindings(
     Sys.which = function(...) {
       ""
-    }
+    },
+    .package = "base"
   )
 
   expect_error(selenium(), "PATH to JAVA not found")
@@ -76,7 +76,6 @@ test_that("errorIfVersionNotFound", {
   local_mocked_bindings(
     process_yaml = binman_process_yaml,
     list_versions = mock_binman_list_versions_selenium,
-    .package = "binman"
   )
   local_mocked_bindings(
     Sys.which = function(...) {
@@ -96,7 +95,6 @@ test_that("pickUpErrorFromReturnCode", {
     process_yaml = binman_process_yaml,
     list_versions = mock_binman_list_versions_selenium,
     app_dir = mock_binman_app_dir,
-    .package = "binman"
   )
   local_mocked_bindings(
     normalizePath = mock_base_normalizePath,
@@ -135,7 +133,6 @@ test_that("pickUpErrorFromPortInUse", {
     process_yaml = binman_process_yaml,
     list_versions = mock_binman_list_versions_selenium,
     app_dir = mock_binman_app_dir,
-    .package = "binman"
   )
   local_mocked_bindings(
     normalizePath = mock_base_normalizePath,
@@ -174,7 +171,6 @@ test_that("pickUpWarningOnNoStderr", {
     process_yaml = binman_process_yaml,
     list_versions = mock_binman_list_versions_selenium,
     app_dir = mock_binman_app_dir,
-    .package = "binman"
   )
   local_mocked_bindings(
     normalizePath = mock_base_normalizePath,

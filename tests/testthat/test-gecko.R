@@ -6,7 +6,6 @@ test_that("canCallGecko", {
     process_yaml = binman_process_yaml,
     list_versions = mock_binman_list_versions_gecko,
     app_dir = mock_binman_app_dir,
-    .package = "binman"
   )
   local_mocked_bindings(
     normalizePath = mock_base_normalizePath,
@@ -48,7 +47,6 @@ test_that("canCallGecko", {
 test_that("gecko_verErrorWorks", {
   local_mocked_bindings(
     list_versions = mock_binman_list_versions_gecko,
-    .package = "binman"
   )
 
   expect_error(
@@ -62,7 +60,6 @@ test_that("pickUpErrorFromReturnCode", {
     process_yaml = binman_process_yaml,
     list_versions = mock_binman_list_versions_gecko,
     app_dir = mock_binman_app_dir,
-    .package = "binman"
   )
   local_mocked_bindings(
     normalizePath = mock_base_normalizePath,
@@ -92,7 +89,6 @@ test_that("pickUpErrorFromPortInUse", {
     process_yaml = binman_process_yaml,
     list_versions = mock_binman_list_versions_gecko,
     app_dir = mock_binman_app_dir,
-    .package = "binman"
   )
   local_mocked_bindings(
     normalizePath = mock_base_normalizePath,
