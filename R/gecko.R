@@ -124,7 +124,7 @@ gecko_check <- function(verbose, check = TRUE) {
 }
 
 gecko_ver <- function(platform, version) {
-  geckover <- binman::list_versions("geckodriver")[[platform]]
+  geckover <- list_versions("geckodriver")[[platform]]
   geckover <- if (identical(version, "latest")) {
     as.character(max(semver::parse_version(geckover)))
   } else {
