@@ -78,10 +78,9 @@ test_that("errorIfVersionNotFound", {
     list_versions = mock_binman_list_versions_selenium,
   )
   local_mocked_bindings(
-    Sys.which = function(...) {
+    java_check = function(...) {
       "im here"
     },
-    .package = "base"
   )
 
   expect_error(

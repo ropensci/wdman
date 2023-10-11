@@ -142,7 +142,7 @@ java_check <- function() {
   if (identical(unname(javapath), "")) {
     stop("PATH to JAVA not found. Please check JAVA is installed.")
   }
-  java_version <- suppressWarnings(system2(Sys.which("java"), "-version", stdout = TRUE, stderr = TRUE))
+  java_version <- suppressWarnings(system2(javapath, "-version", stdout = TRUE, stderr = TRUE))
   if (!is.null(attr(java_version, "status"))) {
     stop(paste(java_version, collapse = "\n"))
   }
