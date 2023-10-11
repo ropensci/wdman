@@ -1,5 +1,3 @@
-context("test-assertions")
-
 test_that("assertionsWork", {
   expect_error(assertthat::assert_that(is_list("")), "is not a list")
   expect_error(
