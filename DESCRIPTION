@@ -27,8 +27,9 @@ Imports:
     assertthat,
     processx,
     yaml,
-    semver(>= 0.2.0),
-    utils
+    semver (>= 0.2.0),
+    utils,
+    jsonlite
 URL: https://docs.ropensci.org/wdman/, https://github.com/ropensci/wdman
 URLNote: https://github.com/ropensci/wdman
 BugReports: https://github.com/ropensci/wdman/issues
