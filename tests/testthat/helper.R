@@ -4,6 +4,7 @@ mock_binman_list_versions_chrome <- function(...) {
   list(
     linux64 = c("2.23", "2.24", "2.25", "2.26"),
     mac64 = c("2.23", "2.24", "2.25"),
+    mac64_m1 = c("2.23", "2.24", "2.25"),
     win32 = c("2.23", "2.24", "2.25")
   )
 }
@@ -21,6 +22,7 @@ mock_binman_list_versions_gecko <- function(...) {
   list(
     linux64 = c("0.10.0", "0.11.0", "0.11.1"),
     macos = c("0.10.0", "0.11.0", "0.11.1"),
+    `macos-aarch64` = c("0.10.0", "0.11.0", "0.11.1"),
     win32 = c("0.10.0", "0.11.0", "0.11.1"),
     win64 = c("0.10.0", "0.11.0", "0.11.1")
   )
@@ -51,6 +53,35 @@ mock_binman_app_dir <- function(...) {
   "some.dir"
 }
 
+mock_processx_process <- R6::R6Class(
+  "process_test",
+  public = list(
+    initialize = function(...) {},
+    is_alive = function() TRUE,
+    test = "hello"
+  )
+)
+
+mock_processx_process_fail <- R6::R6Class(
+  "process_test",
+  public = list(
+    initialize = function(...) {},
+    is_alive = function() FALSE
+  )
+)
+
+mock_generic_check <- function(...) {
+  list(platform = "some.plat")
+}
+
+mock_generic_ver <- function(...) {
+  list(path = "some.path")
+}
+
+mock_base_Sys.info_windows <- function(...) {
+  structure("Windows", .Names = "sysname")
+}
+
 mock_subprocess_spawn_process <- function(...) {
   "hello"
 }
@@ -75,3 +106,4 @@ mock_subprocess_process_read_utils <- function(...) {
 mock_generic_start_log <- function(...) {
   list(stdout = "super duper", stderr = "no error here")
 }
+

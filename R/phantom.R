@@ -127,7 +127,7 @@ phantom_check <- function(verbose, check = TRUE) {
 }
 
 phantom_ver <- function(platform, version) {
-  phantomver <- binman::list_versions("phantomjs")[[platform]]
+  phantomver <- list_versions("phantomjs")[[platform]]
   phantomver <- if (identical(version, "latest")) {
     as.character(max(semver::parse_version(phantomver)))
   } else {

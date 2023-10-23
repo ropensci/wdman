@@ -93,7 +93,7 @@ selenium <- function(port = 4567L,
   )
   if (isFALSE(seleniumdrv$is_alive())) {
     err <- paste0(readLines(pfile[["err"]]), collapse = "\n")
-    stop("Selenium server  couldn't be started\n", err)
+    stop("Selenium server couldn't be started\n", err)
   }
   startlog <- generic_start_log(seleniumdrv, # poll = 10000L,
     outfile = pfile[["out"]],
@@ -142,6 +142,10 @@ java_check <- function() {
   if (identical(unname(javapath), "")) {
     stop("PATH to JAVA not found. Please check JAVA is installed.")
   }
+  java_version <- suppressWarnings(system2(javapath, "-version", stdout = TRUE, stderr = TRUE))
+  if (!is.null(attr(java_version, "status"))) {
+    stop(paste(java_version, collapse = "\n"))
+  }
   javapath
 }
 
@@ -156,7 +160,7 @@ selenium_check <- function(verbose, check = TRUE) {
 }
 
 selenium_ver <- function(platform, version) {
-  selver <- binman::list_versions("seleniumserver")[[platform]]
+  selver <- list_versions("seleniumserver")[[platform]]
   selver <- if (identical(version, "latest")) {
     as.character(max(semver::parse_version(selver)))
   } else {

@@ -3,10 +3,12 @@ Type: Package
 Title: 'Webdriver'/'Selenium' Binary Manager
 Version: 0.2.6
 Authors@R: c(
-    person("John", "Harrison", , "johndharrison0@gmail.com",
-    role = "aut", comment = "original author"),
-    person("Ju Yeong", "Kim", , "jkim2345@fredhutch.org",
-    role = "cre", comment = "rOpenSci maintainer"))
+    person("John", "Harrison", , "johndharrison0@gmail.com", role = "aut",
+           comment = "original author"),
+    person("Ju Yeong", "Kim", , "jkim2345@fredhutch.org", role = "aut",
+           comment = "rOpenSci maintainer"),
+    person("Jonathan", "Völkle", , "jonathan.voelkle@web.de", role = "cre")
+  )
 Description: There are a number of binary files associated with the
     'Webdriver'/'Selenium' project. This package provides functions to download
     these binaries and to manage processes involving them.
@@ -15,10 +17,11 @@ Encoding: UTF-8
 Depends:
     R (>= 3.2)
 Suggests:
-    testthat,
+    testthat (>= 3.1.7),
     covr,
     knitr,
-    rmarkdown
+    rmarkdown,
+    R6
 Imports:
     binman,
     assertthat,
@@ -31,3 +34,4 @@ URLNote: https://github.com/ropensci/wdman
 BugReports: https://github.com/ropensci/wdman/issues
 RoxygenNote: 7.2.3
 VignetteBuilder: knitr
+Config/testthat/edition: 3
