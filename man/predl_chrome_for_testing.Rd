@@ -2,32 +2,29 @@
 % Please edit documentation in R/predl_chrome_for_testing.R
 \name{predl_chrome_for_testing}
 \alias{predl_chrome_for_testing}
-\title{Pre-download function for Chrome-for-testing site}
+\title{Pre-download function for Chrome for Testing site}
 \usage{
-predl_chrome_for_testing(
-  url,
-  platform,
-  history,
-  appname,
-  platformregex = platform
-)
+predl_chrome_for_testing(url, platform)
 }
 \arguments{
-\item{url}{URL of the JSON to use for files}
+\item{url}{URL containing the JSON used to locate files.}
 
 \item{platform}{One of `c("linux64", "mac-arm64", "mac-x64",
-"win32", "win64")}
-
-\item{history}{Integer number of recent entries}
-
-\item{appname}{Name of the app, typically `"chromedriver"`}
-
-\item{platformregex}{A filter for platforms. Defaults to the platform names.}
+"win32", "win64")`.}
 }
 \value{
-A named list of dataframes.  The name indicates the platform.  The dataframe should contain the version, url, and file to
-be processed.  Used as input for `binman::download_files()` or an equivalent.
+A named list of dataframes. The name indicates the platform. The
+dataframe should contain the version, url, and file to be processed.
+Used as input for [binman::download_files()] or equivalent.
 }
 \description{
-Pre-download function for Chrome-for-testing site
+Prepare to download Chromedriver from the Chrome for Testing site.
+}
+\examples{
+\dontrun{
+# predl_chrome_for_testing() is used by chrome()
+chrome <- chrome()
+chrome$stop()
+}
+
 }

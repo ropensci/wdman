@@ -8,8 +8,6 @@ predlfunction:
     - linux64
     - win32
     - win64
-    history: 3
-    appname: "chromedriver"
 dlfunction:
   "binman::download_files": []
 postdlfunction:

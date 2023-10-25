@@ -4,15 +4,27 @@
 \alias{unziptar_chromedriver}
 \title{Unzip/untar the chromedriver file}
 \usage{
-unziptar_chromedriver(...)
+unziptar_chromedriver(dlfiles, chmod = TRUE)
 }
 \arguments{
-\item{...}{Passed into [binman::unziptar_dlfiles].}
+\item{dlfiles}{Passed into [binman::unziptar_dlfiles]: A data frame of
+files.}
+
+\item{chmod}{If `TRUE`, the files are made executable.}
 }
 \value{
-The same as [binman::unziptar_dlfiles].
+The same as [binman::unziptar_dlfiles()]: a list of character
+  vectors representing the processed files.
 }
 \description{
 Unzip or untar a downloaded chromedriver file, then extract it from
 its folder.
+}
+\examples{
+\dontrun{
+# unziptar_chromedriver() is used by chrome()
+chrome <- chrome()
+chrome$stop()
+}
+
 }

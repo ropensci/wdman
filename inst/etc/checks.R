@@ -18,6 +18,7 @@ tries$chrome <- tryCatch(
 
 tries$chrome_old <- tryCatch(
   {
+    # Version of chrome that is not on the Chrome for Testing site
     print("chrome (old)")
     tmp <- chrome(verbose = TRUE, version = "114.0.5735.90")
     print(tmp$log())
