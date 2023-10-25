@@ -27,11 +27,12 @@ Imports:
     assertthat,
     processx,
     yaml,
-    semver(>= 0.2.0),
-    utils
+    semver (>= 0.2.0),
+    utils,
+    jsonlite
 URL: https://docs.ropensci.org/wdman/, https://github.com/ropensci/wdman
 URLNote: https://github.com/ropensci/wdman
 BugReports: https://github.com/ropensci/wdman/issues
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 VignetteBuilder: knitr
 Config/testthat/edition: 3
