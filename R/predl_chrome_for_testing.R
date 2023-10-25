@@ -37,10 +37,7 @@ predl_chrome_for_testing <- function(url, platform, history,
   }
   extracted <- do.call(rbind, lapply(ver_data, unwrap))
   app_links <- tapply(extracted, extracted$platform, identity)
-  print(names(app_links))
-  print(platform)
   app_links <- app_links[platform]
-  print(app_links)
   assign_directory(app_links, appname)
 }
 
