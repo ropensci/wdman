@@ -49,9 +49,21 @@ predl_chrome_for_testing <- function(url, platform, history,
   assign_directory(app_links, appname)
 }
 
+#' Unzip/untar downloaded files
+#'
+#' Unzip or untar downloaded files.  Copies files into the
+#' expected position.
+#'
+#' @param ... Passed into [binman::unziptar_dlfiles].
+#'
+#' @return The same as [binman::unziptar_dlfiles]: a list of character
+#'  vectors indicating files processed.
+#'
+#' @export
+#' @md
 unziptar_dlfiles <- function(...) {
   x <- binman::unziptar_dlfiles(...)
-  for (f in x) {
+  for (f in x$processed) {
     dir <- tools::file_path_sans_ext(f)
     file.copy(list.files(dir, full.names = TRUE), dirname(dir))
   }
