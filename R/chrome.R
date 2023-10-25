@@ -115,13 +115,19 @@ chrome_check <- function(verbose, check = TRUE, chrome_old = FALSE) {
 
   cyml <- yaml::yaml.load_file(chromeyml)
   platvec <- c("predlfunction", predl_function, "platform")
-  cyml[[platvec]] <-
+  cyml_platvec <-
     switch(Sys.info()["sysname"],
       Linux = grep(os_arch("linux"), cyml[[platvec]], value = TRUE),
       Windows = grep(os_arch("win"), cyml[[platvec]], value = TRUE),
       Darwin = grep(mac_machine(), cyml[[platvec]], value = TRUE),
       stop("Unknown OS")
     )
+
+  if (length(cyml_platvec) == 0) {
+    cyml_platvec <- grep("win", cyml[[platvec]], value = TRUE)
+  }
+
+  cyml[[platvec]] <- cyml_platvec
 
   # Need regex that can tell mac64 and mac64_m1 apart
   if (cyml[[platvec]] %in% c("mac64", "mac64_m1")) {
