@@ -104,7 +104,7 @@ chrome_check <- function(verbose, check = TRUE) {
   cyml[[platvec]] <-
     switch(Sys.info()["sysname"],
       Linux = grep(os_arch("linux"), cyml[[platvec]], value = TRUE),
-      Windows = grep("win", cyml[[platvec]], value = TRUE),
+      Windows = grep(os_arch("win"), cyml[[platvec]], value = TRUE),
       Darwin = grep(mac_machine(), cyml[[platvec]], value = TRUE),
       stop("Unknown OS")
     )
