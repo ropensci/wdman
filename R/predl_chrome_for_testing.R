@@ -16,13 +16,6 @@ predl_chrome_for_testing <- function(url, platform, history,
                                      platformregex = platform) {
   assert_that(is_URL_file(url))
   assert_that(is_character(platform))
-  platform <- c(
-    mac64_m1 = "mac-arm64",
-    mac64 = "mac-x64",
-    linux32 = "linux32",
-    linux64 = "linux64",
-    win32 = "win64"
-  )[platform]
   assert_that(is_integer(history))
   assert_that(is_string(appname))
   assert_that(is_character(platformregex))
@@ -44,14 +37,12 @@ predl_chrome_for_testing <- function(url, platform, history,
   }
   extracted <- do.call(rbind, lapply(ver_data, unwrap))
   app_links <- tapply(extracted, extracted$platform, identity)
-  app_links <- app_links[platform]
-  names(app_links) <- c(
-    "mac-arm64" = "mac64_m1",
-    "mac-x64" = "mac64",
-    linux32 = "linux32",
-    linux64 = "linux64",
-    win64 = "win32"
-  )[names(app_links)]
+  has_platform <- vapply(
+    names(app_links),
+    function(x) any(grepl(platformregex, x, perl = TRUE)),
+    FUN.VALUE = logical(1)
+  )
+  app_links <- app_links[has_platform]
   assign_directory(app_links, appname)
 }
 
