@@ -75,12 +75,13 @@ read_pipes <- function(env, outfile, errfile, pipe = "both",
 unix_spawn_tofile <- function(command, args, outfile, errfile, ...) {
   tfile <- tempfile(fileext = ".sh")
   write("#!/bin/sh", tfile)
-  write(paste(c(
-    shQuote(command), args, ">",
-    shQuote(outfile), "2>", shQuote(errfile)
-  ), collapse = " "),
-  tfile,
-  append = TRUE
+  write(
+    paste(c(
+      shQuote(command), args, ">",
+      shQuote(outfile), "2>", shQuote(errfile)
+    ), collapse = " "),
+    tfile,
+    append = TRUE
   )
   Sys.chmod(tfile)
   processx::process$new(tfile, cleanup_tree = TRUE)
@@ -124,5 +125,5 @@ kill_process <- function(p) {
 
 # Figure out if installing on an Intel or M1 mac
 mac_machine <- function() {
-  ifelse(Sys.info()[["machine"]] == "arm64", "mac(64_|os-)", "mac(64|os)$")
+  ifelse(Sys.info()[["machine"]] == "arm64", "mac(-arm64|64_|os-)", "mac(64|os|-x64)$")
 }
