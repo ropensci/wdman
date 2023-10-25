@@ -1,0 +1,15 @@
+name: chromedriver
+predlfunction:
+  "wdman::predl_chrome_for_testing":
+    url: https://googlechromelabs.github.io/chrome-for-testing/latest-versions-per-milestone-with-downloads.json
+    platform:
+    - mac-arm64
+    - mac-x64
+    - linux64
+    - win32
+    - win64
+dlfunction:
+  "binman::download_files": []
+postdlfunction:
+  "wdman::unziptar_chromedriver":
+    chmod: TRUE
