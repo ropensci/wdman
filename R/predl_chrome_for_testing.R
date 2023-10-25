@@ -36,31 +36,34 @@ predl_chrome_for_testing <- function(url, platform, history,
     }
   }
   extracted <- do.call(rbind, lapply(ver_data, unwrap))
-  print(extracted)
   app_links <- tapply(extracted, extracted$platform, identity)
-  has_platform <- vapply(
-    names(app_links),
-    function(x) any(grepl(platformregex, x, perl = TRUE)),
-    FUN.VALUE = logical(1)
-  )
-  app_links <- app_links[has_platform]
+  print(names(app_links))
+  print(platform)
+  app_links <- app_links[platform]
+  print(app_links)
   assign_directory(app_links, appname)
 }
 
-#' Unzip/untar files
+#' Unzip/untar the chromedriver file
 #'
-#' Unzip or untar downloaded files
+#' Unzip or untar a downloaded chromedriver file, then extract it from
+#' its folder.
 #'
 #' @param ... Passed into [binman::unziptar_dlfiles].
 #'
 #' @return The same as [binman::unziptar_dlfiles].
 #'
 #' @export
-unziptar_dlfiles <- function(...) {
+unziptar_chromedriver <- function(...) {
+  chmod <- list(...)$chmod
   x <- binman::unziptar_dlfiles(...)
   for (f in x$processed) {
     dir <- tools::file_path_sans_ext(f)
-    file.copy(list.files(dir, full.names = TRUE), dirname(dir))
+    file.copy(list.files(dir, full.names = TRUE), dirname(dir), copy.mode = TRUE)
+
+    if (chmod && .Platform$OS.type != "windows") {
+      Sys.chmod(list.files(dirname(dir), pattern = "^chromedriver$", full.names = TRUE), "0755")
+    }
   }
   x
 }
