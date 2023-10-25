@@ -43,18 +43,12 @@ predl_chrome_for_testing <- function(url, platform, history,
 
 # The same as tapply(x, y, identity), but works on older versions of R.
 tapply_identity <- function(x, y) {
-  args <- c(
-    list(
-      function(x, ...) setNames(list(data.frame(...)), x),
-      y
-    ),
-    x,
-    USE.NAMES = FALSE
-  )
+  res <- lapply(unique(y), function(z) x[y == z, ])
 
-  as.array(do.call(mapply, args))
+  names(res) <- unique(y)
+
+  as.array(res)
 }
-
 
 #' Unzip/untar the chromedriver file
 #'

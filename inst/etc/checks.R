@@ -2,7 +2,7 @@ library(wdman)
 
 tries <- list()
 
-tries$chrome <- rlang::try_fetch(
+tries$chrome <- tryCatch(
   {
     print("chrome")
     tmp <- chrome(verbose = TRUE)
@@ -11,7 +11,21 @@ tries$chrome <- rlang::try_fetch(
     tmp
   },
   error = function(e) {
-    print(e)
+    print(e$message)
+    e
+  }
+)
+
+tries$chrome_old <- tryCatch(
+  {
+    print("chrome (old)")
+    tmp <- chrome(verbose = TRUE, version = "114.0.5735.90")
+    print(tmp$log())
+    tmp$stop()
+    tmp
+  },
+  error = function(e) {
+    print(e$message)
     e
   }
 )

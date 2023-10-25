@@ -1,17 +1,17 @@
 name: chromedriver
 predlfunction:
-  "wdman::predl_chrome_for_testing":
-    url: https://googlechromelabs.github.io/chrome-for-testing/latest-versions-per-milestone-with-downloads.json
+  "binman::predl_google_storage":
+    url: https://www.googleapis.com/storage/v1/b/chromedriver/o
     platform:
-    - mac-arm64
-    - mac-x64
+    - mac64_m1
+    - mac64
+    - linux32
     - linux64
     - win32
-    - win64
     history: 3
     appname: "chromedriver"
 dlfunction:
   "binman::download_files": []
 postdlfunction:
-  "wdman::unziptar_chromedriver":
+  "binman::unziptar_dlfiles":
     chmod: TRUE

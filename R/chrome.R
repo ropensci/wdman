@@ -36,7 +36,14 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
   assert_that(is_string(version))
   assert_that(is_string(path))
   assert_that(is_logical(verbose))
-  chromecheck <- chrome_check(verbose, check = check)
+
+  if (version != "latest" && numeric_version(version) < "115.0.5790.170") {
+    chrome_old <- TRUE
+  } else {
+    chrome_old <- FALSE
+  }
+
+  chromecheck <- chrome_check(verbose, check = check, chrome_old = chrome_old)
   chromeplat <- chromecheck[["platform"]]
   chromeversion <- chrome_ver(chromeplat, version)
   eopts <- list(...)
@@ -97,10 +104,17 @@ chrome <- function(port = 4567L, version = "latest", path = "wd/hub",
   )
 }
 
-chrome_check <- function(verbose, check = TRUE) {
-  chromeyml <- system.file("yaml", "chromedriver.yml", package = "wdman")
+chrome_check <- function(verbose, check = TRUE, chrome_old = FALSE) {
+  if (chrome_old) {
+    chromeyml <- system.file("yaml", "chromedriver.yml", package = "wdman")
+    predl_function <- "binman::predl_google_storage"
+  } else {
+    chromeyml <- system.file("yaml", "chromedriver_testing.yml", package = "wdman")
+    predl_function <- "wdman::predl_chrome_for_testing"
+  }
+
   cyml <- yaml::yaml.load_file(chromeyml)
-  platvec <- c("predlfunction", "wdman::predl_chrome_for_testing", "platform")
+  platvec <- c("predlfunction", predl_function, "platform")
   cyml[[platvec]] <-
     switch(Sys.info()["sysname"],
       Linux = grep(os_arch("linux"), cyml[[platvec]], value = TRUE),
@@ -111,7 +125,7 @@ chrome_check <- function(verbose, check = TRUE) {
 
   # Need regex that can tell mac64 and mac64_m1 apart
   if (cyml[[platvec]] %in% c("mac64", "mac64_m1")) {
-    platregexvec <- c("predlfunction", "wdman::predl_chrome_for_testing", "platformregex")
+    platregexvec <- c("predlfunction", predl_function, "platformregex")
     cyml[[platregexvec]] <- paste0(cyml[[platvec]], "\\.")
   }
 
