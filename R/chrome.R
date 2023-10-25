@@ -125,20 +125,6 @@ chrome_check <- function(verbose, check = TRUE) {
   list(yaml = cyml, platform = chromeplat)
 }
 
-# The same as tapply(x, y, identity), but works on older versions of R.
-tapply_identity <- function(x, y) {
-  args <- c(
-    list(
-      function(x, ...) setNames(list(data.frame(...)), x),
-      y
-    ),
-    x,
-    USE.NAMES = FALSE
-  )
-
-  as.array(do.call(mapply, args))
-}
-
 chrome_ver <- function(platform, version) {
   chromever <- list_versions("chromedriver")[[platform]]
   chromever <- if (identical(version, "latest")) {

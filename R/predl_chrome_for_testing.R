@@ -36,10 +36,25 @@ predl_chrome_for_testing <- function(url, platform, history,
     }
   }
   extracted <- do.call(rbind, lapply(ver_data, unwrap))
-  app_links <- tapply(extracted, extracted$platform, identity)
+  app_links <- tapply_identity(extracted, extracted$platform)
   app_links <- app_links[platform]
   assign_directory(app_links, appname)
 }
+
+# The same as tapply(x, y, identity), but works on older versions of R.
+tapply_identity <- function(x, y) {
+  args <- c(
+    list(
+      function(x, ...) setNames(list(data.frame(...)), x),
+      y
+    ),
+    x,
+    USE.NAMES = FALSE
+  )
+
+  as.array(do.call(mapply, args))
+}
+
 
 #' Unzip/untar the chromedriver file
 #'
