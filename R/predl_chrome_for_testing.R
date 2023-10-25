@@ -16,17 +16,21 @@ predl_chrome_for_testing <- function(url, platform, history,
                                      platformregex = platform) {
   assert_that(is_URL_file(url))
   assert_that(is_character(platform))
-  platform <- c(mac64_m1 = "mac-arm64",
-                mac64    = "mac-x64",
-                linux32  = "linux32",
-                linux64  = "linux64",
-                win32    = "win64")[platform]
+  platform <- c(
+    mac64_m1 = "mac-arm64",
+    mac64 = "mac-x64",
+    linux32 = "linux32",
+    linux64 = "linux64",
+    win32 = "win64"
+  )[platform]
   assert_that(is_integer(history))
   assert_that(is_string(appname))
   assert_that(is_character(platformregex))
   ver_data <- jsonlite::fromJSON(url)[[2]]
-  ver_data <- Filter(function(x) !is.null(x$downloads[[appname]]),
-         ver_data)
+  ver_data <- Filter(
+    function(x) !is.null(x$downloads[[appname]]),
+    ver_data
+  )
   ver_data <- ver_data[order(as.numeric(names(ver_data)))]
   unwrap <- function(entry) {
     version <- entry$version
@@ -41,17 +45,28 @@ predl_chrome_for_testing <- function(url, platform, history,
   extracted <- do.call(rbind, lapply(ver_data, unwrap))
   app_links <- tapply(extracted, extracted$platform, identity)
   app_links <- app_links[platform]
-  names(app_links) <- c("mac-arm64" = "mac64_m1",
-                        "mac-x64" = "mac64",
-                        linux32  = "linux32",
-                        linux64  = "linux64",
-                        win64    = "win32")[names(app_links)]
+  names(app_links) <- c(
+    "mac-arm64" = "mac64_m1",
+    "mac-x64" = "mac64",
+    linux32 = "linux32",
+    linux64 = "linux64",
+    win64 = "win32"
+  )[names(app_links)]
   assign_directory(app_links, appname)
 }
 
+#' Unzip/untar files
+#'
+#' Unzip or untar downloaded files
+#'
+#' @param ... Passed into [binman::unziptar_dlfiles].
+#'
+#' @return The same as [binman::unziptar_dlfiles].
+#'
+#' @export
 unziptar_dlfiles <- function(...) {
   x <- binman::unziptar_dlfiles(...)
-  for (f in x) {
+  for (f in x$processed) {
     dir <- tools::file_path_sans_ext(f)
     file.copy(list.files(dir, full.names = TRUE), dirname(dir))
   }
